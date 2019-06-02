@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Public">
+      <UniqueIdentifier>{f450fb5c-56fd-4709-b53c-6d22f5fb5318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private">
+      <UniqueIdentifier>{ee9af22e-7d4e-46e8-a517-394533e84380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Nodes">
+      <UniqueIdentifier>{902efc5c-8544-467c-a49a-8c5e7c27c6b9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Frox.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFlow.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeNode.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFlowImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeNodeFactory.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeTask.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComputeNodes.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFrame.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocator.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFrameImplV1.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="FroxImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeNodeImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Runnable.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeThread.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Frox.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFlow.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNode.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFlowImpl.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNodeFactory.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComputeNodes.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFrame.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFrameImplV1.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="FroxImpl.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNodeImpl.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeThread.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
