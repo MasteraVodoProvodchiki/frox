@@ -63,9 +63,79 @@ ComputeTask* OperationComputeNode::CreateComputeTask()
 	});
 }
 
+MakeFrameComputeNode::MakeFrameComputeNode(const ComputeNodeInitializer& initializer)
+	: Super(initializer)
+	, _width(1)
+	, _height(1)
+{}
+
+MakeFrameComputeNode::~MakeFrameComputeNode()
+{}
+
+void MakeFrameComputeNode::AllocateDefaultPins()
+{
+	_output = CreateOutput("output");
+}
+
+void MakeFrameComputeNode::OnPostInit()
+{
+	ComputeFramePtr output = FroxInstance()->CreateComputeFrame(Size{ _width, _height });
+	SetOutput(_output, output);
+}
+
+bool MakeFrameComputeNode::IsValid() const
+{
+	return _width > 0 && _height > 0 && GetOutput(_output) != nullptr;
+}
+
+ComputeTask* MakeFrameComputeNode::CreateComputeTask()
+{
+	float value = _value;
+
+	ComputeFramePtr output = GetOutput(_output);
+
+	return ComputeTaskUtils::Make([value, output]() {
+		EComputeFrameType type = output->GetType();
+		Size size = output->GetSize();
+		switch (type)
+		{
+		case ECFT_UInt8: {
+			for (uint32_t row = 0; row < size.Height; ++row)
+			{
+				uint8_t* values = output->GetRowData<uint8_t>(row);
+				memset(values, uint8_t(value), size.Width * sizeof(uint8_t));
+			}
+			break;
+		}
+		case ECFT_Float: {
+			for (uint32_t row = 0; row < size.Height; ++row)
+			{
+				float* values = output->GetRowData<float>(row);
+				for (uint32_t column = 0; column < size.Width; ++column)
+				{
+					float& out = *(values + column);
+					out = value;
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
+	});
+}
+
+MakeZeroFrameComputeNode::MakeZeroFrameComputeNode(const ComputeNodeInitializer& initializer)
+	: Super(initializer)
+{
+	SetValue(0.f);
+}
+
 FROX_COMPUTENODE_IMPL(AddComputeNode)
 FROX_COMPUTENODE_IMPL(SubComputeNode)
 FROX_COMPUTENODE_IMPL(MulComputeNode)
 FROX_COMPUTENODE_IMPL(DivComputeNode)
+FROX_COMPUTENODE_IMPL(MakeFrameComputeNode)
+FROX_COMPUTENODE_IMPL(MakeZeroFrameComputeNode)
 
 } // End frox

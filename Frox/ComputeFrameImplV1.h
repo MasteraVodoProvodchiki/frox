@@ -11,6 +11,7 @@ struct MatData
 		uint8_t Uint8;
 		float Scalar;
 		void* Data = nullptr;
+		size_t Mem;
 	};
 
 	uint32_t Width = 0;
@@ -35,9 +36,13 @@ public:
 
 	// ComputeFrame overrides
 	virtual EComputeFrameType GetType() const override;
+	virtual uint32_t GetElementSize() const override;
 	virtual bool IsValid() const override;
 	virtual Size GetSize() const override;
-	virtual void* GetData() const override;
+	virtual const void* GetData() const override;
+	virtual const void* GetRowData(uint32_t row) const override;
+	virtual void* GetData() override;
+	virtual void* GetRowData(uint32_t row) override;
 
 private:
 	MatData _data;

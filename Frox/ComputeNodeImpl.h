@@ -29,6 +29,9 @@ protected:
 	virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 	{}
 
+	virtual void OnPostInit()
+	{}
+
 	uint32_t CreateInput(const char* name);
 	uint32_t CreateOutput(const char* name);
 
