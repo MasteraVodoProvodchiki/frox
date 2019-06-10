@@ -17,6 +17,9 @@ ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, void* 
 		{
 			switch (type)
 			{
+			case ECFT_Bool:
+				_data.Bool = data != nullptr ? *reinterpret_cast<bool*>(data) : 0;
+				break;
 			case ECFT_UInt8:
 				_data.Uint8 = data != nullptr ? *reinterpret_cast<uint8_t*>(data) : 0;
 				break;
@@ -37,6 +40,7 @@ ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, void* 
 			uint32_t elementSize = utils::FrameTypeToSize(type);
 			switch (type)
 			{
+			case ECFT_Bool:
 			case ECFT_UInt8:
 			case ECFT_UInt16:
 			case ECFT_UInt32:

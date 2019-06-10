@@ -7,6 +7,8 @@ uint32_t FrameTypeToSize(EComputeFrameType type)
 {
 	switch (type)
 	{
+	case ECFT_Bool:
+		return sizeof(bool);
 	case ECFT_UInt8:
 		return sizeof(uint8_t);
 	case ECFT_UInt16:

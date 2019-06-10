@@ -8,6 +8,7 @@ struct MatData
 {
 	union
 	{
+		bool Bool;
 		uint8_t Uint8;
 		uint16_t Uint16;
 		uint32_t Uint32;

@@ -10,6 +10,7 @@ namespace frox {
 enum EComputeFrameType
 {
 	ECFT_None = 0,
+	ECFT_Bool,
 	ECFT_UInt8,
 	ECFT_UInt16,
 	ECFT_UInt32,
