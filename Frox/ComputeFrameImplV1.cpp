@@ -20,6 +20,12 @@ ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, void* 
 			case ECFT_UInt8:
 				_data.Uint8 = data != nullptr ? *reinterpret_cast<uint8_t*>(data) : 0;
 				break;
+			case ECFT_UInt16:
+				_data.Uint16 = data != nullptr ? *reinterpret_cast<uint16_t*>(data) : 0;
+				break;
+			case ECFT_UInt32:
+				_data.Uint32 = data != nullptr ? *reinterpret_cast<uint32_t*>(data) : 0;
+				break;
 			case ECFT_Float:
 				_data.Scalar = data != nullptr ? *reinterpret_cast<float*>(data) : 0.f;
 				break;
@@ -32,18 +38,16 @@ ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, void* 
 			switch (type)
 			{
 			case ECFT_UInt8:
-				_data.Data = malloc(nbElements * elementSize);
-				if (data != nullptr)
-				{
-					memcpy(_data.Data, data, nbElements * elementSize);
-				}
-				break;
+			case ECFT_UInt16:
+			case ECFT_UInt32:
 			case ECFT_Float:
 				_data.Data = malloc(nbElements * elementSize);
 				if (data != nullptr)
 				{
 					memcpy(_data.Data, data, nbElements * elementSize);
 				}
+				break;
+			default:
 				break;
 			}
 		}
@@ -52,7 +56,7 @@ ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, void* 
 
 ComputeFrameImplV1::~ComputeFrameImplV1()
 {
-	if (_data.Width > 1 && _data.Height > 1)
+	if (!_data.IsOptimized())
 	{
 		free(_data.Data);
 	}
@@ -83,7 +87,7 @@ Size ComputeFrameImplV1::GetSize() const
 
 const void* ComputeFrameImplV1::GetData() const
 {
-	return (_data.Width == 1 && _data.Height == 1) ? &_data.Mem : _data.Data;
+	return _data.IsOptimized() ? &_data.Mem : _data.Data;
 }
 
 const void* ComputeFrameImplV1::GetRowData(uint32_t row) const

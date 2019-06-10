@@ -9,6 +9,10 @@ uint32_t FrameTypeToSize(EComputeFrameType type)
 	{
 	case ECFT_UInt8:
 		return sizeof(uint8_t);
+	case ECFT_UInt16:
+		return sizeof(uint16_t);
+	case ECFT_UInt32:
+		return sizeof(uint32_t);
 	case ECFT_Float:
 		return sizeof(float);
 	default:

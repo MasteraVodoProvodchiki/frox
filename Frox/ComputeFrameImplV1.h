@@ -9,6 +9,8 @@ struct MatData
 	union
 	{
 		uint8_t Uint8;
+		uint16_t Uint16;
+		uint32_t Uint32;
 		float Scalar;
 		void* Data = nullptr;
 		size_t Mem;
@@ -18,6 +20,11 @@ struct MatData
 	uint32_t Height = 0;
 	EComputeFrameType Type = ECFT_None;
 	bool Valid = false;
+
+	bool IsOptimized() const
+	{
+		return Width == 1 && Height == 1;
+	}
 };
 
 /**

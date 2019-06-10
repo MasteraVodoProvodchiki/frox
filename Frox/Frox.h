@@ -39,6 +39,16 @@ public:
 		return CreateComputeFrame(Size{ 1, 1 }, ECFT_UInt8, &value);
 	}
 
+	ComputeFramePtr CreateScalar(uint16_t value)
+	{
+		return CreateComputeFrame(Size{ 1, 1 }, ECFT_UInt16, &value);
+	}
+
+	ComputeFramePtr CreateScalar(uint32_t value)
+	{
+		return CreateComputeFrame(Size{ 1, 1 }, ECFT_UInt32, &value);
+	}
+
 	ComputeFramePtr CreateScalar(float value)
 	{
 		return CreateComputeFrame(Size{ 1, 1 }, ECFT_Float, &value);
