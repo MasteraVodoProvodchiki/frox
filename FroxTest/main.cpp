@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
 	ComputeFramePtr C = frox->CreateScalar(3.f);
 
 	auto add = flow->CreateNode<AddComputeNode>("Add");
+	auto mul = flow->CreateNode<MulComputeNode>("Mul");
+	flow->ConnectNodes(add, mul, 0);
+
 	add->SetInput(0, A);
 	add->SetInput(1, B);
-	auto mul = flow->CreateNode<MulComputeNode>("Mul");
-
-	flow->ConnectNodes(add, mul, 0);
 	mul->SetInput(1, C);
 
 	flow->Perform();

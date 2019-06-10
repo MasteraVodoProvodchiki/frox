@@ -1,5 +1,6 @@
 #include "ComputeFlowImpl.h"
-#include "ComputeNode.h"
+#include "ComputeNodeImpl.h"
+#include "ComputeNodePin.h"
 #include "ComputeTask.h"
 #include "ComputeNodeFactory.h"
 #include "Log.h"
@@ -52,20 +53,34 @@ void ComputeFlowImpl::DestoyNode(ComputeNode* node)
 
 bool ComputeFlowImpl::ConnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId)
 {
-	ComputeFramePtr frame = outNode->GetOutput(outPinId);
-	if (!frame)
-	{
-		Log::Error("Invalid output", "ConnectNodes");
-		return false;
-	}
+	// Impl
+	ComputeNodeImpl* outNodeImpl = reinterpret_cast<ComputeNodeImpl*>(outNode);
+	ComputeNodeImpl* inNodeImpl = reinterpret_cast<ComputeNodeImpl*>(inNode);
 
-	inNode->SetInput(inPinId, frame);
+	// Get
+	ComputeNodePinPtr outputPin = outNodeImpl->GetOutputPin(outPinId);
+	ComputeNodePinPtr inputPin = inNodeImpl->GetInputPin(inPinId);
+
+	// connect
+	outputPin->ConnectTo(inputPin);
+
+
 	return true;
 }
 
 bool ComputeFlowImpl::DisconnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId)
 {
-	inNode->SetInput(inPinId, nullptr);
+	// Impl
+	ComputeNodeImpl* outNodeImpl = reinterpret_cast<ComputeNodeImpl*>(outNode);
+	ComputeNodeImpl* inNodeImpl = reinterpret_cast<ComputeNodeImpl*>(inNode);
+
+	// Get
+	ComputeNodePinPtr outputPin = outNodeImpl->GetOutputPin(outPinId);
+	ComputeNodePinPtr inputPin = inNodeImpl->GetInputPin(inPinId);
+	
+	// disonnect
+	outputPin; inputPin;
+
 	return true;
 }
 

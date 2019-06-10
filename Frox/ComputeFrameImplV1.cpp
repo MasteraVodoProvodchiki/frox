@@ -101,7 +101,7 @@ const void* ComputeFrameImplV1::GetRowData(uint32_t row) const
 
 void* ComputeFrameImplV1::GetData()
 {
-	return (_data.Width == 1 && _data.Height == 1) ? &_data.Mem : _data.Data;
+	return _data.IsOptimized() ? &_data.Mem : _data.Data;
 }
 
 void* ComputeFrameImplV1::GetRowData(uint32_t row)

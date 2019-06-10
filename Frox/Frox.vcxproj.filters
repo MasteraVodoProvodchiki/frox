@@ -63,6 +63,9 @@
     <ClInclude Include="ComputeThread.h">
       <Filter>Private</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeNodePin.h">
+      <Filter>Private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -102,6 +105,9 @@
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="ComputeThread.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNodePin.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>

@@ -127,6 +127,7 @@
     <ClInclude Include="ComputeFrame.h" />
     <ClInclude Include="ComputeFrameImplV1.h" />
     <ClInclude Include="ComputeNode.h" />
+    <ClInclude Include="ComputeNodePin.h" />
     <ClInclude Include="ComputeNodeImpl.h" />
     <ClInclude Include="ComputeTask.h" />
     <ClInclude Include="ComputeThread.h" />
@@ -144,6 +145,7 @@
     <ClCompile Include="ComputeFrame.cpp" />
     <ClCompile Include="ComputeFrameImplV1.cpp" />
     <ClCompile Include="ComputeNode.cpp" />
+    <ClCompile Include="ComputeNodePin.cpp" />
     <ClCompile Include="ComputeNodeFactory.cpp" />
     <ClCompile Include="ComputeNodeImpl.cpp" />
     <ClCompile Include="ComputeThread.cpp" />

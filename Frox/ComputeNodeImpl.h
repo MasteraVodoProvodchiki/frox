@@ -1,17 +1,12 @@
 #pragma once
 
 #include "ComputeNode.h"
+#include "ComputeNodePin.h"
 
 #include <vector>
 #include <string.h>
 
 namespace frox {
-
-struct ComputeNodePin
-{
-	std::string Name;
-	ComputeFramePtr Frame;
-};
 
 class ComputeNodeImpl : public ComputeNode
 {
@@ -25,6 +20,9 @@ public:
 	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
 	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) override;
 
+	ComputeNodePinPtr GetInputPin(uint32_t inId = 0) const;
+	ComputeNodePinPtr GetOutputPin(uint32_t outId = 0) const;
+
 protected:
 	virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 	{}
@@ -36,12 +34,13 @@ protected:
 	uint32_t CreateOutput(const char* name);
 
 	void SetOutput(uint32_t outId, ComputeFramePtr frame);
+
 	ComputeFramePtr GetInput(uint32_t inId = 0) const;
 	ComputeFramePtr GetOutput(uint32_t outId = 0) const;
 
 private:
-	std::vector<ComputeNodePin> _inputs;
-	std::vector<ComputeNodePin> _outputs;
+	std::vector<ComputeNodePinPtr> _inputs;
+	std::vector<ComputeNodePinPtr> _outputs;
 };
 
 } // End frox.
