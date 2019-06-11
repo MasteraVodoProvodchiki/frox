@@ -27,6 +27,16 @@ struct Size
 {
 	uint32_t Width;
 	uint32_t Height;
+
+	friend bool operator == (const Size& left, const Size& right)
+	{
+		return left.Width == right.Width && left.Height == right.Height;
+	}
+
+	friend bool operator != (const Size& left, const Size& right)
+	{
+		return left.Width != right.Width || left.Height != right.Height;
+	}
 };
 
 class ComputeFrame

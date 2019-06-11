@@ -2,7 +2,109 @@
 #include "ComputeTask.h"
 #include "Frox.h"
 
+#include <assert.h>
+
 namespace frox {
+
+namespace utils {
+
+struct AddOperation
+{
+	template <typename TypeT>
+	TypeT operator ()(TypeT A, TypeT B)
+	{
+		return A + B;
+	}
+};
+
+struct SubOperation
+{
+	template <typename TypeT>
+	TypeT operator ()(TypeT A, TypeT B)
+	{
+		return A - B;
+	}
+};
+
+struct MulOperation
+{
+	template <typename TypeT>
+	TypeT operator ()(TypeT A, TypeT B)
+	{
+		return A * B;
+	}
+};
+
+struct DivOperation
+{
+	template <typename TypeT>
+	TypeT operator ()(TypeT A, TypeT B)
+	{
+		return A / B;
+	}
+};
+
+
+template<typename TypeT, typename CallbackT>
+void Foreach(ComputeFramePtr left, ComputeFramePtr right, ComputeFramePtr output, CallbackT callback)
+{
+	Size leftSize = left->GetSize();
+	Size rightSize = right->GetSize();
+	Size outputSize = output->GetSize();
+	Size size = outputSize;
+
+	assert(leftSize == outputSize);
+	assert(rightSize == outputSize);
+
+	for (uint32_t row = 0; row < size.Height; ++row)
+	{
+		const TypeT* leftValues = left->GetRowData<TypeT>(row);
+		const TypeT* rightValues = right->GetRowData<TypeT>(row);
+		TypeT* outputValues = output->GetRowData<TypeT>(row);
+		
+		for (uint32_t column = 0; column < size.Width; ++column)
+		{
+			outputValues[column] = callback(leftValues[column], rightValues[column]);
+		}
+	}
+}
+
+template <typename OperatorT>
+void Foreach(ComputeFramePtr left, ComputeFramePtr right, ComputeFramePtr output)
+{
+	EComputeFrameType leftType = left->GetType();
+	EComputeFrameType rightType = right->GetType();
+	EComputeFrameType outputType = output->GetType();
+	EComputeFrameType type = outputType;
+
+	assert(leftType == outputType);
+	assert(rightType == outputType);
+
+	switch (type)
+	{
+	case ECFT_UInt8: {
+		Foreach<uint8_t>(left, right, output, OperatorT());
+		break;
+	}
+	case ECFT_UInt16: {
+		Foreach<uint16_t>(left, right, output, OperatorT());
+		break;
+	}
+	case ECFT_UInt32: {
+		Foreach<uint32_t>(left, right, output, OperatorT());
+		break;
+	}
+	case ECFT_Float: {
+		Foreach<float>(left, right, output, OperatorT());
+		break;
+	}
+	default:
+		assert(false);
+		break;
+	}
+}
+
+} // End utils
 
 OperationComputeNode::OperationComputeNode(const ComputeNodeInitializer& initializer, EType type)
 	: Super(initializer)
@@ -32,10 +134,18 @@ void OperationComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 
 bool OperationComputeNode::IsValid() const
 {
+	ComputeFramePtr left = GetInput(_left);
+	ComputeFramePtr right = GetInput(_right);
+	ComputeFramePtr output = GetOutput(_output);
+
 	return
-		GetInput(_left) != nullptr &&
-		GetInput(_right) != nullptr &&
-		GetOutput(_output) != nullptr;
+		left != nullptr &&
+		right != nullptr &&
+		output != nullptr &&
+		left->GetType() == right->GetType() &&
+		left->GetType() == output->GetType();
+		left->GetSize() == right->GetSize() &&
+		left->GetSize() == output->GetSize();
 }
 
 ComputeTask* OperationComputeNode::CreateComputeTask()
@@ -50,12 +160,16 @@ ComputeTask* OperationComputeNode::CreateComputeTask()
 		switch (type)
 		{
 		case OperationComputeNode::ET_Add:
+			utils::Foreach<utils::AddOperation>(left, right, output);
 			break;
 		case OperationComputeNode::ET_Sub:
+			utils::Foreach<utils::SubOperation>(left, right, output);
 			break;
 		case OperationComputeNode::ET_Mul:
+			utils::Foreach<utils::MulOperation>(left, right, output);
 			break;
 		case OperationComputeNode::ET_Div:
+			utils::Foreach<utils::DivOperation>(left, right, output);
 			break;
 		default:
 			break;
@@ -104,6 +218,22 @@ ComputeTask* MakeFrameComputeNode::CreateComputeTask()
 			{
 				uint8_t* values = output->GetRowData<uint8_t>(row);
 				memset(values, uint8_t(value), size.Width * sizeof(uint8_t));
+			}
+			break;
+		}
+		case ECFT_UInt16: {
+			for (uint32_t row = 0; row < size.Height; ++row)
+			{
+				uint16_t* values = output->GetRowData<uint16_t>(row);
+				memset(values, uint16_t(value), size.Width * sizeof(uint16_t));
+			}
+			break;
+		}
+		case ECFT_UInt32: {
+			for (uint32_t row = 0; row < size.Height; ++row)
+			{
+				uint32_t* values = output->GetRowData<uint32_t>(row);
+				memset(values, uint32_t(value), size.Width * sizeof(uint32_t));
 			}
 			break;
 		}
