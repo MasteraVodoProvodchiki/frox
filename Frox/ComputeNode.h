@@ -12,7 +12,7 @@ struct ComputeNodeInitializer
 	const char* Name = nullptr;
 };
 
-class ComputeNode
+class FROX_API ComputeNode
 {
 public:
 	ComputeNode(const ComputeNodeInitializer& initializer)
@@ -25,6 +25,11 @@ public:
 	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) = 0;
 	virtual bool IsValid() const = 0;
 	virtual ComputeTask* CreateComputeTask() = 0;
+
+	void SetInputScalar(uint32_t inId, uint8_t value);
+	void SetInputScalar(uint32_t inId, uint16_t value);
+	void SetInputScalar(uint32_t inId, uint32_t value);
+	void SetInputScalar(uint32_t inId, float value);
 };
 
 } // End frox

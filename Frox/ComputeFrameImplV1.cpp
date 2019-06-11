@@ -91,22 +91,62 @@ Size ComputeFrameImplV1::GetSize() const
 
 const void* ComputeFrameImplV1::GetData() const
 {
-	return _data.IsOptimized() ? &_data.Mem : _data.Data;
+	if (_data.IsOptimized())
+	{
+		switch (_data.Type)
+		{
+		case ECFT_Bool:
+			return &_data.Bool;
+		case ECFT_UInt8:
+			return &_data.Uint8;
+		case ECFT_UInt16:
+			return &_data.Uint16;
+		case ECFT_UInt32:
+			return &_data.Uint32;
+		case ECFT_Float:
+			return &_data.Scalar;
+		}
+	}
+
+	return _data.Data;
 }
 
 const void* ComputeFrameImplV1::GetRowData(uint32_t row) const
 {
-	return reinterpret_cast<uint8_t*>(_data.Data) + row * utils::FrameTypeToSize(_data.Type);
+	assert(row < _data.Height);
+	return _data.IsOptimized() ?
+		GetData() :
+		reinterpret_cast<uint8_t*>(_data.Data) + row * utils::FrameTypeToSize(_data.Type);
 }
 
 void* ComputeFrameImplV1::GetData()
 {
-	return _data.IsOptimized() ? &_data.Mem : _data.Data;
+	if (_data.IsOptimized())
+	{
+		switch (_data.Type)
+		{
+		case ECFT_Bool:
+			return &_data.Bool;
+		case ECFT_UInt8:
+			return &_data.Uint8;
+		case ECFT_UInt16:
+			return &_data.Uint16;
+		case ECFT_UInt32:
+			return &_data.Uint32;
+		case ECFT_Float:
+			return &_data.Scalar;
+		}
+	}
+
+	return _data.Data;
 }
 
 void* ComputeFrameImplV1::GetRowData(uint32_t row)
 {
-	return reinterpret_cast<uint8_t*>(_data.Data) + row * utils::FrameTypeToSize(_data.Type);
+	assert(row < _data.Height);
+	return _data.IsOptimized() ?
+		GetData() :
+		reinterpret_cast<uint8_t*>(_data.Data) + row * utils::FrameTypeToSize(_data.Type);
 }
 
 } // End frox
