@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComputeFlow.h"
+#include "ComputeTask.h"
 
 #include <vector>
 
@@ -28,7 +29,11 @@ public:
 	virtual void Fetch() override;
 
 private:
+	uint32_t GetNumActiveTasks() const;
+
+private:
 	std::vector<ComputeNode*> _nodes;
+	std::vector<ComputeTaskPtr> _tasks;
 };
 
 } // End frox

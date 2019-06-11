@@ -1,7 +1,6 @@
 #include "ComputeFlowImpl.h"
 #include "ComputeNodeImpl.h"
 #include "ComputeNodePin.h"
-#include "ComputeTask.h"
 #include "ComputeNodeFactory.h"
 #include "Log.h"
 #include "ComputeThread.h"
@@ -89,15 +88,41 @@ void ComputeFlowImpl::Perform()
 	for (ComputeNode* node : _nodes)
 	{
 		ComputeTask* task = node->CreateComputeTask();
-		ComputeThreadPool::Instance().Push(task);
-	}
+		assert(task != nullptr);
 
-	// Connect to tasks
+		ComputeTaskPtr taskPtr = ComputeTaskPtr(task);
+		_tasks.push_back(taskPtr);
+
+		ComputeThreadPool::Instance().Push(taskPtr);
+	}
 }
 
 void ComputeFlowImpl::Fetch()
 {
 	// Wait tasks
+	uint32_t nbActiveTasks = 0;
+	do
+	{
+		nbActiveTasks = GetNumActiveTasks();
+		std::this_thread::sleep_for(std::chrono::microseconds(1));
+	}
+	while (nbActiveTasks > 0);
+
+	_tasks.clear();
+}
+
+uint32_t ComputeFlowImpl::GetNumActiveTasks() const
+{
+	uint32_t nbActiveTasks = 0;
+	for (ComputeTaskPtr task : _tasks)
+	{
+		if (!task->IsCompleted())
+		{
+			++nbActiveTasks;
+		}
+	}
+
+	return nbActiveTasks;
 }
 
 } // End frox

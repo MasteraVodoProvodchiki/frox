@@ -1,13 +1,32 @@
 #pragma once
 
+#include <memory>
+
 namespace frox {
 
 class ComputeTask
 {
 public:
+	ComputeTask()
+		: _bCompleted(false)
+	{}
 	virtual ~ComputeTask() {}
 	virtual void Perform() = 0;
+
+	void Complete()
+	{
+		_bCompleted = true;
+	}
+
+	bool IsCompleted() const
+	{
+		return _bCompleted;
+	}
+
+private:
+	bool _bCompleted;
 };
+using ComputeTaskPtr = std::shared_ptr<ComputeTask>;
 
 template <typename FunctorT>
 class TComputeTask : public ComputeTask

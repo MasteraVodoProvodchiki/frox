@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Thread.h"
+#include "ComputeTask.h"
 
 #include <vector>
 #include <deque>
@@ -9,7 +10,6 @@
 
 namespace frox {
 
-class ComputeTask;
 class ComputeThread : public Thread
 {
 public:
@@ -20,13 +20,13 @@ public:
 	virtual void Run() override;
 
 	void Stop();
-	void Push(ComputeTask* task);
-	ComputeTask* Pop();
+	void Push(ComputeTaskPtr task);
+	ComputeTaskPtr Pop();
 
 private:
 	std::atomic_bool _stoped;
 	std::mutex _mutex;
-	std::deque<ComputeTask*> _tasks;
+	std::deque<ComputeTaskPtr> _tasks;
 };
 
 class ComputeThreadPool
@@ -37,7 +37,7 @@ class ComputeThreadPool
 public:
 	static ComputeThreadPool& Instance();
 
-	void Push(ComputeTask* task);
+	void Push(ComputeTaskPtr task);
 
 private:
 	std::vector<ComputeThread*> _threads;

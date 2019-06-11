@@ -13,24 +13,19 @@ ComputeThread::ComputeThread()
 }
 
 ComputeThread::~ComputeThread()
-{
-	for (ComputeTask* task : _tasks)
-	{
-		delete task;
-	}
-}
+{}
 
 // Runnable overrides
 void ComputeThread::Run()
 {
 	while (!_stoped)
 	{
-		ComputeTask* task = Pop();
+		ComputeTaskPtr task = Pop();
 		if (task != nullptr)
 		{
 			task->Perform();
+			task->Complete();
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
-			delete task;
 		}
 		else
 		{
@@ -44,17 +39,17 @@ void ComputeThread::Stop()
 	_stoped = true;
 }
 
-void ComputeThread::Push(ComputeTask* task)
+void ComputeThread::Push(ComputeTaskPtr task)
 {
 	std::lock_guard<std::mutex> guard(_mutex);
 	_tasks.push_back(task);
 }
 
-ComputeTask* ComputeThread::Pop()
+ComputeTaskPtr ComputeThread::Pop()
 {
 	std::lock_guard<std::mutex> guard(_mutex);
 	
-	ComputeTask* task = nullptr;
+	ComputeTaskPtr task = nullptr;
 	if (!_tasks.empty())
 	{
 		task = _tasks.front();
@@ -100,7 +95,7 @@ ComputeThreadPool& ComputeThreadPool::Instance()
 	return threadPool;
 }
 
-void ComputeThreadPool::Push(ComputeTask* task)
+void ComputeThreadPool::Push(ComputeTaskPtr task)
 {
 	assert(!_threads.empty());
 	ComputeThread* thread = _threads.front();
