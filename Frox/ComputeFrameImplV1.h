@@ -49,8 +49,10 @@ public:
 	virtual Size GetSize() const override;
 	virtual const void* GetData() const override;
 	virtual const void* GetRowData(uint32_t row) const override;
+	virtual const void* At(uint32_t row, uint32_t column) const override;
 	virtual void* GetData() override;
 	virtual void* GetRowData(uint32_t row) override;
+	virtual void* At(uint32_t row, uint32_t column) override;
 
 private:
 	MatData _data;
