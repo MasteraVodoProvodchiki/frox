@@ -120,6 +120,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Allocator.h" />
+    <ClInclude Include="AvgComputeNode.h" />
     <ClInclude Include="BasicComputeNodes.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ComputeFlow.h" />
@@ -136,10 +137,13 @@
     <ClInclude Include="ComputeNodeFactory.h" />
     <ClInclude Include="FroxImpl.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MakeFrameComputeNode.h" />
     <ClInclude Include="Runnable.h" />
     <ClInclude Include="Thread.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AvgComputeNode.cpp" />
     <ClCompile Include="BasicComputeNodes.cpp" />
     <ClCompile Include="ComputeFlow.cpp" />
     <ClCompile Include="ComputeFlowImpl.cpp" />
@@ -153,6 +157,7 @@
     <ClCompile Include="Frox.cpp" />
     <ClCompile Include="FroxImpl.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="MakeFrameComputeNode.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

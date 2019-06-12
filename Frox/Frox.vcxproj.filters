@@ -10,6 +10,9 @@
     <Filter Include="Public\Nodes">
       <UniqueIdentifier>{902efc5c-8544-467c-a49a-8c5e7c27c6b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Private\Utils">
+      <UniqueIdentifier>{d2d2de6d-6842-4e81-aac2-589b2210111a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frox.h">
@@ -66,6 +69,15 @@
     <ClInclude Include="ComputeNodePin.h">
       <Filter>Private</Filter>
     </ClInclude>
+    <ClInclude Include="AvgComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Private\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MakeFrameComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
     <ClInclude Include="Variant.h">
       <Filter>Public</Filter>
     </ClInclude>
@@ -112,6 +124,12 @@
     </ClCompile>
     <ClCompile Include="ComputeNodePin.cpp">
       <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="AvgComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="MakeFrameComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
