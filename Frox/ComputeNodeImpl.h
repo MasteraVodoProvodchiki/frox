@@ -17,8 +17,11 @@ public:
 	virtual ~ComputeNodeImpl() override;
 	
 	// ComputeNode overrides
+	virtual const char* GetName() const override;
 	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
 	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) override;
+	virtual void Initialize() override;
+	virtual bool WasInitialized() const override;
 
 	ComputeNodePinPtr GetInputPin(uint32_t inId = 0) const;
 	ComputeNodePinPtr GetOutputPin(uint32_t outId = 0) const;
@@ -39,6 +42,8 @@ protected:
 	ComputeFramePtr GetOutput(uint32_t outId = 0) const;
 
 private:
+	std::string _name;
+	bool _bWasInitialized;
 	std::vector<ComputeNodePinPtr> _inputs;
 	std::vector<ComputeNodePinPtr> _outputs;
 };

@@ -11,6 +11,7 @@
 namespace frox {
 
 ComputeFlowImpl::ComputeFlowImpl()
+	: _bWasInitialized(false)
 {}
 
 ComputeFlowImpl::~ComputeFlowImpl()
@@ -83,17 +84,48 @@ bool ComputeFlowImpl::DisconnectNodes(ComputeNode* outNode, int outPinId, Comput
 	return true;
 }
 
-void ComputeFlowImpl::Perform()
+void ComputeFlowImpl::Initialize()
 {
 	for (ComputeNode* node : _nodes)
 	{
-		ComputeTask* task = node->CreateComputeTask();
-		assert(task != nullptr);
+		if (!node->WasInitialized())
+		{
+			node->Initialize();
+		}
+	}
 
-		ComputeTaskPtr taskPtr = ComputeTaskPtr(task);
-		_tasks.push_back(taskPtr);
+	_bWasInitialized = true;
+}
 
-		ComputeThreadPool::Instance().Push(taskPtr);
+bool ComputeFlowImpl::WasInitialized() const
+{
+	return _bWasInitialized;
+}
+
+void ComputeFlowImpl::Perform()
+{
+	if (!WasInitialized())
+	{
+		Initialize();
+	}
+
+	for (ComputeNode* node : _nodes)
+	{
+		if (node->IsValid())
+		{
+			ComputeTask* task = node->CreateComputeTask();
+			assert(task != nullptr);
+
+			ComputeTaskPtr taskPtr = ComputeTaskPtr(task);
+			_tasks.push_back(taskPtr);
+
+			ComputeThreadPool::Instance().Push(taskPtr);
+		}
+		else
+		{
+			std::string message = "Invalid Node: " + std::string(node->GetName());
+			Log::Error(message.c_str(), "ComputeFlow");
+		}
 	}
 }
 

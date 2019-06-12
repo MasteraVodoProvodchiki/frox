@@ -31,6 +31,9 @@ public:
 		return DisconnectNodes(outNode, 0, inNode, inPinId);
 	}
 
+	virtual void Initialize() = 0;
+	virtual bool WasInitialized() const = 0;
+
 	virtual void Perform() = 0;
 	virtual void Fetch() = 0;
 };

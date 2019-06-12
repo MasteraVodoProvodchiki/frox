@@ -25,6 +25,8 @@ public:
 	virtual bool ConnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId) override;
 	virtual bool DisconnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId) override;
 
+	virtual void Initialize() override;
+	virtual bool WasInitialized() const override;
 	virtual void Perform() override;
 	virtual void Fetch() override;
 
@@ -32,6 +34,7 @@ private:
 	uint32_t GetNumActiveTasks() const;
 
 private:
+	bool _bWasInitialized;
 	std::vector<ComputeNode*> _nodes;
 	std::vector<ComputeTaskPtr> _tasks;
 };

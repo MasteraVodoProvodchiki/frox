@@ -1,14 +1,22 @@
 #include "ComputeNodeImpl.h"
+
 #include <assert.h>
 
 namespace frox {
 
 ComputeNodeImpl::ComputeNodeImpl(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
+	, _name(initializer.Name != nullptr ? initializer.Name : "Noname")
+	, _bWasInitialized(false)
 {}
 
 ComputeNodeImpl::~ComputeNodeImpl()
 {}
+
+const char* ComputeNodeImpl::GetName() const
+{
+	return _name.c_str();
+}
 
 void ComputeNodeImpl::SetInput(uint32_t inId, ComputeFramePtr frame)
 {
@@ -21,6 +29,17 @@ void ComputeNodeImpl::SetInput(uint32_t inId, ComputeFramePtr frame)
 ComputeFramePtr ComputeNodeImpl::GetOutput(uint32_t outId)
 {
 	return outId < _outputs.size() ? _outputs[outId]->Frame : nullptr;
+}
+
+void ComputeNodeImpl::Initialize()
+{
+	this->OnPostInit();
+	_bWasInitialized = true;
+}
+
+bool ComputeNodeImpl::WasInitialized() const
+{
+	return _bWasInitialized;
 }
 
 uint32_t ComputeNodeImpl::CreateInput(const char* name)
