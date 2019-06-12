@@ -37,6 +37,9 @@ void FroxImpl::DestroyComputeFlow(ComputeFlow* computeFlow)
 
 ComputeFramePtr FroxImpl::CreateComputeFrame(Size size, EComputeFrameType type, void* data)
 {
+	assert(size.Width > 0 && size.Height > 0);
+	assert(type != EComputeFrameType::ECFT_None);
+
 	return ComputeFrameImplV1::Create(size, type, data);
 }
 
