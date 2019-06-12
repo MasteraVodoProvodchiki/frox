@@ -131,6 +131,7 @@
     <ClInclude Include="ComputeNodeImpl.h" />
     <ClInclude Include="ComputeTask.h" />
     <ClInclude Include="ComputeThread.h" />
+    <ClInclude Include="Variant.h" />
     <ClInclude Include="Frox.h" />
     <ClInclude Include="ComputeNodeFactory.h" />
     <ClInclude Include="FroxImpl.h" />
