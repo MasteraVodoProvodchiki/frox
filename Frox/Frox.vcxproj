@@ -121,9 +121,11 @@
   <ItemGroup>
     <ClInclude Include="Allocator.h" />
     <ClInclude Include="AvgComputeNode.h" />
+    <ClInclude Include="BasicComputeFlow.h" />
     <ClInclude Include="BasicComputeNodes.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ComputeFlow.h" />
+    <ClInclude Include="BasicComputeFlowImpl.h" />
     <ClInclude Include="ComputeFlowImpl.h" />
     <ClInclude Include="ComputeFrame.h" />
     <ClInclude Include="ComputeFrameImplV1.h" />
@@ -145,8 +147,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AvgComputeNode.cpp" />
+    <ClCompile Include="BasicComputeFlow.cpp" />
     <ClCompile Include="BasicComputeNodes.cpp" />
     <ClCompile Include="ComputeFlow.cpp" />
+    <ClCompile Include="BasicComputeFlowImpl.cpp" />
     <ClCompile Include="ComputeFlowImpl.cpp" />
     <ClCompile Include="ComputeFrame.cpp" />
     <ClCompile Include="ComputeFrameImplV1.cpp" />

@@ -27,9 +27,6 @@
     <ClInclude Include="ComputeNode.h">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="ComputeFlowImpl.h">
-      <Filter>Private</Filter>
-    </ClInclude>
     <ClInclude Include="ComputeNodeFactory.h">
       <Filter>Public</Filter>
     </ClInclude>
@@ -84,6 +81,15 @@
     <ClInclude Include="SubFlowComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="BasicComputeFlow.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComputeFlowImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFlowImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -94,9 +100,6 @@
     </ClCompile>
     <ClCompile Include="ComputeNode.cpp">
       <Filter>Public</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputeFlowImpl.cpp">
-      <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="ComputeNodeFactory.cpp">
       <Filter>Public</Filter>
@@ -136,6 +139,15 @@
     </ClCompile>
     <ClCompile Include="SubFlowComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComputeFlow.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComputeFlowImpl.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFlowImpl.cpp">
+      <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

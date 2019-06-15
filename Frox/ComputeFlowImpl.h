@@ -1,79 +1,52 @@
 #pragma once
 
-#include "ComputeFlow.h"
-#include "ComputeTask.h"
+#include "Common.h"
+#include "ComputeFrame.h"
 
-#include <vector>
+#include <memory>
 
 namespace frox {
 
-// Entry structs
-struct ComputeFlowEntryNode
-{
-	ComputeNode* Node;
-	uint32_t InId;
-};
-
-struct ComputeFlowEntry
-{
-	std::string Name;
-	ComputeFramePtr Frame;
-	std::vector<ComputeFlowEntryNode> Nodes;
-};
-
-// Output structs
-struct ComputeFlowOutput
-{
-	std::string Name;
-	ComputeFramePtr Frame;
-};
+class ComputeNodeImpl;
 
 /**
- * @brief Basic class of compute flow
+ * @brief Compute flow class impl
  */
-class ComputeFlowImpl : public ComputeFlow
+class ComputeFlowImpl : public std::enable_shared_from_this<ComputeFlowImpl>
 {
-	ComputeFlowImpl();
-
 public:
-	virtual ~ComputeFlowImpl() override;
+	virtual ~ComputeFlowImpl() {}
 
-	static ComputeFlowImpl* Create()
+	std::shared_ptr<ComputeFlowImpl> GetPtr()
 	{
-		return new ComputeFlowImpl();
+		return shared_from_this();
 	}
 
-	// ComputeFlow overrides
-	virtual ComputeNode* CreateNode(const char* type, const char* name = nullptr) override;
-	virtual void DestoyNode(ComputeNode* node) override;
-	virtual bool ConnectNodes(ComputeNode* outNode, uint32_t outPinId, ComputeNode* inNode, uint32_t inPinId) override;
-	virtual bool DisconnectNodes(ComputeNode* outNode, uint32_t outPinId, ComputeNode* inNode, uint32_t inPinId) override;
+	// Nodes
+	virtual ComputeNodeImpl* CreateNode(const char* type, const char* name = nullptr) = 0;
+	virtual void DestoyNode(ComputeNodeImpl* node) = 0;
 
-	virtual uint32_t CreateEntry(const char* name = nullptr) override;
-	virtual uint32_t CreateOutput(const char* name = nullptr) override;
+	// Connections
+	virtual bool ConnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId) = 0;
+	virtual bool DisconnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId) = 0;
 
-	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
-	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const override;
+	// Input/Output
+	virtual uint32_t CreateEntry(const char* name = nullptr) = 0;
+	virtual uint32_t CreateOutput(const char* name = nullptr) = 0;
 
-	virtual void ConnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId = 0) override;
-	virtual void DisconnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId = 0) override;
+	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) = 0;
+	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const = 0;
 
-	virtual void Initialize() override;
-	virtual bool WasInitialized() const override;
-	virtual void Perform() override;
-	virtual void Fetch() override;
-	// End ComputeFlow overrides
+	virtual void ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) = 0;
+	virtual void DisconnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) = 0;
 
-private:
-	uint32_t GetNumActiveTasks() const;
-
-private:
-	bool _bWasInitialized;
-	std::vector<ComputeNode*> _nodes;
-	std::vector<ComputeTaskPtr> _tasks;
-
-	std::vector<ComputeFlowEntry> _entries;
-	std::vector<ComputeFlowOutput> _outputs;
+	// Common
+	virtual void Initialize() = 0;
+	virtual bool WasInitialized() const = 0;
+	virtual void Perform() = 0;
+	virtual void Fetch() = 0;
+	virtual uint32_t GetNumActiveTasks() const = 0;
 };
+using ComputeFlowImplPtr = std::shared_ptr<ComputeFlowImpl>;
 
 } // End frox

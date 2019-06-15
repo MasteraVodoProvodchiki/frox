@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 
 namespace frox {
@@ -13,9 +14,19 @@ public:
 	virtual ~ComputeTask() {}
 	virtual void Perform() = 0;
 
+	void BindOnCompleted(std::function<void(ComputeTask*)> callback)
+	{
+		_onCompleted = callback;
+	}
+
 	void Complete()
 	{
-		_bCompleted = true;
+		if (_onCompleted)
+		{
+			_onCompleted(this);
+		}
+
+		_bCompleted = true;	
 	}
 
 	bool IsCompleted() const
@@ -25,6 +36,7 @@ public:
 
 private:
 	bool _bCompleted;
+	std::function<void(ComputeTask*)> _onCompleted;
 };
 using ComputeTaskPtr = std::shared_ptr<ComputeTask>;
 

@@ -1,6 +1,6 @@
 #include "FroxImpl.h"
 #include "Log.h"
-#include "ComputeFlowImpl.h"
+#include "BasicComputeFlow.h"
 #include "ComputeFrameImplV1.h"
 
 #include <algorithm>
@@ -20,7 +20,7 @@ FroxImpl::~FroxImpl()
 
 ComputeFlow* FroxImpl::CreateComputeFlow()
 {
-	ComputeFlow* flow =  ComputeFlowImpl::Create();
+	ComputeFlow* flow =  BasicComputeFlow::Create();
 	_flows.push_back(flow);
 	return flow;
 }
@@ -31,8 +31,6 @@ void FroxImpl::DestroyComputeFlow(ComputeFlow* computeFlow)
 		return other == computeFlow;
 	});
 	_flows.erase(it);
-
-	delete computeFlow;
 }
 
 ComputeFramePtr FroxImpl::CreateComputeFrame(Size size, EComputeFrameType type, void* data)
