@@ -81,6 +81,9 @@
     <ClInclude Include="Variant.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="SubFlowComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -129,6 +132,9 @@
       <Filter>Public\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="MakeFrameComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="SubFlowComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>

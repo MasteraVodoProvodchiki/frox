@@ -132,6 +132,7 @@
     <ClInclude Include="ComputeNodeImpl.h" />
     <ClInclude Include="ComputeTask.h" />
     <ClInclude Include="ComputeThread.h" />
+    <ClInclude Include="SubFlowComputeNode.h" />
     <ClInclude Include="Variant.h" />
     <ClInclude Include="Frox.h" />
     <ClInclude Include="ComputeNodeFactory.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="FroxImpl.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MakeFrameComputeNode.cpp" />
+    <ClCompile Include="SubFlowComputeNode.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
