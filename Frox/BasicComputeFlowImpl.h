@@ -65,8 +65,12 @@ public:
 	virtual uint32_t GetNumActiveTasks() const override;
 	// End ComputeFlow overrides
 	
+	void SetOnPerformedCallback(std::function<void()> onPerformed);
+	void ClearOnPerformedCallback();
+
 private:
 	void OnTaskCompleted(ComputeTask* task);
+	void Performed();
 
 private:
 	bool _bWasInitialized;
@@ -74,6 +78,9 @@ private:
 
 	mutable std::mutex _tasksMutex;
 	std::vector<ComputeTaskPtr> _tasks;
+
+	mutable std::mutex _onPerformedMutex;
+	std::function<void()> _onPerformed;
 
 	std::vector<ComputeFlowEntry> _entries;
 	std::vector<ComputeFlowOutput> _outputs;

@@ -258,6 +258,32 @@ void BasicComputeFlowImpl::OnTaskCompleted(ComputeTask* task)
 		return other.get() == task;
 	});
 	_tasks.erase(it, _tasks.end());
+
+	if (_tasks.empty())
+	{
+		Performed();
+	}
+}
+
+void BasicComputeFlowImpl::SetOnPerformedCallback(std::function<void()> onPerformed)
+{
+	std::lock_guard<std::mutex> lock(_onPerformedMutex);
+}
+
+void BasicComputeFlowImpl::ClearOnPerformedCallback()
+{
+	std::lock_guard<std::mutex> lock(_onPerformedMutex);
+}
+
+void BasicComputeFlowImpl::Performed()
+{
+	assert(_tasks.empty());
+
+	std::lock_guard<std::mutex> lock(_onPerformedMutex);
+	if (_onPerformed)
+	{
+		_onPerformed();
+	}
 }
 
 } // End frox

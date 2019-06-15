@@ -18,6 +18,8 @@ namespace frox {
 
 class ComputeFrame;
 class ComputeNode;
+
+class IComputeFlowListerner;
 class ComputeFlow;
 
 } // End frox

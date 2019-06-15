@@ -5,6 +5,12 @@
 
 namespace frox {
 
+class IComputeFlowListerner
+{
+public:
+	virtual void OnPerformed() = 0;
+};
+
 /**
  * @brief Compute flow class
  */

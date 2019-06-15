@@ -18,9 +18,9 @@ FroxImpl::~FroxImpl()
 	assert(_flows.empty());
 }
 
-ComputeFlow* FroxImpl::CreateComputeFlow()
+ComputeFlow* FroxImpl::CreateComputeFlow(IComputeFlowListerner* listerner)
 {
-	ComputeFlow* flow =  BasicComputeFlow::Create();
+	ComputeFlow* flow =  BasicComputeFlow::Create(listerner);
 	_flows.push_back(flow);
 	return flow;
 }
