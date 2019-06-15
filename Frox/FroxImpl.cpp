@@ -31,6 +31,8 @@ void FroxImpl::DestroyComputeFlow(ComputeFlow* computeFlow)
 		return other == computeFlow;
 	});
 	_flows.erase(it);
+
+	delete computeFlow;
 }
 
 ComputeFramePtr FroxImpl::CreateComputeFrame(Size size, EComputeFrameType type, void* data)

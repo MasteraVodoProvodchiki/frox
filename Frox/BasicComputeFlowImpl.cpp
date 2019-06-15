@@ -268,11 +268,13 @@ void BasicComputeFlowImpl::OnTaskCompleted(ComputeTask* task)
 void BasicComputeFlowImpl::SetOnPerformedCallback(std::function<void()> onPerformed)
 {
 	std::lock_guard<std::mutex> lock(_onPerformedMutex);
+	_onPerformed = onPerformed;
 }
 
 void BasicComputeFlowImpl::ClearOnPerformedCallback()
 {
 	std::lock_guard<std::mutex> lock(_onPerformedMutex);
+	_onPerformed = nullptr;
 }
 
 void BasicComputeFlowImpl::Performed()
