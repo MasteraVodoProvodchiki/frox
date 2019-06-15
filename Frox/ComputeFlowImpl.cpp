@@ -24,6 +24,7 @@ ComputeFlowImpl::~ComputeFlowImpl()
 
 ComputeNode* ComputeFlowImpl::CreateNode(const char* type, const char* name)
 {
+	// Create node
 	ComputeNodeInitializer initializer {
 		name
 	};
@@ -35,14 +36,21 @@ ComputeNode* ComputeFlowImpl::CreateNode(const char* type, const char* name)
 		return nullptr;
 	}
 
+	// Pins
 	node->AllocateDefaultPins();
 
+	// Append
 	_nodes.push_back(node);
+
 	return node;
 }
 
 void ComputeFlowImpl::DestoyNode(ComputeNode* node)
 {
+	// Remove From Entries/Outputs
+	// TODO. Add code
+
+	// Remove
 	auto it = std::remove_if(_nodes.begin(), _nodes.end(), [node](ComputeNode* other) {
 		return other == node;
 	});
@@ -51,7 +59,7 @@ void ComputeFlowImpl::DestoyNode(ComputeNode* node)
 	delete node;
 }
 
-bool ComputeFlowImpl::ConnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId)
+bool ComputeFlowImpl::ConnectNodes(ComputeNode* outNode, uint32_t outPinId, ComputeNode* inNode, uint32_t inPinId)
 {
 	// Impl
 	ComputeNodeImpl* outNodeImpl = reinterpret_cast<ComputeNodeImpl*>(outNode);
@@ -61,14 +69,13 @@ bool ComputeFlowImpl::ConnectNodes(ComputeNode* outNode, int outPinId, ComputeNo
 	ComputeNodePinPtr outputPin = outNodeImpl->GetOutputPin(outPinId);
 	ComputeNodePinPtr inputPin = inNodeImpl->GetInputPin(inPinId);
 
-	// connect
+	// Connect
 	outputPin->ConnectTo(inputPin);
-
 
 	return true;
 }
 
-bool ComputeFlowImpl::DisconnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId)
+bool ComputeFlowImpl::DisconnectNodes(ComputeNode* outNode, uint32_t outPinId, ComputeNode* inNode, uint32_t inPinId)
 {
 	// Impl
 	ComputeNodeImpl* outNodeImpl = reinterpret_cast<ComputeNodeImpl*>(outNode);
@@ -78,10 +85,12 @@ bool ComputeFlowImpl::DisconnectNodes(ComputeNode* outNode, int outPinId, Comput
 	ComputeNodePinPtr outputPin = outNodeImpl->GetOutputPin(outPinId);
 	ComputeNodePinPtr inputPin = inNodeImpl->GetInputPin(inPinId);
 	
-	// disonnect
+	// Disonnect
+	// TODO. Add disconnect
 	outputPin; inputPin;
 
-	return true;
+	assert(false);
+	return false;
 }
 
 void ComputeFlowImpl::Initialize()
@@ -118,8 +127,6 @@ void ComputeFlowImpl::Perform()
 
 			ComputeTaskPtr taskPtr = ComputeTaskPtr(task);
 			_tasks.push_back(taskPtr);
-
-			ComputeThreadPool::Instance().Push(taskPtr);
 		}
 		else
 		{
@@ -127,18 +134,23 @@ void ComputeFlowImpl::Perform()
 			Log::Error(message.c_str(), "ComputeFlow");
 		}
 	}
+
+	// Push tasks
+	for (ComputeTaskPtr task : _tasks)
+	{
+		ComputeThreadPool::Instance().Push(task);
+	}
 }
 
 void ComputeFlowImpl::Fetch()
 {
 	// Wait tasks
-	uint32_t nbActiveTasks = 0;
-	do
+	uint32_t nbActiveTasks = GetNumActiveTasks();
+	while (nbActiveTasks > 0)
 	{
-		nbActiveTasks = GetNumActiveTasks();
 		std::this_thread::sleep_for(std::chrono::microseconds(1));
+		nbActiveTasks = GetNumActiveTasks();
 	}
-	while (nbActiveTasks > 0);
 
 	_tasks.clear();
 }

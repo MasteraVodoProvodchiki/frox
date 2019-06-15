@@ -7,6 +7,9 @@
 
 namespace frox {
 
+/**
+ * @brief Basic class of compute flow
+ */
 class ComputeFlowImpl : public ComputeFlow
 {
 	ComputeFlowImpl();
@@ -22,13 +25,14 @@ public:
 	// ComputeFlow overrides
 	virtual ComputeNode* CreateNode(const char* type, const char* name = nullptr) override;
 	virtual void DestoyNode(ComputeNode* node) override;
-	virtual bool ConnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId) override;
-	virtual bool DisconnectNodes(ComputeNode* outNode, int outPinId, ComputeNode* inNode, int inPinId) override;
+	virtual bool ConnectNodes(ComputeNode* outNode, uint32_t outPinId, ComputeNode* inNode, uint32_t inPinId) override;
+	virtual bool DisconnectNodes(ComputeNode* outNode, uint32_t outPinId, ComputeNode* inNode, uint32_t inPinId) override;
 
 	virtual void Initialize() override;
 	virtual bool WasInitialized() const override;
 	virtual void Perform() override;
 	virtual void Fetch() override;
+	// End ComputeFlow overrides
 
 private:
 	uint32_t GetNumActiveTasks() const;

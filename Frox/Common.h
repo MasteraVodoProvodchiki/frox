@@ -12,6 +12,8 @@
 
 #define FROX_VERSION 100
 
+#include <stdint.h>
+
 namespace frox {
 
 class ComputeFrame;
