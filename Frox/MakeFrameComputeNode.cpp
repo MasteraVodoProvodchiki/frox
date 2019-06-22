@@ -50,7 +50,7 @@ void MakeFrameBaseComputeNode::AllocateDefaultPins()
 
 void MakeFrameBaseComputeNode::OnPostInit()
 {
-	if (this->IsValid())
+	if (_width > 0 && _height > 0 && _type != EComputeFrameType::ECFT_None)
 	{
 		ComputeFramePtr output = FroxInstance()->CreateComputeFrame(Size{ _width, _height }, _type);
 		SetOutput(_output, output);
