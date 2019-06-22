@@ -43,6 +43,12 @@ struct DivOperation
 	{
 		return A / B;
 	}
+
+	template <>
+	bool operator ()(bool A, bool B)
+	{
+		return false;
+	}
 };
 
 } // End utils
@@ -101,16 +107,16 @@ ComputeTask* OperationComputeNode::CreateComputeTask()
 		switch (type)
 		{
 		case OperationComputeNode::ET_Add:
-			utils::Foreach<utils::AddOperation>(left, right, output);
+			utils::Foreach(left, right, output, utils::AddOperation());
 			break;
 		case OperationComputeNode::ET_Sub:
-			utils::Foreach<utils::SubOperation>(left, right, output);
+			utils::Foreach(left, right, output, utils::SubOperation());
 			break;
 		case OperationComputeNode::ET_Mul:
-			utils::Foreach<utils::MulOperation>(left, right, output);
+			utils::Foreach(left, right, output, utils::MulOperation());
 			break;
 		case OperationComputeNode::ET_Div:
-			utils::Foreach<utils::DivOperation>(left, right, output);
+			utils::Foreach(left, right, output, utils::DivOperation());
 			break;
 		default:
 			break;
