@@ -7,37 +7,90 @@
 
 namespace frox {
 
-MakeFrameComputeNode::MakeFrameComputeNode(const ComputeNodeInitializer& initializer)
+namespace utils {
+
+struct RandomValue
+{
+	template<typename T>
+	T operator ()(const T&) const
+	{
+		return T(std::rand() % std::numeric_limits<T>::max());
+	}
+
+	template<>
+	bool operator ()(const bool&) const
+	{
+		return (std::rand() % 1) ? true : false;
+	}
+
+	template<>
+	float operator ()(const float&) const
+	{
+		return float(std::rand()) / float(RAND_MAX);
+	}
+};
+
+} // End utils
+
+/// Base
+MakeFrameBaseComputeNode::MakeFrameBaseComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
 	, _width(1)
 	, _height(1)
 	, _type(EComputeFrameType::ECFT_None)
 {}
 
-MakeFrameComputeNode::~MakeFrameComputeNode()
+MakeFrameBaseComputeNode::~MakeFrameBaseComputeNode()
 {}
 
-void MakeFrameComputeNode::AllocateDefaultPins()
+void MakeFrameBaseComputeNode::AllocateDefaultPins()
 {
 	_output = CreateOutput("output");
 }
 
-void MakeFrameComputeNode::OnPostInit()
+void MakeFrameBaseComputeNode::OnPostInit()
 {
-	if (_width > 0 && _height > 0 && _type != EComputeFrameType::ECFT_None && _value.IsValid())
+	if (this->IsValid())
 	{
 		ComputeFramePtr output = FroxInstance()->CreateComputeFrame(Size{ _width, _height }, _type);
 		SetOutput(_output, output);
 	}
 }
 
-bool MakeFrameComputeNode::IsValid() const
+bool MakeFrameBaseComputeNode::IsValid() const
 {
 	return
 		_width > 0 && _height > 0 &&
-		_value.IsValid() &&
 		_type != EComputeFrameType::ECFT_None &&
 		GetOutput(_output) != nullptr;
+}
+
+void MakeFrameBaseComputeNode::SetWidth(uint32_t width)
+{
+	_width = width;
+}
+
+void MakeFrameBaseComputeNode::SetHeight(uint32_t height)
+{
+	_height = height;
+}
+
+void MakeFrameBaseComputeNode::SetType(EComputeFrameType type)
+{
+	_type = type;
+}
+
+
+/// Make By Value
+MakeFrameComputeNode::MakeFrameComputeNode(const ComputeNodeInitializer& initializer)
+	: Super(initializer)
+{}
+
+bool MakeFrameComputeNode::IsValid() const
+{
+	return
+		Super::IsValid() &&
+		_value.IsValid();
 }
 
 ComputeTask* MakeFrameComputeNode::CreateComputeTask()
@@ -106,26 +159,12 @@ ComputeTask* MakeFrameComputeNode::CreateComputeTask()
 	});
 }
 
-void MakeFrameComputeNode::SetWidth(uint32_t width)
-{
-	_width = width;
-}
-
-void MakeFrameComputeNode::SetHeight(uint32_t height)
-{
-	_height = height;
-}
-
 void MakeFrameComputeNode::SetValue(Variant value)
 {
 	_value = value;
 }
 
-void MakeFrameComputeNode::SetType(EComputeFrameType type)
-{
-	_type = type;
-}
-
+/// Make By Zero
 MakeZeroFrameComputeNode::MakeZeroFrameComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
 {
@@ -133,7 +172,48 @@ MakeZeroFrameComputeNode::MakeZeroFrameComputeNode(const ComputeNodeInitializer&
 	SetValue(0.f);
 }
 
+/// Make By Noise
+MakeNoiseFrameComputeNode::MakeNoiseFrameComputeNode(const ComputeNodeInitializer& initializer)
+	: Super(initializer)
+{}
+
+ComputeTask* MakeNoiseFrameComputeNode::CreateComputeTask()
+{
+	ComputeFramePtr output = GetOutput(_output);
+
+	return ComputeTaskUtils::Make([output]() {
+		EComputeFrameType type = output->GetType();
+		Size size = output->GetSize();
+		switch (type)
+		{
+		case ECFT_Bool: {
+			utils::Fill<bool>(output, utils::RandomValue());
+			break;
+		}
+		case ECFT_UInt8: {
+			utils::Fill<uint8_t>(output, utils::RandomValue());
+			break;
+		}
+		case ECFT_UInt16: {
+			utils::Fill<uint16_t>(output, utils::RandomValue());
+			break;
+		}
+		case ECFT_UInt32: {
+			utils::Fill<uint32_t>(output, utils::RandomValue());
+			break;
+		}
+		case ECFT_Float: {
+			utils::Fill<float>(output, utils::RandomValue());
+			break;
+		}
+		default:
+			break;
+		}
+	});
+}
+
 FROX_COMPUTENODE_IMPL(MakeFrameComputeNode)
 FROX_COMPUTENODE_IMPL(MakeZeroFrameComputeNode)
+FROX_COMPUTENODE_IMPL(MakeNoiseFrameComputeNode)
 
 } // End frox
