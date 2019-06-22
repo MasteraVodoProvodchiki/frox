@@ -27,6 +27,7 @@ struct ComputeFlowOutput
 {
 	std::string Name;
 	ComputeFramePtr Frame;
+	std::vector<ComputeFlowEntryNode> Nodes;
 };
 
 /**
@@ -52,11 +53,17 @@ public:
 	virtual uint32_t CreateEntry(const char* name = nullptr) override;
 	virtual uint32_t CreateOutput(const char* name = nullptr) override;
 
+	virtual int32_t FindEntryByName(const char* name) const override;
+	virtual int32_t FindOutputByName(const char* name) const override;
+
 	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
 	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const override;
 
 	virtual void ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) override;
 	virtual void DisconnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) override;
+
+	virtual void ConnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId = 0) override;
+	virtual void DisconnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId = 0) override;
 
 	virtual void Initialize() override;
 	virtual bool WasInitialized() const override;

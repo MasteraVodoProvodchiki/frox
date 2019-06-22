@@ -5,6 +5,22 @@
 
 namespace frox {
 
+uint32_t ComputeFlow::FindOrCreateEntry(const char* name)
+{
+	assert(name != nullptr);
+
+	uint32_t entryId = this->FindEntryByName(name);
+	return entryId != -1 ? entryId : this->CreateEntry(name);
+}
+
+uint32_t ComputeFlow::FindOrCreateOutput(const char* name)
+{
+	assert(name != nullptr);
+
+	uint32_t outputId = this->FindOutputByName(name);
+	return outputId != -1 ? outputId : this->CreateOutput(name);
+}
+
 void ComputeFlow::SetInputScalar(uint32_t inId, uint8_t value)
 {
 	Frox* frox = FroxInstance();

@@ -67,6 +67,18 @@ uint32_t BasicComputeFlow::CreateOutput(const char* name)
 	return _impl->CreateOutput(name);
 }
 
+int32_t BasicComputeFlow::FindEntryByName(const char* name) const
+{
+	assert(_impl);
+	return _impl->FindEntryByName(name);
+}
+
+int32_t BasicComputeFlow::FindOutputByName(const char* name) const
+{
+	assert(_impl);
+	return _impl->FindOutputByName(name);
+}
+
 void BasicComputeFlow::SetInput(uint32_t inId, ComputeFramePtr frame)
 {
 	assert(_impl);
@@ -93,6 +105,22 @@ void BasicComputeFlow::DisconnectEntry(uint32_t entryId, ComputeNode* inNode, ui
 
 	ComputeNodeImpl* inNodeImpl = reinterpret_cast<ComputeNodeImpl*>(inNode);
 	return _impl->DisconnectEntry(entryId, inNodeImpl, inPinId);
+}
+
+void BasicComputeFlow::ConnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId)
+{
+	assert(_impl);
+
+	ComputeNodeImpl* outNodeImpl = reinterpret_cast<ComputeNodeImpl*>(outNode);
+	return _impl->ConnectOutput(outputId, outNodeImpl, outPinId);
+}
+
+void BasicComputeFlow::DisconnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId)
+{
+	assert(_impl);
+
+	ComputeNodeImpl* outNodeImpl = reinterpret_cast<ComputeNodeImpl*>(outNode);
+	return _impl->DisconnectEntry(outputId, outNodeImpl, outPinId);
 }
 
 void BasicComputeFlow::Initialize()

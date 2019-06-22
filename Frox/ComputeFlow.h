@@ -39,14 +39,32 @@ public:
 	}
 
 	// Input/Output
-	virtual uint32_t CreateEntry(const char* name = nullptr) = 0;
-	virtual uint32_t CreateOutput(const char* name = nullptr) = 0;
+	/**
+	 * @brief 
+	 * @return Entry Id
+	 */
+	virtual uint32_t CreateEntry(const char* name) = 0;
+
+	/**
+	 * @brief
+	 * @return Output Id
+	 */
+	virtual uint32_t CreateOutput(const char* name) = 0;
+
+	virtual int32_t FindEntryByName(const char* name) const = 0;
+	virtual int32_t FindOutputByName(const char* name) const = 0;
 
 	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) = 0;
 	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const = 0;
 
 	virtual void ConnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId = 0) = 0;
 	virtual void DisconnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId = 0) = 0;
+
+	virtual void ConnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId = 0) = 0;
+	virtual void DisconnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId = 0) = 0;
+
+	uint32_t FindOrCreateEntry(const char* name);
+	uint32_t FindOrCreateOutput(const char* name);
 
 	void SetInputScalar(uint32_t inId, uint8_t value);
 	void SetInputScalar(uint32_t inId, uint16_t value);

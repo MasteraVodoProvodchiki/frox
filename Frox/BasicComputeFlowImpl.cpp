@@ -107,6 +107,22 @@ uint32_t BasicComputeFlowImpl::CreateOutput(const char* name)
 	return id;
 }
 
+int32_t BasicComputeFlowImpl::FindEntryByName(const char* name) const
+{
+	auto it = std::find_if(_entries.begin(), _entries.end(), [name](const ComputeFlowEntry& entry) {
+		return entry.Name == name;
+	});
+	return it != _entries.end() ? it - _entries.begin() : -1;
+}
+
+int32_t BasicComputeFlowImpl::FindOutputByName(const char* name) const
+{
+	auto it = std::find_if(_outputs.begin(), _outputs.end(), [name](const ComputeFlowOutput& output) {
+		return output.Name == name;
+	});
+	return it != _outputs.end() ? it - _outputs.begin() : -1;
+}
+
 void BasicComputeFlowImpl::SetInput(uint32_t inId, ComputeFramePtr frame)
 {
 	assert(inId < _entries.size());
@@ -116,7 +132,7 @@ void BasicComputeFlowImpl::SetInput(uint32_t inId, ComputeFramePtr frame)
 ComputeFramePtr BasicComputeFlowImpl::GetOutput(uint32_t outId) const
 {
 	assert(outId < _outputs.size());
-	return _entries[outId].Frame;
+	return _outputs[outId].Frame;
 }
 
 void BasicComputeFlowImpl::ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId)
@@ -142,6 +158,34 @@ void BasicComputeFlowImpl::DisconnectEntry(uint32_t entryId, ComputeNodeImpl* in
 	auto& nodes = _entries[entryId].Nodes;
 	auto it = std::remove_if(nodes.begin(), nodes.end(), [inNode, inPinId](const ComputeFlowEntryNode& nodeEntry) {
 		return nodeEntry.Node == inNode && nodeEntry.InId == inPinId;
+	});
+	nodes.erase(it, nodes.end());
+}
+
+void BasicComputeFlowImpl::ConnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId)
+{
+	assert(outputId < _outputs.size());
+
+	assert(std::find(_nodes.begin(), _nodes.end(), outNode) != _nodes.end());
+
+	// Check Pin
+	assert(outNode->GetInputPin(outPinId));
+
+	// Append
+	_outputs[outputId].Nodes.push_back(ComputeFlowEntryNode{
+		outNode,
+		outPinId,
+	});
+}
+
+void BasicComputeFlowImpl::DisconnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId)
+{
+	assert(outputId < _outputs.size());
+
+	// Remove
+	auto& nodes = _outputs[outputId].Nodes;
+	auto it = std::remove_if(nodes.begin(), nodes.end(), [outNode, outPinId](const ComputeFlowEntryNode& nodeEntry) {
+		return nodeEntry.Node == outNode && nodeEntry.InId == outPinId;
 	});
 	nodes.erase(it, nodes.end());
 }
@@ -233,6 +277,16 @@ void BasicComputeFlowImpl::Fetch()
 	}
 
 	_tasks.clear();
+
+	// Update outputs
+	for (ComputeFlowOutput& output : _outputs)
+	{
+		for (const ComputeFlowEntryNode& outputNode : output.Nodes)
+		{
+			ComputeFramePtr frame = outputNode.Node->GetOutput(outputNode.InId);
+			output.Frame = frame;
+		}
+	}
 }
 
 uint32_t BasicComputeFlowImpl::GetNumActiveTasks() const
