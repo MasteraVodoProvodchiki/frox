@@ -33,6 +33,8 @@ protected:
 	virtual void OnPostInit()
 	{}
 
+	void ReallocatePins();
+
 	uint32_t CreateInput(const char* name);
 	uint32_t CreateOutput(const char* name);
 

@@ -107,6 +107,18 @@ uint32_t BasicComputeFlowImpl::CreateOutput(const char* name)
 	return id;
 }
 
+uint32_t BasicComputeFlowImpl::GetEntries(const ComputeFlowEntry** outEntries) const
+{
+	*outEntries = _entries.data();
+	return uint32_t(_entries.size());
+}
+
+uint32_t BasicComputeFlowImpl::GetOutputs(const ComputeFlowOutput** outOutputs) const
+{
+	*outOutputs = _outputs.data();
+	return uint32_t(_outputs.size());
+}
+
 int32_t BasicComputeFlowImpl::FindEntryByName(const char* name) const
 {
 	auto it = std::find_if(_entries.begin(), _entries.end(), [name](const ComputeFlowEntry& entry) {
@@ -169,7 +181,7 @@ void BasicComputeFlowImpl::ConnectOutput(uint32_t outputId, ComputeNodeImpl* out
 	assert(std::find(_nodes.begin(), _nodes.end(), outNode) != _nodes.end());
 
 	// Check Pin
-	assert(outNode->GetInputPin(outPinId));
+	assert(outNode->GetOutputPin(outPinId));
 
 	// Append
 	_outputs[outputId].Nodes.push_back(ComputeFlowEntryNode{

@@ -57,4 +57,12 @@ void ComputeFlow::SetInputScalar(uint32_t inId, float value)
 	this->SetInput(inId, frame);
 }
 
+void ComputeFlow::Release()
+{
+	Frox* frox = FroxInstance();
+	assert(frox != nullptr);
+
+	frox->DestroyComputeFlow(this);
+}
+
 } // End frox

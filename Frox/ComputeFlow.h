@@ -72,6 +72,8 @@ public:
 	void SetInputScalar(uint32_t inId, float value);
 
 	// Common
+	void Release();
+
 	virtual void Initialize() = 0;
 	virtual bool WasInitialized() const = 0;
 	virtual void Perform() = 0;

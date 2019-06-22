@@ -49,6 +49,8 @@ public:
 	virtual uint32_t GetNumActiveTasks() const override;
 	// End ComputeFlow overrides
 
+	ComputeFlowImplPtr GetComputeFlow() const { return _impl; }
+
 private:
 	void OnPerformed();
 

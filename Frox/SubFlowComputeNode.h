@@ -4,6 +4,7 @@
 #include "ComputeNodeFactory.h"
 #include "ComputeFrame.h"
 #include "ComputeFlow.h"
+#include "ComputeFlowImpl.h"
 
 namespace frox {
 
@@ -22,12 +23,18 @@ public:
 	virtual bool IsValid() const override;
 	virtual ComputeTask* CreateComputeTask() override;
 
+	FROX_API void SetSubFlow(ComputeFlow* subFlow);
+
 protected:
 	// ComputeNodeImpl overrides
 	virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame) override;
 
 private:
 	ComputeFlow* _subFlow;
+	ComputeFlowImplPtr _computeFlowImpl;
+
+	std::vector<uint32_t> inPinIds;
+	std::vector<uint32_t> outPinIds;
 };
 
 

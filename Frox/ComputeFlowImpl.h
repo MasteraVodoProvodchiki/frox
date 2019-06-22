@@ -4,10 +4,35 @@
 #include "ComputeFrame.h"
 
 #include <memory>
+#include <string>
+#include <vector>
 
 namespace frox {
 
 class ComputeNodeImpl;
+
+// Entry structs
+struct ComputeFlowEntryNode
+{
+	ComputeNodeImpl* Node;
+	uint32_t InId;
+};
+
+struct ComputeFlowEntry
+{
+	std::string Name;
+	ComputeFramePtr Frame;
+	std::vector<ComputeFlowEntryNode> Nodes;
+};
+
+// Output structs
+struct ComputeFlowOutput
+{
+	std::string Name;
+	ComputeFramePtr Frame;
+	std::vector<ComputeFlowEntryNode> Nodes;
+};
+
 
 /**
  * @brief Compute flow class impl
@@ -33,6 +58,20 @@ public:
 	// Input/Output
 	virtual uint32_t CreateEntry(const char* name = nullptr) = 0;
 	virtual uint32_t CreateOutput(const char* name = nullptr) = 0;
+
+	/**
+	 * @brief 
+	 * @param outEntries output enties poineter
+	 * @param count
+	 */
+	virtual uint32_t GetEntries(const ComputeFlowEntry** outEntries) const = 0;
+
+	/**
+	 * @brief
+	 * @param outOutputs output outputs poineter
+	 * @param count
+	 */
+	virtual uint32_t GetOutputs(const ComputeFlowOutput** outOutputs) const = 0;
 
 	virtual int32_t FindEntryByName(const char* name) const = 0;
 	virtual int32_t FindOutputByName(const char* name) const = 0;

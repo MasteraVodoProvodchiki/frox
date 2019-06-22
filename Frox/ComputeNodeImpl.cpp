@@ -42,6 +42,14 @@ bool ComputeNodeImpl::WasInitialized() const
 	return _bWasInitialized;
 }
 
+void ComputeNodeImpl::ReallocatePins()
+{
+	_inputs.clear();
+	_outputs.clear();
+
+	this->AllocateDefaultPins();
+}
+
 uint32_t ComputeNodeImpl::CreateInput(const char* name)
 {
 	uint32_t inId = uint32_t(_inputs.size());

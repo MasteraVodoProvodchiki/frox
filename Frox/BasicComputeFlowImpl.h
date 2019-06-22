@@ -8,28 +8,6 @@
 
 namespace frox {
 
-// Entry structs
-struct ComputeFlowEntryNode
-{
-	ComputeNodeImpl* Node;
-	uint32_t InId;
-};
-
-struct ComputeFlowEntry
-{
-	std::string Name;
-	ComputeFramePtr Frame;
-	std::vector<ComputeFlowEntryNode> Nodes;
-};
-
-// Output structs
-struct ComputeFlowOutput
-{
-	std::string Name;
-	ComputeFramePtr Frame;
-	std::vector<ComputeFlowEntryNode> Nodes;
-};
-
 /**
  * @brief Basic class of compute flow
  */
@@ -52,6 +30,9 @@ public:
 
 	virtual uint32_t CreateEntry(const char* name = nullptr) override;
 	virtual uint32_t CreateOutput(const char* name = nullptr) override;
+
+	virtual uint32_t GetEntries(const ComputeFlowEntry** outEntries) const override;
+	virtual uint32_t GetOutputs(const ComputeFlowOutput** outOutputs) const override;
 
 	virtual int32_t FindEntryByName(const char* name) const override;
 	virtual int32_t FindOutputByName(const char* name) const override;
