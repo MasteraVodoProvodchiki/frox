@@ -134,6 +134,8 @@
     <ClInclude Include="ComputeNodeImpl.h" />
     <ClInclude Include="ComputeTask.h" />
     <ClInclude Include="ComputeThread.h" />
+    <ClInclude Include="ConvertToComputeNode.h" />
+    <ClInclude Include="CropComputeNode.h" />
     <ClInclude Include="SubFlowComputeNode.h" />
     <ClInclude Include="Variant.h" />
     <ClInclude Include="Frox.h" />
@@ -159,6 +161,8 @@
     <ClCompile Include="ComputeNodeFactory.cpp" />
     <ClCompile Include="ComputeNodeImpl.cpp" />
     <ClCompile Include="ComputeThread.cpp" />
+    <ClCompile Include="ConvertToComputeNode.cpp" />
+    <ClCompile Include="CropComputeNode.cpp" />
     <ClCompile Include="Frox.cpp" />
     <ClCompile Include="FroxImpl.cpp" />
     <ClCompile Include="Log.cpp" />

@@ -90,6 +90,12 @@
     <ClInclude Include="ComputeFlowImpl.h">
       <Filter>Private</Filter>
     </ClInclude>
+    <ClInclude Include="ConvertToComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="CropComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -148,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="ComputeFlowImpl.cpp">
       <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvertToComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="CropComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

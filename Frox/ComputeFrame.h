@@ -39,6 +39,16 @@ struct Size
 	}
 };
 
+struct Rect
+{
+	int32_t X, Y, Width, Heihgt;
+
+	bool IsValid() const
+	{
+		return X >= 0 && Y >= 0 && Width > 0 && Heihgt > 0;
+	}
+};
+
 struct Point
 {
 	uint32_t X;
