@@ -9,6 +9,21 @@ namespace frox {
 
 namespace utils {
 
+template<typename ValueT>
+struct StaticValue
+{
+	ValueT Value;
+	StaticValue(ValueT value)
+		: Value(value)
+	{}
+
+	template<typename T>
+	T operator ()(const T&) const
+	{
+		return T(Value);
+	}
+};
+
 struct RandomValue
 {
 	template<typename T>
@@ -106,51 +121,27 @@ ComputeTask* MakeFrameComputeNode::CreateComputeTask()
 		{
 		case ECFT_Bool: {
 			bool boolValue = value.To<bool>();
-			for (uint32_t row = 0; row < size.Height; ++row)
-			{
-				bool* values = output->GetRowData<bool>(row);
-				memset(values, boolValue, size.Width * sizeof(bool));
-			}
+			utils::Fill<bool>(output, utils::StaticValue<bool>(boolValue));
 			break;
 		}
 		case ECFT_UInt8: {
-			int intValue = value.To<int>();
-			for (uint32_t row = 0; row < size.Height; ++row)
-			{
-				uint8_t* values = output->GetRowData<uint8_t>(row);
-				memset(values, uint8_t(intValue), size.Width * sizeof(uint8_t));
-			}
+			uint8_t intValue = value.To<uint8_t>();
+			utils::Fill<uint8_t>(output, utils::StaticValue<uint8_t>(intValue));
 			break;
 		}
 		case ECFT_UInt16: {
-			int intValue = value.To<int>();
-			for (uint32_t row = 0; row < size.Height; ++row)
-			{
-				uint16_t* values = output->GetRowData<uint16_t>(row);
-				memset(values, uint16_t(intValue), size.Width * sizeof(uint16_t));
-			}
+			uint16_t intValue = value.To<uint16_t>();
+			utils::Fill<uint16_t>(output, utils::StaticValue<uint16_t>(intValue));
 			break;
 		}
 		case ECFT_UInt32: {
-			int intValue = value.To<int>();
-			for (uint32_t row = 0; row < size.Height; ++row)
-			{
-				uint32_t* values = output->GetRowData<uint32_t>(row);
-				memset(values, uint32_t(intValue), size.Width * sizeof(uint32_t));
-			}
+			uint32_t intValue = value.To<uint32_t>();
+			utils::Fill<uint32_t>(output, utils::StaticValue<uint32_t>(intValue));
 			break;
 		}
 		case ECFT_Float: {
 			float floatValue = value.To<float>();
-			for (uint32_t row = 0; row < size.Height; ++row)
-			{
-				float* values = output->GetRowData<float>(row);
-				for (uint32_t column = 0; column < size.Width; ++column)
-				{
-					float& out = *(values + column);
-					out = floatValue;
-				}
-			}
+			utils::Fill<float>(output, utils::StaticValue<float>(floatValue));
 			break;
 		}
 		default:
