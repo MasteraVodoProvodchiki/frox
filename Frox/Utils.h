@@ -29,7 +29,7 @@ void Foreach(ComputeFramePtr left, ComputeFramePtr right, CallbackT callback)
 template <typename LeftT, typename OperatorT>
 void Foreach(ComputeFramePtr left, ComputeFramePtr right, OperatorT callback)
 {
-	EComputeFrameType rightType = left->GetType();
+	EComputeFrameType rightType = right->GetType();
 	switch (rightType)
 	{
 	case ECFT_Bool: {
