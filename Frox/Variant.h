@@ -14,9 +14,9 @@ class Variant
 		ET_None,
 		ET_Bool,
 		ET_Int,
+		ET_Uint32,
 		ET_Float
 	};
-
 
 public:
 	Variant()
@@ -30,6 +30,11 @@ public:
 
 	Variant(int value)
 		: _type(ET_Int)
+		, _int(value)
+	{}
+
+	Variant(uint32_t value)
+		: _type(ET_Uint32)
 		, _int(value)
 	{}
 
@@ -67,6 +72,7 @@ private:
 	{
 		bool _bool;
 		int _int;
+		uint32_t _uint32;
 		float _float;
 	};
 };
@@ -79,9 +85,27 @@ bool Variant::Is<bool>() const
 }
 
 template<>
+bool Variant::Is<uint8_t>() const
+{
+	return _type == ET_Int;
+}
+
+template<>
+bool Variant::Is<uint16_t>() const
+{
+	return _type == ET_Int;
+}
+
+template<>
 bool Variant::Is<int>() const
 {
 	return _type == ET_Int;
+}
+
+template<>
+bool Variant::Is<uint32_t>() const
+{
+	return _type == ET_Uint32;
 }
 
 template<>
@@ -99,10 +123,31 @@ bool Variant::As<bool>() const
 }
 
 template<>
+uint8_t Variant::As<uint8_t>() const
+{
+	assert(_type == ET_Int);
+	return uint8_t(_int);
+}
+
+template<>
+uint16_t Variant::As<uint16_t>() const
+{
+	assert(_type == ET_Int);
+	return uint16_t(_int);
+}
+
+template<>
 int Variant::As<int>() const
 {
 	assert(_type == ET_Int);
 	return _int;
+}
+
+template<>
+uint32_t Variant::As<uint32_t>() const
+{
+	assert(_type == ET_Uint32);
+	return _uint32;
 }
 
 template<>
@@ -122,10 +167,48 @@ bool Variant::To<bool>() const
 		return _bool;
 	case ET_Int:
 		return _int > 0;
+	case ET_Uint32:
+		return _uint32 > 0;
 	case ET_Float:
 		return _float > 0;
 	default:
 		return false;
+	}
+}
+
+template<>
+uint8_t Variant::To<uint8_t>() const
+{
+	switch (_type)
+	{
+	case ET_Bool:
+		return _bool ? 1 : 0;
+	case ET_Int:
+		return uint8_t(_int);
+	case ET_Uint32:
+		return uint8_t(_int);
+	case ET_Float:
+		return uint8_t(_float);
+	default:
+		return 0;
+	}
+}
+
+template<>
+uint16_t Variant::To<uint16_t>() const
+{
+	switch (_type)
+	{
+	case ET_Bool:
+		return _bool ? 1 : 0;
+	case ET_Int:
+		return uint16_t(_int);
+	case ET_Uint32:
+		return uint16_t(_int);
+	case ET_Float:
+		return uint16_t(_float);
+	default:
+		return 0;
 	}
 }
 
@@ -138,8 +221,28 @@ int Variant::To<int>() const
 		return _bool ? 1 : 0;
 	case ET_Int:
 		return _int;
+	case ET_Uint32:
+		return int(_uint32);
 	case ET_Float:
 		return int(_float);
+	default:
+		return 0;
+	}
+}
+
+template<>
+uint32_t Variant::To<uint32_t>() const
+{
+	switch (_type)
+	{
+	case ET_Bool:
+		return _bool ? 1 : 0;
+	case ET_Int:
+		return uint32_t(_int);
+	case ET_Uint32:
+		return _uint32;
+	case ET_Float:
+		return uint32_t(_float);
 	default:
 		return 0;
 	}
@@ -154,6 +257,8 @@ float Variant::To<float>() const
 		return _bool ? 1.f : 0.f;
 	case ET_Int:
 		return float(_int);
+	case ET_Uint32:
+		return float(_uint32);
 	case ET_Float:
 		return _float;
 	default:
