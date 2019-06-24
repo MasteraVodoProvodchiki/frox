@@ -31,7 +31,7 @@ public:
 	virtual ComputeFlow* CreateComputeFlow(IComputeFlowListerner* listerner = nullptr) = 0;
 	virtual void DestroyComputeFlow(ComputeFlow* computeFlow) = 0;
 
-	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, void* data = nullptr) = 0;
+	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, const void* data = nullptr) = 0;
 	virtual void DestroyComputeFrame(ComputeFramePtr computeFlow) = 0;
 
 	ComputeFramePtr CreateScalar(uint8_t value)

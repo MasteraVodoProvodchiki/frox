@@ -3,7 +3,7 @@
 
 namespace frox {
 
-ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, void* data)
+ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, const void* data)
 {
 	assert(size.Width > 0 && size.Height > 0);
 	assert(type != EComputeFrameType::ECFT_None);
@@ -18,19 +18,19 @@ ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, void* 
 		switch (type)
 		{
 		case ECFT_Bool:
-			_data.Bool = data != nullptr ? *reinterpret_cast<bool*>(data) : 0;
+			_data.Bool = data != nullptr ? *reinterpret_cast<const bool*>(data) : 0;
 			break;
 		case ECFT_UInt8:
-			_data.Uint8 = data != nullptr ? *reinterpret_cast<uint8_t*>(data) : 0;
+			_data.Uint8 = data != nullptr ? *reinterpret_cast<const uint8_t*>(data) : 0;
 			break;
 		case ECFT_UInt16:
-			_data.Uint16 = data != nullptr ? *reinterpret_cast<uint16_t*>(data) : 0;
+			_data.Uint16 = data != nullptr ? *reinterpret_cast<const uint16_t*>(data) : 0;
 			break;
 		case ECFT_UInt32:
-			_data.Uint32 = data != nullptr ? *reinterpret_cast<uint32_t*>(data) : 0;
+			_data.Uint32 = data != nullptr ? *reinterpret_cast<const uint32_t*>(data) : 0;
 			break;
 		case ECFT_Float:
-			_data.Scalar = data != nullptr ? *reinterpret_cast<float*>(data) : 0.f;
+			_data.Scalar = data != nullptr ? *reinterpret_cast<const float*>(data) : 0.f;
 			break;
 		}
 	}

@@ -34,10 +34,10 @@ struct MatData
 class ComputeFrameImplV1 : public ComputeFrame
 {
 public:
-	ComputeFrameImplV1(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, void* data = nullptr);
+	ComputeFrameImplV1(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, const void* data = nullptr);
 	virtual ~ComputeFrameImplV1() override;
 
-	static ComputeFramePtr Create(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, void* data = nullptr)
+	static ComputeFramePtr Create(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, const void* data = nullptr)
 	{
 		return std::make_shared<ComputeFrameImplV1>(size, type, data);
 	}
