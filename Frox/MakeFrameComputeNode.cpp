@@ -203,6 +203,46 @@ ComputeTask* MakeNoiseFrameComputeNode::CreateComputeTask()
 	});
 }
 
+/// UEImageReaderComputeNode
+ConstFrameComputeNode::ConstFrameComputeNode(const ComputeNodeInitializer& initializer)
+	: Super(initializer)
+{}
+
+ConstFrameComputeNode::~ConstFrameComputeNode()
+{}
+
+void ConstFrameComputeNode::AllocateDefaultPins()
+{
+	_output = CreateOutput("output");
+}
+
+void ConstFrameComputeNode::OnPostInit()
+{
+	if (_frame)
+	{
+		SetOutput(_output, _frame);
+	}
+}
+
+bool ConstFrameComputeNode::IsValid() const
+{
+	return GetOutput(_output) != nullptr;
+}
+
+ComputeTask* ConstFrameComputeNode::CreateComputeTask()
+{
+	ComputeFramePtr output = GetOutput(_output);
+	return ComputeTaskUtils::Make([output]() {
+		// Nothing
+	});
+}
+
+void ConstFrameComputeNode::SetFrame(ComputeFramePtr frame)
+{
+	_frame = frame;
+}
+
+FROX_COMPUTENODE_IMPL(ConstFrameComputeNode)
 FROX_COMPUTENODE_IMPL(MakeFrameComputeNode)
 FROX_COMPUTENODE_IMPL(MakeZeroFrameComputeNode)
 FROX_COMPUTENODE_IMPL(MakeNoiseFrameComputeNode)

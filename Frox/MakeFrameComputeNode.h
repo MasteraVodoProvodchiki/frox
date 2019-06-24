@@ -75,5 +75,30 @@ public:
 	virtual ComputeTask* CreateComputeTask() override;
 };
 
+class ConstFrameComputeNode : public ComputeNodeImpl
+{
+	FROX_COMPUTENODE(ConstFrameComputeNode, "constframe")
+	using Super = ComputeNodeImpl;
+
+public:
+	ConstFrameComputeNode(const ComputeNodeInitializer& initializer);
+	virtual ~ConstFrameComputeNode() override;
+
+	// ComputeNode overrides
+	virtual void AllocateDefaultPins() override;
+	virtual bool IsValid() const override;
+	virtual ComputeTask* CreateComputeTask() override;
+
+	FROX_API void SetFrame(ComputeFramePtr frame);
+
+protected:
+	// ComputeNodeImpl overrides
+	virtual void OnPostInit() override;
+
+private:
+	ComputeFramePtr _frame;
+	uint32_t _output;
+};
+
 
 } // End frox
