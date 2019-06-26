@@ -159,15 +159,16 @@ bool simpleTest(ComputeFlow& flow)
 
 bool multiTest(ComputeFlow& flow, uint32_t width, uint32_t height)
 {
-	// Create nodes
+	auto avg = flow.CreateNode<AvgComputeNode>("Avg");
+	auto add = flow.CreateNode<AddComputeNode>("Add");
 	auto make = flow.CreateNode<MakeFrameComputeNode>("Make");
+	// Create nodes
+	
 	make->SetWidth(width);
 	make->SetHeight(height);
 	make->SetType(EComputeFrameType::ECFT_Float);
 	make->SetValue(1.f);
 
-	auto add = flow.CreateNode<AddComputeNode>("Add");
-	auto avg = flow.CreateNode<AvgComputeNode>("Avg");
 	flow.ConnectNodes(make, add, 0);
 	flow.ConnectNodes(make, add, 1);
 	flow.ConnectNodes(add, avg, 0);
