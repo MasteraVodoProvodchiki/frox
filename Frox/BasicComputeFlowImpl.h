@@ -59,10 +59,14 @@ public:
 private:
 	void OnTaskCompleted(ComputeTask* task);
 	void Performed();
+	void MakeDirty();
 
 private:
 	bool _bWasInitialized;
+	bool _bDirty;
+
 	std::vector<ComputeNodeImpl*> _nodes;
+	std::vector<ComputeNodeImpl*> _sortedNodes;
 
 	mutable std::mutex _tasksMutex;
 	std::vector<ComputeTaskPtr> _tasks;

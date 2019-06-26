@@ -26,6 +26,9 @@ public:
 	ComputeNodePinPtr GetInputPin(uint32_t inId = 0) const;
 	ComputeNodePinPtr GetOutputPin(uint32_t outId = 0) const;
 
+	const std::vector<ComputeNodePinPtr>& GetInputsPins() const { return _inputs; }
+	const std::vector<ComputeNodePinPtr>& GetOutputPins() const { return _outputs; }
+
 protected:
 	virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 	{}

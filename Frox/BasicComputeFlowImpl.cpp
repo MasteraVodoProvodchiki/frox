@@ -10,8 +10,44 @@
 
 namespace frox {
 
+namespace utils {
+
+void SortNodes(const std::vector<ComputeNodeImpl*>& in, std::vector<ComputeNodeImpl*>& out)
+{
+	out.reserve(in.size());
+
+	for (ComputeNodeImpl* node : in)
+	{
+		size_t nearestIndex = std::numeric_limits<size_t>::max();
+		for (ComputeNodePinPtr pin : node->GetOutputPins())
+		{
+			for (ComputeNodePinPtr nextPin : pin->NextPins)
+			{
+				ComputeNodeImpl* nextNode = nextPin->Owner;
+				auto it = std::find(out.begin(), out.end(), nextNode);
+				if (it != out.end() && nearestIndex > (it - out.begin()))
+				{
+					nearestIndex = it - out.begin();
+				}
+			}
+		}
+		
+		if (nearestIndex != std::numeric_limits<size_t>::max())
+		{
+			out.insert(out.begin() + nearestIndex, node);
+		}
+		else
+		{
+			out.push_back(node);
+		}
+	}
+}
+
+} // End utils
+
 BasicComputeFlowImpl::BasicComputeFlowImpl()
 	: _bWasInitialized(false)
+	, _bDirty(true)
 {}
 
 BasicComputeFlowImpl::~BasicComputeFlowImpl()
@@ -44,6 +80,8 @@ ComputeNodeImpl* BasicComputeFlowImpl::CreateNode(const char* type, const char* 
 	// Append
 	_nodes.push_back(node);
 
+	MakeDirty();
+
 	return node;
 }
 
@@ -59,6 +97,8 @@ void BasicComputeFlowImpl::DestoyNode(ComputeNodeImpl* node)
 	_nodes.erase(it);
 
 	delete node;
+
+	MakeDirty();
 }
 
 bool BasicComputeFlowImpl::ConnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId)
@@ -69,6 +109,8 @@ bool BasicComputeFlowImpl::ConnectNodes(ComputeNodeImpl* outNode, uint32_t outPi
 
 	// Connect
 	outputPin->ConnectTo(inputPin);
+
+	MakeDirty();
 
 	return true;
 }
@@ -83,6 +125,8 @@ bool BasicComputeFlowImpl::DisconnectNodes(ComputeNodeImpl* outNode, uint32_t ou
 	// TODO. Add disconnect
 	outputPin; inputPin;
 
+	MakeDirty();
+
 	assert(false);
 	return false;
 }
@@ -93,6 +137,7 @@ uint32_t BasicComputeFlowImpl::CreateEntry(const char* name)
 	_entries.push_back(ComputeFlowEntry{
 		name != nullptr ? name : "",
 	});
+	MakeDirty();
 
 	return id;
 }
@@ -103,6 +148,7 @@ uint32_t BasicComputeFlowImpl::CreateOutput(const char* name)
 	_outputs.push_back(ComputeFlowOutput{
 		name != nullptr ? name : "",
 	});
+	MakeDirty();
 
 	return id;
 }
@@ -160,6 +206,8 @@ void BasicComputeFlowImpl::ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNod
 		inNode,
 		inPinId,
 	});
+
+	MakeDirty();
 }
 
 void BasicComputeFlowImpl::DisconnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId)
@@ -172,6 +220,8 @@ void BasicComputeFlowImpl::DisconnectEntry(uint32_t entryId, ComputeNodeImpl* in
 		return nodeEntry.Node == inNode && nodeEntry.InId == inPinId;
 	});
 	nodes.erase(it, nodes.end());
+
+	MakeDirty();
 }
 
 void BasicComputeFlowImpl::ConnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId)
@@ -188,6 +238,8 @@ void BasicComputeFlowImpl::ConnectOutput(uint32_t outputId, ComputeNodeImpl* out
 		outNode,
 		outPinId,
 	});
+
+	MakeDirty();
 }
 
 void BasicComputeFlowImpl::DisconnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId)
@@ -200,11 +252,13 @@ void BasicComputeFlowImpl::DisconnectOutput(uint32_t outputId, ComputeNodeImpl* 
 		return nodeEntry.Node == outNode && nodeEntry.InId == outPinId;
 	});
 	nodes.erase(it, nodes.end());
+
+	MakeDirty();
 }
 
 void BasicComputeFlowImpl::Initialize()
 {
-	for (ComputeNode* node : _nodes)
+	for (ComputeNode* node : _sortedNodes)
 	{
 		if (!node->WasInitialized())
 		{
@@ -222,6 +276,14 @@ bool BasicComputeFlowImpl::WasInitialized() const
 
 void BasicComputeFlowImpl::Perform()
 {
+	if (_bDirty)
+	{
+		_sortedNodes.clear();
+		utils::SortNodes(_nodes, _sortedNodes);
+
+		_bDirty = false;
+	}
+
 	if (!WasInitialized())
 	{
 		Initialize();
@@ -239,7 +301,7 @@ void BasicComputeFlowImpl::Perform()
 	// TODO. Add SubFlow
 	// Create tasks
 	std::lock_guard<std::mutex> lock(_tasksMutex);
-	for (ComputeNode* node : _nodes)
+	for (ComputeNode* node : _sortedNodes)
 	{
 		if (node->IsValid())
 		{
@@ -352,6 +414,11 @@ void BasicComputeFlowImpl::Performed()
 	{
 		_onPerformed();
 	}
+}
+
+void BasicComputeFlowImpl::MakeDirty()
+{
+	_bDirty = true;
 }
 
 } // End frox

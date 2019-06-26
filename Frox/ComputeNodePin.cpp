@@ -2,8 +2,9 @@
 
 namespace frox {
 
-ComputeNodePin::ComputeNodePin(PinType type, const std::string& name, std::function<void(ComputeFramePtr)> onChanged)
-	: Type(type)
+ComputeNodePin::ComputeNodePin(ComputeNodeImpl* owner, PinType type, const std::string& name, std::function<void(ComputeFramePtr)> onChanged)
+	: Owner(owner)
+	, Type(type)
 	, Name(name)
 	, OnChanged(onChanged)
 {}
@@ -25,6 +26,7 @@ void ComputeNodePin::ConnectTo(ComputeNodePinPtr pin)
 	};
 		
 	_functions.push_back(func);
+	NextPins.push_back(pin);
 }
 
 void ComputeNodePin::SetData(ComputeFramePtr frame)

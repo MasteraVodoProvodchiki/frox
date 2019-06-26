@@ -53,7 +53,7 @@ void ComputeNodeImpl::ReallocatePins()
 uint32_t ComputeNodeImpl::CreateInput(const char* name)
 {
 	uint32_t inId = uint32_t(_inputs.size());
-	_inputs.push_back(ComputeNodePin::Create(ComputeNodePin::ET_Input, name, [this, inId](ComputeFramePtr frame) {
+	_inputs.push_back(ComputeNodePin::Create(this, ComputeNodePin::ET_Input, name, [this, inId](ComputeFramePtr frame) {
 		this->OnInputChanged(inId, frame);
 	}));
 	return inId;
@@ -62,7 +62,7 @@ uint32_t ComputeNodeImpl::CreateInput(const char* name)
 uint32_t ComputeNodeImpl::CreateOutput(const char* name)
 {
 	uint32_t outId = uint32_t(_outputs.size());
-	_outputs.push_back(ComputeNodePin::Create(ComputeNodePin::ET_Output, name));
+	_outputs.push_back(ComputeNodePin::Create(this,  ComputeNodePin::ET_Output, name));
 	return outId;
 }
 
