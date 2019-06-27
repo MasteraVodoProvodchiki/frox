@@ -53,6 +53,7 @@ MakeFrameBaseComputeNode::MakeFrameBaseComputeNode(const ComputeNodeInitializer&
 	, _width(1)
 	, _height(1)
 	, _type(EComputeFrameType::ECFT_None)
+	, _channels(1)
 {}
 
 MakeFrameBaseComputeNode::~MakeFrameBaseComputeNode()
@@ -67,7 +68,7 @@ void MakeFrameBaseComputeNode::OnPostInit()
 {
 	if (_width > 0 && _height > 0 && _type != EComputeFrameType::ECFT_None)
 	{
-		ComputeFramePtr output = FroxInstance()->CreateComputeFrame(Size{ _width, _height }, _type);
+		ComputeFramePtr output = FroxInstance()->CreateComputeFrame(Size{ _width, _height }, _type, _channels);
 		SetOutput(_output, output);
 	}
 }
@@ -77,6 +78,7 @@ bool MakeFrameBaseComputeNode::IsValid() const
 	return
 		_width > 0 && _height > 0 &&
 		_type != EComputeFrameType::ECFT_None &&
+		_channels > 0 &&
 		GetOutput(_output) != nullptr;
 }
 
@@ -95,6 +97,10 @@ void MakeFrameBaseComputeNode::SetType(EComputeFrameType type)
 	_type = type;
 }
 
+void MakeFrameBaseComputeNode::SetChannels(uint32_t channels)
+{
+	_channels = channels;
+}
 
 /// Make By Value
 MakeFrameComputeNode::MakeFrameComputeNode(const ComputeNodeInitializer& initializer)

@@ -3,19 +3,20 @@
 
 namespace frox {
 
-ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, const void* data)
+ComputeFrameImplV1::ComputeFrameImplV1(Size size, ComputeFrameType typeData, const void* data)
 {
 	assert(size.Width > 0 && size.Height > 0);
-	assert(type != EComputeFrameType::ECFT_None);
+	assert(typeData.Type != EComputeFrameType::ECFT_None && typeData.Channels > 0);
 
 	_data.Width = size.Width;
 	_data.Height = size.Height;
-	_data.Type = type;
+	_data.Type = typeData.Type;
+	_data.Channels = typeData.Channels;
 	_data.Valid = true;
 
-	if (size.Width == 1 && size.Height == 1)
+	if (_data.Width == 1 && _data.Height == 1 && _data.Channels == 1)
 	{
-		switch (type)
+		switch (_data.Type)
 		{
 		case ECFT_Bool:
 			_data.Bool = data != nullptr ? *reinterpret_cast<const bool*>(data) : 0;
@@ -37,22 +38,23 @@ ComputeFrameImplV1::ComputeFrameImplV1(Size size, EComputeFrameType type, const 
 	else
 	{
 		uint32_t nbElements = size.Width * size.Height;
-		uint32_t elementSize = utils::FrameTypeToSize(type);
-		switch (type)
+		uint32_t elementSize = utils::FrameTypeToSize(typeData.Type);
+		uint32_t nbBytes = nbElements * elementSize * _data.Channels;
+		switch (typeData.Type)
 		{
 		case ECFT_Bool:
 		case ECFT_UInt8:
 		case ECFT_UInt16:
 		case ECFT_UInt32:
 		case ECFT_Float:
-			_data.Data = malloc(nbElements * elementSize);
+			_data.Data = malloc(nbBytes);
 			if (data != nullptr)
 			{
-				memcpy(_data.Data, data, nbElements * elementSize);
+				memcpy(_data.Data, data, nbBytes);
 			}
 			else
 			{
-				memset(_data.Data, 0x00, nbElements * elementSize);
+				memset(_data.Data, 0x00, nbBytes);
 			}
 			break;
 		default:
@@ -74,9 +76,14 @@ EComputeFrameType ComputeFrameImplV1::GetType() const
 	return _data.Type;
 }
 
+uint32_t ComputeFrameImplV1::GetChannels() const
+{
+	return _data.Channels;
+}
+
 uint32_t ComputeFrameImplV1::GetElementSize() const
 {
-	return utils::FrameTypeToSize(_data.Type);
+	return utils::FrameTypeToSize(_data.Type) * _data.Channels;
 }
 
 bool ComputeFrameImplV1::IsValid() const
@@ -119,7 +126,7 @@ const void* ComputeFrameImplV1::GetRowData(uint32_t row) const
 	assert(row < _data.Height);
 	return _data.IsOptimized() ?
 		GetData() :
-		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width) * utils::FrameTypeToSize(_data.Type);
+		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width) * GetElementSize();
 }
 
 const void* ComputeFrameImplV1::At(uint32_t row, uint32_t column) const
@@ -127,7 +134,7 @@ const void* ComputeFrameImplV1::At(uint32_t row, uint32_t column) const
 	assert(row < _data.Height && column < _data.Width);
 	return _data.IsOptimized() ?
 		GetData() :
-		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width + column) * utils::FrameTypeToSize(_data.Type);
+		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width + column) * GetElementSize();
 }
 
 void* ComputeFrameImplV1::GetData()
@@ -157,7 +164,7 @@ void* ComputeFrameImplV1::GetRowData(uint32_t row)
 	assert(row < _data.Height);
 	return _data.IsOptimized() ?
 		GetData() :
-		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width) * utils::FrameTypeToSize(_data.Type);
+		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width) * GetElementSize();
 }
 
 void* ComputeFrameImplV1::At(uint32_t row, uint32_t column)
@@ -165,7 +172,7 @@ void* ComputeFrameImplV1::At(uint32_t row, uint32_t column)
 	assert(row < _data.Height && column < _data.Width);
 	return _data.IsOptimized() ?
 		GetData() :
-		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width + column) * utils::FrameTypeToSize(_data.Type);
+		reinterpret_cast<uint8_t*>(_data.Data) + (row * _data.Width + column) * GetElementSize();
 }
 
 } // End frox

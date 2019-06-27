@@ -96,6 +96,9 @@
     <ClInclude Include="CropComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">

@@ -23,6 +23,7 @@ public:
 	FROX_API void SetWidth(uint32_t width);
 	FROX_API void SetHeight(uint32_t height);
 	FROX_API void SetType(EComputeFrameType type);
+	FROX_API void SetChannels(uint32_t channels);
 
 protected:
 	// ComputeNodeImpl overrides
@@ -32,6 +33,7 @@ protected:
 	uint32_t _width;
 	uint32_t _height;
 	EComputeFrameType _type;
+	uint32_t _channels;
 
 	uint32_t _output;
 };

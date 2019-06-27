@@ -17,6 +17,12 @@ enum EComputeFrameType
 	ECFT_Float
 };
 
+struct ComputeFrameType
+{
+	EComputeFrameType Type;
+	uint32_t Channels;
+};
+
 namespace utils {
 
 uint32_t FrameTypeToSize(EComputeFrameType type);
@@ -61,6 +67,7 @@ public:
 	virtual ~ComputeFrame() {}
 
 	virtual EComputeFrameType GetType() const = 0;
+	virtual uint32_t GetChannels() const = 0;
 	virtual uint32_t GetElementSize() const = 0;
 	virtual bool IsValid() const = 0;
 	virtual Size GetSize() const = 0;

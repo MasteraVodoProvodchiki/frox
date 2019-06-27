@@ -20,11 +20,12 @@ struct MatData
 	uint32_t Width = 0;
 	uint32_t Height = 0;
 	EComputeFrameType Type = ECFT_None;
+	uint32_t Channels = 0;
 	bool Valid = false;
 
 	bool IsOptimized() const
 	{
-		return Width == 1 && Height == 1;
+		return Width == 1 && Height == 1 && Channels == 1;
 	}
 };
 
@@ -34,16 +35,17 @@ struct MatData
 class ComputeFrameImplV1 : public ComputeFrame
 {
 public:
-	ComputeFrameImplV1(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, const void* data = nullptr);
+	ComputeFrameImplV1(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr);
 	virtual ~ComputeFrameImplV1() override;
 
-	static ComputeFramePtr Create(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, const void* data = nullptr)
+	static ComputeFramePtr Create(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr)
 	{
 		return std::make_shared<ComputeFrameImplV1>(size, type, data);
 	}
 
 	// ComputeFrame overrides
 	virtual EComputeFrameType GetType() const override;
+	virtual uint32_t GetChannels() const override;
 	virtual uint32_t GetElementSize() const override;
 	virtual bool IsValid() const override;
 	virtual Size GetSize() const override;

@@ -15,7 +15,7 @@ public:
 	// Frox overrides
 	virtual ComputeFlow* CreateComputeFlow(IComputeFlowListerner* listerner) override;
 	virtual void DestroyComputeFlow(ComputeFlow* computeFlow) override;
-	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, EComputeFrameType type = ECFT_None, const void* data = nullptr) override;
+	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr) override;
 	virtual void DestroyComputeFrame(ComputeFramePtr computeFlow) override;
 
 private:
