@@ -1,5 +1,6 @@
 #include <Frox.h>
 #include <Utils.h>
+#include <Types.h>
 
 #include <ComputeFlow.h>
 
@@ -14,6 +15,17 @@
 #include <assert.h>
 #include <vector>
 #include <algorithm>
+
+
+namespace std {
+
+template<> class numeric_limits<frox::float4> {
+public:
+	static frox::float4 lowest() { return frox::float4(std::numeric_limits<float>::lowest()); };
+	static frox::float4 max() { return frox::float4(std::numeric_limits<float>::max()); };
+};
+
+}
 
 using namespace frox;
 
@@ -257,6 +269,23 @@ bool cropTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
 	);
 }
 
+bool multiChannelsTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
+{
+	// Create nodes
+	auto make = flow.CreateNode<MakeNoiseFrameComputeNode>("Make");
+	make->SetWidth(width);
+	make->SetHeight(height);
+	make->SetType(EComputeFrameType::ECFT_Float);
+	make->SetChannels(4);
+
+	flow.ConnectOutput(flow.CreateOutput("out"), make);
+
+	return runFlow(
+		flow,
+		std::bind(&checkRange<float4>, std::placeholders::_1, float4(0.f), float4(1.f))
+	);
+}
+
 int main(int argc, char *argv[])
 {
 	// Init
@@ -274,6 +303,7 @@ int main(int argc, char *argv[])
 	test("Noise Test", std::bind(&noiseTest0, _1, 64, 64));
 	test("ConvertTo Test", std::bind(&convertToTest0, _1, 64, 64));
 	test("Crop Test", std::bind(&cropTest0, _1, 64, 64));
+	test("Multi Channels Test", std::bind(&multiChannelsTest0, _1, 64, 64));
 
 	// Shutdown
 	FroxShutdown(gFrox);
