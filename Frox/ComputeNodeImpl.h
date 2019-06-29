@@ -4,7 +4,11 @@
 #include "ComputeNodePin.h"
 
 #include <vector>
+#ifdef _WIN32
 #include <string.h>
+#else
+#include <string>
+#endif
 
 namespace frox {
 
