@@ -1,0 +1,581 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A3F068122C55F220087580F /* BasicComputeNodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F064E22C55F1F0087580F /* BasicComputeNodes.h */; };
+		0A3F068222C55F220087580F /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F064F22C55F1F0087580F /* Log.cpp */; };
+		0A3F068322C55F220087580F /* ComputeFlow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F065022C55F1F0087580F /* ComputeFlow.cpp */; };
+		0A3F068422C55F220087580F /* ComputeFrameImplV1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F065122C55F1F0087580F /* ComputeFrameImplV1.cpp */; };
+		0A3F068522C55F220087580F /* Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065222C55F1F0087580F /* Types.h */; };
+		0A3F068622C55F220087580F /* ComputeTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065422C55F1F0087580F /* ComputeTask.h */; };
+		0A3F068722C55F220087580F /* BasicComputeFlowImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065522C55F1F0087580F /* BasicComputeFlowImpl.h */; };
+		0A3F068822C55F220087580F /* ComputeFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065622C55F1F0087580F /* ComputeFrame.h */; };
+		0A3F068922C55F220087580F /* BasicComputeNodes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F065722C55F1F0087580F /* BasicComputeNodes.cpp */; };
+		0A3F068A22C55F220087580F /* SubFlowComputeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F065822C55F1F0087580F /* SubFlowComputeNode.cpp */; };
+		0A3F068B22C55F220087580F /* CropComputeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065922C55F1F0087580F /* CropComputeNode.h */; };
+		0A3F068C22C55F220087580F /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065A22C55F1F0087580F /* Common.h */; };
+		0A3F068D22C55F220087580F /* AvgComputeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065B22C55F1F0087580F /* AvgComputeNode.h */; };
+		0A3F068E22C55F220087580F /* ComputeFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F065C22C55F1F0087580F /* ComputeFrame.cpp */; };
+		0A3F068F22C55F220087580F /* ComputeNodePin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065D22C55F1F0087580F /* ComputeNodePin.h */; };
+		0A3F069022C55F220087580F /* ComputeFrameImplV1.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065E22C55F200087580F /* ComputeFrameImplV1.h */; };
+		0A3F069122C55F220087580F /* Frox.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F065F22C55F200087580F /* Frox.h */; };
+		0A3F069222C55F220087580F /* ComputeFlowImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066022C55F200087580F /* ComputeFlowImpl.h */; };
+		0A3F069322C55F220087580F /* ComputeNodeImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F066122C55F200087580F /* ComputeNodeImpl.cpp */; };
+		0A3F069422C55F220087580F /* ComputeNodePin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F066222C55F200087580F /* ComputeNodePin.cpp */; };
+		0A3F069522C55F220087580F /* BasicComputeFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066322C55F200087580F /* BasicComputeFlow.h */; };
+		0A3F069622C55F220087580F /* Runnable.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066422C55F200087580F /* Runnable.h */; };
+		0A3F069722C55F220087580F /* ComputeNodeImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066522C55F200087580F /* ComputeNodeImpl.h */; };
+		0A3F069822C55F220087580F /* Log.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066622C55F200087580F /* Log.h */; };
+		0A3F069922C55F220087580F /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066722C55F200087580F /* Utils.h */; };
+		0A3F069A22C55F220087580F /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066822C55F200087580F /* Variant.h */; };
+		0A3F069B22C55F220087580F /* BasicComputeFlow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F066922C55F200087580F /* BasicComputeFlow.cpp */; };
+		0A3F069C22C55F220087580F /* ComputeNodeFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066A22C55F200087580F /* ComputeNodeFactory.h */; };
+		0A3F069D22C55F220087580F /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F066B22C55F200087580F /* Thread.cpp */; };
+		0A3F069E22C55F220087580F /* ConvertToComputeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066C22C55F200087580F /* ConvertToComputeNode.h */; };
+		0A3F069F22C55F220087580F /* FroxImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F066D22C55F200087580F /* FroxImpl.h */; };
+		0A3F06A022C55F220087580F /* BasicComputeFlowImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F066E22C55F200087580F /* BasicComputeFlowImpl.cpp */; };
+		0A3F06A122C55F220087580F /* ComputeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F066F22C55F200087580F /* ComputeNode.cpp */; };
+		0A3F06A222C55F220087580F /* MakeFrameComputeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067022C55F200087580F /* MakeFrameComputeNode.cpp */; };
+		0A3F06A322C55F220087580F /* MakeFrameComputeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F067222C55F210087580F /* MakeFrameComputeNode.h */; };
+		0A3F06A422C55F220087580F /* Thread.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F067322C55F210087580F /* Thread.h */; };
+		0A3F06A522C55F220087580F /* ComputeThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067422C55F210087580F /* ComputeThread.cpp */; };
+		0A3F06A622C55F220087580F /* SubFlowComputeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F067522C55F210087580F /* SubFlowComputeNode.h */; };
+		0A3F06A722C55F220087580F /* Allocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F067622C55F210087580F /* Allocator.h */; };
+		0A3F06A822C55F220087580F /* ComputeNodeFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067722C55F210087580F /* ComputeNodeFactory.cpp */; };
+		0A3F06A922C55F220087580F /* Frox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067822C55F210087580F /* Frox.cpp */; };
+		0A3F06AA22C55F220087580F /* ComputeFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F067922C55F210087580F /* ComputeFlow.h */; };
+		0A3F06AB22C55F220087580F /* ConvertToComputeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067A22C55F210087580F /* ConvertToComputeNode.cpp */; };
+		0A3F06AC22C55F220087580F /* ComputeThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F067B22C55F210087580F /* ComputeThread.h */; };
+		0A3F06AD22C55F220087580F /* FroxImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067C22C55F210087580F /* FroxImpl.cpp */; };
+		0A3F06AE22C55F220087580F /* ComputeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3F067D22C55F210087580F /* ComputeNode.h */; };
+		0A3F06AF22C55F220087580F /* CropComputeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067E22C55F210087580F /* CropComputeNode.cpp */; };
+		0A3F06B022C55F220087580F /* ComputeFlowImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F067F22C55F210087580F /* ComputeFlowImpl.cpp */; };
+		0A3F06B122C55F220087580F /* AvgComputeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F068022C55F210087580F /* AvgComputeNode.cpp */; };
+		0AF743BF22C561B6003411D8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AF743BE22C561B6003411D8 /* main.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0AF743B322C56134003411D8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0A3F064022C55EA70087580F /* libFrox.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libFrox.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A3F064E22C55F1F0087580F /* BasicComputeNodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicComputeNodes.h; sourceTree = "<group>"; };
+		0A3F064F22C55F1F0087580F /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		0A3F065022C55F1F0087580F /* ComputeFlow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeFlow.cpp; sourceTree = "<group>"; };
+		0A3F065122C55F1F0087580F /* ComputeFrameImplV1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeFrameImplV1.cpp; sourceTree = "<group>"; };
+		0A3F065222C55F1F0087580F /* Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
+		0A3F065322C55F1F0087580F /* Frox.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Frox.vcxproj; sourceTree = "<group>"; };
+		0A3F065422C55F1F0087580F /* ComputeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeTask.h; sourceTree = "<group>"; };
+		0A3F065522C55F1F0087580F /* BasicComputeFlowImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicComputeFlowImpl.h; sourceTree = "<group>"; };
+		0A3F065622C55F1F0087580F /* ComputeFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeFrame.h; sourceTree = "<group>"; };
+		0A3F065722C55F1F0087580F /* BasicComputeNodes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BasicComputeNodes.cpp; sourceTree = "<group>"; };
+		0A3F065822C55F1F0087580F /* SubFlowComputeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SubFlowComputeNode.cpp; sourceTree = "<group>"; };
+		0A3F065922C55F1F0087580F /* CropComputeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropComputeNode.h; sourceTree = "<group>"; };
+		0A3F065A22C55F1F0087580F /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		0A3F065B22C55F1F0087580F /* AvgComputeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvgComputeNode.h; sourceTree = "<group>"; };
+		0A3F065C22C55F1F0087580F /* ComputeFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeFrame.cpp; sourceTree = "<group>"; };
+		0A3F065D22C55F1F0087580F /* ComputeNodePin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeNodePin.h; sourceTree = "<group>"; };
+		0A3F065E22C55F200087580F /* ComputeFrameImplV1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeFrameImplV1.h; sourceTree = "<group>"; };
+		0A3F065F22C55F200087580F /* Frox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Frox.h; sourceTree = "<group>"; };
+		0A3F066022C55F200087580F /* ComputeFlowImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeFlowImpl.h; sourceTree = "<group>"; };
+		0A3F066122C55F200087580F /* ComputeNodeImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeNodeImpl.cpp; sourceTree = "<group>"; };
+		0A3F066222C55F200087580F /* ComputeNodePin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeNodePin.cpp; sourceTree = "<group>"; };
+		0A3F066322C55F200087580F /* BasicComputeFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicComputeFlow.h; sourceTree = "<group>"; };
+		0A3F066422C55F200087580F /* Runnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runnable.h; sourceTree = "<group>"; };
+		0A3F066522C55F200087580F /* ComputeNodeImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeNodeImpl.h; sourceTree = "<group>"; };
+		0A3F066622C55F200087580F /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		0A3F066722C55F200087580F /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		0A3F066822C55F200087580F /* Variant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Variant.h; sourceTree = "<group>"; };
+		0A3F066922C55F200087580F /* BasicComputeFlow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BasicComputeFlow.cpp; sourceTree = "<group>"; };
+		0A3F066A22C55F200087580F /* ComputeNodeFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeNodeFactory.h; sourceTree = "<group>"; };
+		0A3F066B22C55F200087580F /* Thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
+		0A3F066C22C55F200087580F /* ConvertToComputeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvertToComputeNode.h; sourceTree = "<group>"; };
+		0A3F066D22C55F200087580F /* FroxImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FroxImpl.h; sourceTree = "<group>"; };
+		0A3F066E22C55F200087580F /* BasicComputeFlowImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BasicComputeFlowImpl.cpp; sourceTree = "<group>"; };
+		0A3F066F22C55F200087580F /* ComputeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeNode.cpp; sourceTree = "<group>"; };
+		0A3F067022C55F200087580F /* MakeFrameComputeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MakeFrameComputeNode.cpp; sourceTree = "<group>"; };
+		0A3F067122C55F210087580F /* Frox.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Frox.vcxproj.filters; sourceTree = "<group>"; };
+		0A3F067222C55F210087580F /* MakeFrameComputeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MakeFrameComputeNode.h; sourceTree = "<group>"; };
+		0A3F067322C55F210087580F /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
+		0A3F067422C55F210087580F /* ComputeThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeThread.cpp; sourceTree = "<group>"; };
+		0A3F067522C55F210087580F /* SubFlowComputeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubFlowComputeNode.h; sourceTree = "<group>"; };
+		0A3F067622C55F210087580F /* Allocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Allocator.h; sourceTree = "<group>"; };
+		0A3F067722C55F210087580F /* ComputeNodeFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeNodeFactory.cpp; sourceTree = "<group>"; };
+		0A3F067822C55F210087580F /* Frox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Frox.cpp; sourceTree = "<group>"; };
+		0A3F067922C55F210087580F /* ComputeFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeFlow.h; sourceTree = "<group>"; };
+		0A3F067A22C55F210087580F /* ConvertToComputeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConvertToComputeNode.cpp; sourceTree = "<group>"; };
+		0A3F067B22C55F210087580F /* ComputeThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeThread.h; sourceTree = "<group>"; };
+		0A3F067C22C55F210087580F /* FroxImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FroxImpl.cpp; sourceTree = "<group>"; };
+		0A3F067D22C55F210087580F /* ComputeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputeNode.h; sourceTree = "<group>"; };
+		0A3F067E22C55F210087580F /* CropComputeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CropComputeNode.cpp; sourceTree = "<group>"; };
+		0A3F067F22C55F210087580F /* ComputeFlowImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComputeFlowImpl.cpp; sourceTree = "<group>"; };
+		0A3F068022C55F210087580F /* AvgComputeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AvgComputeNode.cpp; sourceTree = "<group>"; };
+		0AF743B522C56134003411D8 /* FroxTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FroxTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AF743BE22C561B6003411D8 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0A3F063E22C55EA70087580F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0AF743B222C56134003411D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A3F063722C55EA70087580F = {
+			isa = PBXGroup;
+			children = (
+				0A3F064222C55EA70087580F /* Frox */,
+				0AF743B622C56134003411D8 /* FroxTest */,
+				0A3F064122C55EA70087580F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0A3F064122C55EA70087580F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A3F064022C55EA70087580F /* libFrox.dylib */,
+				0AF743B522C56134003411D8 /* FroxTest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0A3F064222C55EA70087580F /* Frox */ = {
+			isa = PBXGroup;
+			children = (
+				0A3F067622C55F210087580F /* Allocator.h */,
+				0A3F068022C55F210087580F /* AvgComputeNode.cpp */,
+				0A3F065B22C55F1F0087580F /* AvgComputeNode.h */,
+				0A3F066922C55F200087580F /* BasicComputeFlow.cpp */,
+				0A3F066322C55F200087580F /* BasicComputeFlow.h */,
+				0A3F066E22C55F200087580F /* BasicComputeFlowImpl.cpp */,
+				0A3F065522C55F1F0087580F /* BasicComputeFlowImpl.h */,
+				0A3F065722C55F1F0087580F /* BasicComputeNodes.cpp */,
+				0A3F064E22C55F1F0087580F /* BasicComputeNodes.h */,
+				0A3F065A22C55F1F0087580F /* Common.h */,
+				0A3F065022C55F1F0087580F /* ComputeFlow.cpp */,
+				0A3F067922C55F210087580F /* ComputeFlow.h */,
+				0A3F067F22C55F210087580F /* ComputeFlowImpl.cpp */,
+				0A3F066022C55F200087580F /* ComputeFlowImpl.h */,
+				0A3F065C22C55F1F0087580F /* ComputeFrame.cpp */,
+				0A3F065622C55F1F0087580F /* ComputeFrame.h */,
+				0A3F065122C55F1F0087580F /* ComputeFrameImplV1.cpp */,
+				0A3F065E22C55F200087580F /* ComputeFrameImplV1.h */,
+				0A3F066F22C55F200087580F /* ComputeNode.cpp */,
+				0A3F067D22C55F210087580F /* ComputeNode.h */,
+				0A3F067722C55F210087580F /* ComputeNodeFactory.cpp */,
+				0A3F066A22C55F200087580F /* ComputeNodeFactory.h */,
+				0A3F066122C55F200087580F /* ComputeNodeImpl.cpp */,
+				0A3F066522C55F200087580F /* ComputeNodeImpl.h */,
+				0A3F066222C55F200087580F /* ComputeNodePin.cpp */,
+				0A3F065D22C55F1F0087580F /* ComputeNodePin.h */,
+				0A3F065422C55F1F0087580F /* ComputeTask.h */,
+				0A3F067422C55F210087580F /* ComputeThread.cpp */,
+				0A3F067B22C55F210087580F /* ComputeThread.h */,
+				0A3F067A22C55F210087580F /* ConvertToComputeNode.cpp */,
+				0A3F066C22C55F200087580F /* ConvertToComputeNode.h */,
+				0A3F067E22C55F210087580F /* CropComputeNode.cpp */,
+				0A3F065922C55F1F0087580F /* CropComputeNode.h */,
+				0A3F067822C55F210087580F /* Frox.cpp */,
+				0A3F065F22C55F200087580F /* Frox.h */,
+				0A3F065322C55F1F0087580F /* Frox.vcxproj */,
+				0A3F067122C55F210087580F /* Frox.vcxproj.filters */,
+				0A3F067C22C55F210087580F /* FroxImpl.cpp */,
+				0A3F066D22C55F200087580F /* FroxImpl.h */,
+				0A3F064F22C55F1F0087580F /* Log.cpp */,
+				0A3F066622C55F200087580F /* Log.h */,
+				0A3F067022C55F200087580F /* MakeFrameComputeNode.cpp */,
+				0A3F067222C55F210087580F /* MakeFrameComputeNode.h */,
+				0A3F066422C55F200087580F /* Runnable.h */,
+				0A3F065822C55F1F0087580F /* SubFlowComputeNode.cpp */,
+				0A3F067522C55F210087580F /* SubFlowComputeNode.h */,
+				0A3F066B22C55F200087580F /* Thread.cpp */,
+				0A3F067322C55F210087580F /* Thread.h */,
+				0A3F065222C55F1F0087580F /* Types.h */,
+				0A3F066722C55F200087580F /* Utils.h */,
+				0A3F066822C55F200087580F /* Variant.h */,
+			);
+			path = Frox;
+			sourceTree = "<group>";
+		};
+		0AF743B622C56134003411D8 /* FroxTest */ = {
+			isa = PBXGroup;
+			children = (
+				0AF743BE22C561B6003411D8 /* main.cpp */,
+			);
+			path = FroxTest;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		0A3F063C22C55EA70087580F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A3F069922C55F220087580F /* Utils.h in Headers */,
+				0A3F068B22C55F220087580F /* CropComputeNode.h in Headers */,
+				0A3F06AE22C55F220087580F /* ComputeNode.h in Headers */,
+				0A3F06A322C55F220087580F /* MakeFrameComputeNode.h in Headers */,
+				0A3F069A22C55F220087580F /* Variant.h in Headers */,
+				0A3F069E22C55F220087580F /* ConvertToComputeNode.h in Headers */,
+				0A3F068522C55F220087580F /* Types.h in Headers */,
+				0A3F069222C55F220087580F /* ComputeFlowImpl.h in Headers */,
+				0A3F069622C55F220087580F /* Runnable.h in Headers */,
+				0A3F06AC22C55F220087580F /* ComputeThread.h in Headers */,
+				0A3F069522C55F220087580F /* BasicComputeFlow.h in Headers */,
+				0A3F068F22C55F220087580F /* ComputeNodePin.h in Headers */,
+				0A3F069022C55F220087580F /* ComputeFrameImplV1.h in Headers */,
+				0A3F06A422C55F220087580F /* Thread.h in Headers */,
+				0A3F068C22C55F220087580F /* Common.h in Headers */,
+				0A3F069C22C55F220087580F /* ComputeNodeFactory.h in Headers */,
+				0A3F068722C55F220087580F /* BasicComputeFlowImpl.h in Headers */,
+				0A3F069F22C55F220087580F /* FroxImpl.h in Headers */,
+				0A3F069722C55F220087580F /* ComputeNodeImpl.h in Headers */,
+				0A3F068822C55F220087580F /* ComputeFrame.h in Headers */,
+				0A3F068122C55F220087580F /* BasicComputeNodes.h in Headers */,
+				0A3F069122C55F220087580F /* Frox.h in Headers */,
+				0A3F069822C55F220087580F /* Log.h in Headers */,
+				0A3F068622C55F220087580F /* ComputeTask.h in Headers */,
+				0A3F06AA22C55F220087580F /* ComputeFlow.h in Headers */,
+				0A3F06A722C55F220087580F /* Allocator.h in Headers */,
+				0A3F068D22C55F220087580F /* AvgComputeNode.h in Headers */,
+				0A3F06A622C55F220087580F /* SubFlowComputeNode.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0A3F063F22C55EA70087580F /* Frox */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A3F064B22C55EA70087580F /* Build configuration list for PBXNativeTarget "Frox" */;
+			buildPhases = (
+				0A3F063C22C55EA70087580F /* Headers */,
+				0A3F063D22C55EA70087580F /* Sources */,
+				0A3F063E22C55EA70087580F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Frox;
+			productName = Frox;
+			productReference = 0A3F064022C55EA70087580F /* libFrox.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		0AF743B422C56134003411D8 /* FroxTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AF743B922C56134003411D8 /* Build configuration list for PBXNativeTarget "FroxTest" */;
+			buildPhases = (
+				0AF743B122C56134003411D8 /* Sources */,
+				0AF743B222C56134003411D8 /* Frameworks */,
+				0AF743B322C56134003411D8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FroxTest;
+			productName = FroxTest;
+			productReference = 0AF743B522C56134003411D8 /* FroxTest */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0A3F063822C55EA70087580F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = MasteraVodoProvodchiki;
+				TargetAttributes = {
+					0A3F063F22C55EA70087580F = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					0AF743B422C56134003411D8 = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 0A3F063B22C55EA70087580F /* Build configuration list for PBXProject "Frox" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 0A3F063722C55EA70087580F;
+			productRefGroup = 0A3F064122C55EA70087580F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0A3F063F22C55EA70087580F /* Frox */,
+				0AF743B422C56134003411D8 /* FroxTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0A3F063D22C55EA70087580F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A3F068422C55F220087580F /* ComputeFrameImplV1.cpp in Sources */,
+				0A3F068222C55F220087580F /* Log.cpp in Sources */,
+				0A3F068922C55F220087580F /* BasicComputeNodes.cpp in Sources */,
+				0A3F06A022C55F220087580F /* BasicComputeFlowImpl.cpp in Sources */,
+				0A3F069D22C55F220087580F /* Thread.cpp in Sources */,
+				0A3F06AF22C55F220087580F /* CropComputeNode.cpp in Sources */,
+				0A3F06A822C55F220087580F /* ComputeNodeFactory.cpp in Sources */,
+				0A3F06AD22C55F220087580F /* FroxImpl.cpp in Sources */,
+				0A3F069B22C55F220087580F /* BasicComputeFlow.cpp in Sources */,
+				0A3F06AB22C55F220087580F /* ConvertToComputeNode.cpp in Sources */,
+				0A3F069322C55F220087580F /* ComputeNodeImpl.cpp in Sources */,
+				0A3F06B022C55F220087580F /* ComputeFlowImpl.cpp in Sources */,
+				0A3F06A922C55F220087580F /* Frox.cpp in Sources */,
+				0A3F06B122C55F220087580F /* AvgComputeNode.cpp in Sources */,
+				0A3F06A522C55F220087580F /* ComputeThread.cpp in Sources */,
+				0A3F06A122C55F220087580F /* ComputeNode.cpp in Sources */,
+				0A3F068E22C55F220087580F /* ComputeFrame.cpp in Sources */,
+				0A3F069422C55F220087580F /* ComputeNodePin.cpp in Sources */,
+				0A3F06A222C55F220087580F /* MakeFrameComputeNode.cpp in Sources */,
+				0A3F068322C55F220087580F /* ComputeFlow.cpp in Sources */,
+				0A3F068A22C55F220087580F /* SubFlowComputeNode.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0AF743B122C56134003411D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0AF743BF22C561B6003411D8 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0A3F064922C55EA70087580F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		0A3F064A22C55EA70087580F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		0A3F064C22C55EA70087580F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		0A3F064D22C55EA70087580F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		0AF743BA22C56134003411D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = ./Frox;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-lFrox";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0AF743BB22C56134003411D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = ./Frox;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-lFrox";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A3F063B22C55EA70087580F /* Build configuration list for PBXProject "Frox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A3F064922C55EA70087580F /* Debug */,
+				0A3F064A22C55EA70087580F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A3F064B22C55EA70087580F /* Build configuration list for PBXNativeTarget "Frox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A3F064C22C55EA70087580F /* Debug */,
+				0A3F064D22C55EA70087580F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0AF743B922C56134003411D8 /* Build configuration list for PBXNativeTarget "FroxTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AF743BA22C56134003411D8 /* Debug */,
+				0AF743BB22C56134003411D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0A3F063822C55EA70087580F /* Project object */;
+}
