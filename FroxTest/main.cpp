@@ -11,18 +11,12 @@
 #include <CropComputeNode.h>
 
 #include <iostream>
-#ifdef _WIN32
-#include <conio.h>
-#else
 #include <stdio.h>
-#endif
 #include <assert.h>
 #include <vector>
 #include <algorithm>
-
-#ifndef _WIN32
 #include <cmath>
-#endif
+
 
 namespace std {
 
@@ -316,11 +310,6 @@ int main(int argc, char *argv[])
 	FroxShutdown(gFrox);
 
 	// Wait
-#ifdef _WIN32
-	_getch();
-#else
     getchar();
-#endif
-
 	return 0;
 }
