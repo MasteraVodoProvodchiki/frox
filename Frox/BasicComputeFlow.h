@@ -11,14 +11,14 @@ namespace frox {
  */
 class BasicComputeFlow : public ComputeFlow
 {
-	BasicComputeFlow(IComputeFlowListerner* listerner);
+	BasicComputeFlow();
 
 public:
 	virtual ~BasicComputeFlow() override;
 
-	static BasicComputeFlow* Create(IComputeFlowListerner* listerner = nullptr)
+	static BasicComputeFlow* Create()
 	{
-		return new BasicComputeFlow(listerner);
+		return new BasicComputeFlow();
 	}
 
 	// ComputeFlow overrides
@@ -44,19 +44,19 @@ public:
 
 	virtual void Initialize() override;
 	virtual bool WasInitialized() const override;
-	virtual void Perform() override;
-	virtual void Fetch() override;
-	virtual uint32_t GetNumActiveTasks() const override;
+	// virtual void Perform() override;
+	// virtual void Fetch() override;
+	// virtual uint32_t GetNumActiveTasks() const override;
 	// End ComputeFlow overrides
 
 	ComputeFlowImplPtr GetComputeFlow() const { return _impl; }
 
 private:
-	void OnPerformed();
+	// void OnPerformed();
 
 private:
 	ComputeFlowImplPtr _impl;
-	IComputeFlowListerner* _listerner;
+	// IComputeFlowListerner* _listerner;
 };
 
 } // End frox

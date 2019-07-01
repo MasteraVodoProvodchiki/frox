@@ -39,10 +39,11 @@ void test(const char* name, FunctionT func)
 
 	// Create Flow
 	ComputeFlow* flow = gFrox->CreateComputeFlow();
+	FlowPerformer* performer = gFrox->CreateFlowPerformer();
 
 	std::cout << name << ": ";
 
-	bool result = func(*flow);
+	bool result = func(*flow, *performer);
 	if(!result)
 	{
 		std::cout << ": invalid" << std::endl;
@@ -53,15 +54,16 @@ void test(const char* name, FunctionT func)
 	}
 
 	// Destroy Flow
+	gFrox->DestroyFlowPerformer(performer);
 	gFrox->DestroyComputeFlow(flow);
 }
 
 template<typename FunctionT>
-bool runFlow(ComputeFlow& flow, FunctionT tester)
+bool runFlow(ComputeFlow& flow, FlowPerformer& performer, FunctionT tester)
 {
 	// Invoke
-	flow.Perform();
-	flow.Fetch();
+	performer.Perform(&flow);
+	performer.Fetch(&flow);
 
 	// Check
 	ComputeFramePtr result = flow.GetOutput(0); // mul->GetOutput();
@@ -130,7 +132,7 @@ bool checkSum(ComputeFramePtr frame, T expected)
 
 // Tests
 template<typename T>
-bool makeTest(ComputeFlow& flow, uint32_t width, uint32_t height, EComputeFrameType type, T value)
+bool makeTest(ComputeFlow& flow, FlowPerformer& performer, uint32_t width, uint32_t height, EComputeFrameType type, T value)
 {
 	// Create nodes
 	auto make = flow.CreateNode<MakeFrameComputeNode>("Make");
@@ -142,6 +144,7 @@ bool makeTest(ComputeFlow& flow, uint32_t width, uint32_t height, EComputeFrameT
 
 	return runFlow(
 		flow,
+		performer,
 		std::bind(&checkRange<T>, std::placeholders::_1, value, value)
 	);
 }
@@ -150,7 +153,7 @@ auto makeTestUInt16 = std::bind(&makeTest<uint16_t>, std::placeholders::_1, 64, 
 auto makeTestUInt32 = std::bind(&makeTest<uint32_t>, std::placeholders::_1, 64, 64, EComputeFrameType::ECFT_UInt32, 126000);
 auto makeTestFloat = std::bind(&makeTest<float>, std::placeholders::_1, 64, 64, EComputeFrameType::ECFT_Float, 0.5f);
 
-bool simpleTest(ComputeFlow& flow)
+bool simpleTest(ComputeFlow& flow, FlowPerformer& performer)
 {
 	// Create nodes
 	auto add = flow.CreateNode<AddComputeNode>("Add");
@@ -166,11 +169,12 @@ bool simpleTest(ComputeFlow& flow)
 
 	return runFlow(
 		flow,
+		performer,
 		std::bind(&checkSingle<float>, std::placeholders::_1, 9.f)
 	);
 }
 
-bool multiTest(ComputeFlow& flow, uint32_t width, uint32_t height)
+bool multiTest(ComputeFlow& flow, FlowPerformer& performer, uint32_t width, uint32_t height)
 {
 	auto avg = flow.CreateNode<AvgComputeNode>("Avg");
 	auto add = flow.CreateNode<AddComputeNode>("Add");
@@ -201,11 +205,12 @@ bool multiTest(ComputeFlow& flow, uint32_t width, uint32_t height)
 	
 	return runFlow(
 		flow,
+		performer,
 		std::bind(&checkSingle<float>, std::placeholders::_1, 2.f)
 	);
 }
 
-bool noiseTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
+bool noiseTest0(ComputeFlow& flow, FlowPerformer& performer, uint32_t width, uint32_t height)
 {
 	// Create nodes
 	auto make = flow.CreateNode<MakeNoiseFrameComputeNode>("Make");
@@ -218,11 +223,12 @@ bool noiseTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
 
 	return runFlow(
 		flow,
+		performer,
 		std::bind(&checkRange<float>, std::placeholders::_1, 0.f, 1.f)
 	);
 }
 
-bool convertToTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
+bool convertToTest0(ComputeFlow& flow, FlowPerformer& performer, uint32_t width, uint32_t height)
 {
 	// Create nodes
 	auto make = flow.CreateNode<MakeNoiseFrameComputeNode>("Make");
@@ -240,11 +246,12 @@ bool convertToTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
 
 	return runFlow(
 		flow,
+		performer,
 		std::bind(&checkRange<uint16_t>, std::placeholders::_1, 20, 100)
 	);
 }
 
-bool cropTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
+bool cropTest0(ComputeFlow& flow, FlowPerformer& performer, uint32_t width, uint32_t height)
 {
 	assert(width >= 16 && height >= 16);
 
@@ -266,11 +273,12 @@ bool cropTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
 
 	return runFlow(
 		flow,
+		performer,
 		std::bind(&checkSum<uint32_t>, std::placeholders::_1, cropWidth * cropHeight * 1)
 	);
 }
 
-bool multiChannelsTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
+bool multiChannelsTest0(ComputeFlow& flow, FlowPerformer& performer, uint32_t width, uint32_t height)
 {
 	// Create nodes
 	auto make = flow.CreateNode<MakeNoiseFrameComputeNode>("Make");
@@ -283,6 +291,7 @@ bool multiChannelsTest0(ComputeFlow& flow, uint32_t width, uint32_t height)
 
 	return runFlow(
 		flow,
+		performer,
 		std::bind(&checkRange<float4>, std::placeholders::_1, float4(0.f), float4(1.f))
 	);
 }

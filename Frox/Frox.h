@@ -28,8 +28,14 @@ class Frox
 public:
 	virtual ~Frox() {}
 
-	virtual ComputeFlow* CreateComputeFlow(IComputeFlowListerner* listerner = nullptr) = 0;
+	virtual ComputeFlow* CreateComputeFlow() = 0;
 	virtual void DestroyComputeFlow(ComputeFlow* computeFlow) = 0;
+
+	virtual FlowData* CreateFlowData() = 0;
+	virtual void DestroyFlowData(FlowData* flowData) = 0;
+
+	virtual FlowPerformer* CreateFlowPerformer(IComputeFlowListerner* listerner = nullptr) = 0;
+	virtual void DestroyFlowPerformer(FlowPerformer* performer) = 0;
 
 	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr) = 0;
 	virtual void DestroyComputeFrame(ComputeFramePtr computeFlow) = 0;

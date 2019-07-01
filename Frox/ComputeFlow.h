@@ -5,12 +5,6 @@
 
 namespace frox {
 
-class IComputeFlowListerner
-{
-public:
-	virtual void OnPerformed() = 0;
-};
-
 /**
  * @brief Compute flow class
  */
@@ -76,9 +70,9 @@ public:
 
 	virtual void Initialize() = 0;
 	virtual bool WasInitialized() const = 0;
-	virtual void Perform() = 0;
-	virtual void Fetch() = 0;
-	virtual uint32_t GetNumActiveTasks() const = 0;
+	//virtual void Perform() = 0;
+	//virtual void Fetch() = 0;
+	//virtual uint32_t GetNumActiveTasks() const = 0;
 };
 
 template <typename ComputeNodeT>

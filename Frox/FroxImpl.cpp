@@ -1,6 +1,8 @@
 #include "FroxImpl.h"
 #include "Log.h"
 #include "BasicComputeFlow.h"
+#include "BasicFlowPerformer.h"
+
 #include "ComputeFrameImplV1.h"
 
 #include <algorithm>
@@ -16,11 +18,13 @@ FroxImpl::FroxImpl(const FroxDesc& desc)
 FroxImpl::~FroxImpl()
 {
 	assert(_flows.empty());
+	assert(_datas.empty());
+	assert(_performers.empty());
 }
 
-ComputeFlow* FroxImpl::CreateComputeFlow(IComputeFlowListerner* listerner)
+ComputeFlow* FroxImpl::CreateComputeFlow()
 {
-	ComputeFlow* flow =  BasicComputeFlow::Create(listerner);
+	ComputeFlow* flow =  BasicComputeFlow::Create();
 	_flows.push_back(flow);
 	return flow;
 }
@@ -33,6 +37,40 @@ void FroxImpl::DestroyComputeFlow(ComputeFlow* computeFlow)
 	_flows.erase(it);
 
 	delete computeFlow;
+}
+
+FlowData* FroxImpl::CreateFlowData()
+{
+	FlowData* data = BasicFlowData::Create();
+	_datas.push_back(data);
+	return data;
+}
+
+void FroxImpl::DestroyFlowData(FlowData* flowData)
+{
+	auto it = std::remove_if(_datas.begin(), _datas.end(), [flowData](FlowData* other) {
+		return other == flowData;
+	});
+	_datas.erase(it);
+
+	delete flowData;
+}
+
+FlowPerformer* FroxImpl::CreateFlowPerformer(IComputeFlowListerner* listerner)
+{
+	FlowPerformer* performer = BasicFlowPerformer::Create(listerner);
+	_performers.push_back(performer);
+	return performer;
+}
+
+void FroxImpl::DestroyFlowPerformer(FlowPerformer* performer)
+{
+	auto it = std::remove_if(_performers.begin(), _performers.end(), [performer](FlowPerformer* other) {
+		return other == performer;
+	});
+	_performers.erase(it);
+
+	delete performer;
 }
 
 ComputeFramePtr FroxImpl::CreateComputeFrame(Size size, ComputeFrameType type, const void* data)

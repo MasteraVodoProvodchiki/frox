@@ -21,7 +21,7 @@ struct ComputeFlowEntryNode
 struct ComputeFlowEntry
 {
 	std::string Name;
-	ComputeFramePtr Frame;
+	// ComputeFramePtr Frame;
 	std::vector<ComputeFlowEntryNode> Nodes;
 };
 
@@ -29,7 +29,7 @@ struct ComputeFlowEntry
 struct ComputeFlowOutput
 {
 	std::string Name;
-	ComputeFramePtr Frame;
+	// ComputeFramePtr Frame;
 	std::vector<ComputeFlowEntryNode> Nodes;
 };
 
@@ -88,9 +88,13 @@ public:
 	// Common
 	virtual void Initialize() = 0;
 	virtual bool WasInitialized() const = 0;
-	virtual void Perform() = 0;
-	virtual void Fetch() = 0;
-	virtual uint32_t GetNumActiveTasks() const = 0;
+
+	virtual void Prepare() = 0;
+	virtual uint32_t GetNodes(const ComputeNodeImplPtr** outNodes) const = 0;
+
+	// virtual void Perform() = 0;
+	// virtual void Fetch() = 0;
+	// virtual uint32_t GetNumActiveTasks() const = 0;
 };
 using ComputeFlowImplPtr = std::shared_ptr<ComputeFlowImpl>;
 

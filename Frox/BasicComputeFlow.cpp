@@ -5,18 +5,18 @@
 
 namespace frox {
 
-BasicComputeFlow::BasicComputeFlow(IComputeFlowListerner* listerner)
+BasicComputeFlow::BasicComputeFlow()
 	: _impl(BasicComputeFlowImpl::Create())
-	, _listerner(listerner)
+	//, _listerner(listerner)
 {
-	BasicComputeFlowImpl* impl = reinterpret_cast<BasicComputeFlowImpl*>(_impl.get());
-	impl->SetOnPerformedCallback(std::bind(&BasicComputeFlow::OnPerformed, this));
+	//BasicComputeFlowImpl* impl = reinterpret_cast<BasicComputeFlowImpl*>(_impl.get());
+	//impl->SetOnPerformedCallback(std::bind(&BasicComputeFlow::OnPerformed, this));
 }
 
 BasicComputeFlow::~BasicComputeFlow()
 {
-	BasicComputeFlowImpl* impl = reinterpret_cast<BasicComputeFlowImpl*>(_impl.get());
-	impl->ClearOnPerformedCallback();
+	//BasicComputeFlowImpl* impl = reinterpret_cast<BasicComputeFlowImpl*>(_impl.get());
+	//impl->ClearOnPerformedCallback();
 }
 
 ComputeNode* BasicComputeFlow::CreateNode(const char* type, const char* name)
@@ -135,6 +135,7 @@ bool BasicComputeFlow::WasInitialized() const
 	return _impl->WasInitialized();
 }
 
+/*
 void BasicComputeFlow::Perform()
 {
 	assert(_impl);
@@ -161,5 +162,6 @@ void BasicComputeFlow::OnPerformed()
 		_listerner->OnPerformed();
 	}
 }
+*/
 
 } // End frox

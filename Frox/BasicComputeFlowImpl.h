@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComputeFlowImpl.h"
+#include "ComputeNodeImpl.h"
 #include "ComputeTask.h"
 
 #include <vector>
@@ -48,31 +49,36 @@ public:
 
 	virtual void Initialize() override;
 	virtual bool WasInitialized() const override;
+
+	virtual void Prepare() override;
+	virtual uint32_t GetNodes(const ComputeNodeImplPtr** outNodes) const override;
+	/*
 	virtual void Perform() override;
 	virtual void Fetch() override;
 	virtual uint32_t GetNumActiveTasks() const override;
+	*/
 	// End ComputeFlow overrides
 	
-	void SetOnPerformedCallback(std::function<void()> onPerformed);
-	void ClearOnPerformedCallback();
+	// void SetOnPerformedCallback(std::function<void()> onPerformed);
+	// void ClearOnPerformedCallback();
 
 private:
-	void OnTaskCompleted(ComputeTask* task);
-	void Performed();
+	// void OnTaskCompleted(ComputeTask* task);
+	// void Performed();
 	void MakeDirty();
 
 private:
 	bool _bWasInitialized;
 	bool _bDirty;
 
-	std::vector<ComputeNodeImpl*> _nodes;
-	std::vector<ComputeNodeImpl*> _sortedNodes;
+	std::vector<ComputeNodeImplPtr> _nodes;
+	std::vector<ComputeNodeImplPtr> _sortedNodes;
 
-	mutable std::mutex _tasksMutex;
-	std::vector<ComputeTaskPtr> _tasks;
+	// mutable std::mutex _tasksMutex;
+	// std::vector<ComputeTaskPtr> _tasks;
 
-	mutable std::mutex _onPerformedMutex;
-	std::function<void()> _onPerformed;
+	// mutable std::mutex _onPerformedMutex;
+	// std::function<void()> _onPerformed;
 
 	std::vector<ComputeFlowEntry> _entries;
 	std::vector<ComputeFlowOutput> _outputs;

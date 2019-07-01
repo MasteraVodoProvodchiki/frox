@@ -12,18 +12,18 @@ namespace frox {
 
 namespace utils {
 
-void SortNodes(const std::vector<ComputeNodeImpl*>& in, std::vector<ComputeNodeImpl*>& out)
+void SortNodes(const std::vector<ComputeNodeImplPtr>& in, std::vector<ComputeNodeImplPtr>& out)
 {
 	out.reserve(in.size());
 
-	for (ComputeNodeImpl* node : in)
+	for (ComputeNodeImplPtr node : in)
 	{
 		size_t nearestIndex = std::numeric_limits<size_t>::max();
 		for (ComputeNodePinPtr pin : node->GetOutputPins())
 		{
 			for (ComputeNodePinPtr nextPin : pin->NextPins)
 			{
-				ComputeNodeImpl* nextNode = nextPin->Owner;
+				ComputeNodeImplPtr nextNode = nextPin->Owner->getptr();
 				auto it = std::find(out.begin(), out.end(), nextNode);
 				if (it != out.end() && nearestIndex > (it - out.begin()))
 				{
@@ -51,12 +51,7 @@ BasicComputeFlowImpl::BasicComputeFlowImpl()
 {}
 
 BasicComputeFlowImpl::~BasicComputeFlowImpl()
-{
-	for (ComputeNodeImpl* node : _nodes)
-	{
-		delete node;
-	}
-}
+{}
 
 ComputeNodeImpl* BasicComputeFlowImpl::CreateNode(const char* type, const char* name)
 {
@@ -66,8 +61,8 @@ ComputeNodeImpl* BasicComputeFlowImpl::CreateNode(const char* type, const char* 
 	};
 
 	ComputeNode* nodeTemp = ComputeNodeFactory::Create(type, initializer);
-
 	ComputeNodeImpl* node = reinterpret_cast<ComputeNodeImpl*>(nodeTemp);
+
 	if (node == nullptr)
 	{
 		Log::Error("Unknown ComputeNode type", "ComputeFlow");
@@ -78,7 +73,8 @@ ComputeNodeImpl* BasicComputeFlowImpl::CreateNode(const char* type, const char* 
 	node->AllocateDefaultPins();
 
 	// Append
-	_nodes.push_back(node);
+	ComputeNodeImplPtr nodePtr = node->getptr();
+	_nodes.push_back(nodePtr);
 
 	MakeDirty();
 
@@ -91,12 +87,10 @@ void BasicComputeFlowImpl::DestoyNode(ComputeNodeImpl* node)
 	// TODO. Add code
 
 	// Remove
-	auto it = std::remove_if(_nodes.begin(), _nodes.end(), [node](ComputeNodeImpl* other) {
-		return other == node;
+	auto it = std::remove_if(_nodes.begin(), _nodes.end(), [node](ComputeNodeImplPtr other) {
+		return other.get() == node;
 	});
 	_nodes.erase(it);
-
-	delete node;
 
 	MakeDirty();
 }
@@ -258,7 +252,7 @@ void BasicComputeFlowImpl::DisconnectOutput(uint32_t outputId, ComputeNodeImpl* 
 
 void BasicComputeFlowImpl::Initialize()
 {
-	for (ComputeNode* node : _sortedNodes)
+	for (ComputeNodeImplPtr node : _sortedNodes)
 	{
 		if (!node->WasInitialized())
 		{
@@ -274,6 +268,29 @@ bool BasicComputeFlowImpl::WasInitialized() const
 	return _bWasInitialized;
 }
 
+void BasicComputeFlowImpl::Prepare()
+{
+	if (_bDirty)
+	{
+		_sortedNodes.clear();
+		utils::SortNodes(_nodes, _sortedNodes);
+
+		_bDirty = false;
+	}
+
+	if (!WasInitialized())
+	{
+		Initialize();
+	}
+}
+
+uint32_t BasicComputeFlowImpl::GetNodes(const ComputeNodeImplPtr** outNodes) const
+{
+	*outNodes = _sortedNodes.data();
+	return uint32_t(_sortedNodes.size());
+}
+
+/*
 void BasicComputeFlowImpl::Perform()
 {
 	if (_bDirty)
@@ -301,7 +318,7 @@ void BasicComputeFlowImpl::Perform()
 	// TODO. Add SubFlow
 	// Create tasks
 	std::lock_guard<std::mutex> lock(_tasksMutex);
-	for (ComputeNode* node : _sortedNodes)
+	for (ComputeNodeImplPtr node : _sortedNodes)
 	{
 		if (node->IsValid())
 		{
@@ -415,6 +432,7 @@ void BasicComputeFlowImpl::Performed()
 		_onPerformed();
 	}
 }
+*/
 
 void BasicComputeFlowImpl::MakeDirty()
 {

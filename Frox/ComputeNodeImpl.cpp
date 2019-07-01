@@ -18,6 +18,11 @@ const char* ComputeNodeImpl::GetName() const
 	return _name.c_str();
 }
 
+void ComputeNodeImpl::AllocateDefaultPins()
+{
+
+}
+
 void ComputeNodeImpl::SetInput(uint32_t inId, ComputeFramePtr frame)
 {
 	if (inId < _inputs.size())
@@ -29,6 +34,16 @@ void ComputeNodeImpl::SetInput(uint32_t inId, ComputeFramePtr frame)
 ComputeFramePtr ComputeNodeImpl::GetOutput(uint32_t outId)
 {
 	return outId < _outputs.size() ? _outputs[outId]->Frame : nullptr;
+}
+
+bool ComputeNodeImpl::IsValid() const
+{
+	return true;
+}
+
+ComputeTask* ComputeNodeImpl::CreateComputeTask()
+{
+	return nullptr;
 }
 
 void ComputeNodeImpl::Initialize()

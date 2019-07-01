@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Common.h"
+#include "Types.h"
 
 #include <memory>
-#include <inttypes.h>
+
 
 namespace frox {
 
@@ -28,38 +29,6 @@ namespace utils {
 uint32_t FrameTypeToSize(EComputeFrameType type);
 
 } // End utils
-
-struct Size
-{
-	uint32_t Width;
-	uint32_t Height;
-
-	friend bool operator == (const Size& left, const Size& right)
-	{
-		return left.Width == right.Width && left.Height == right.Height;
-	}
-
-	friend bool operator != (const Size& left, const Size& right)
-	{
-		return left.Width != right.Width || left.Height != right.Height;
-	}
-};
-
-struct Rect
-{
-	int32_t X, Y, Width, Heihgt;
-
-	bool IsValid() const
-	{
-		return X >= 0 && Y >= 0 && Width > 0 && Heihgt > 0;
-	}
-};
-
-struct Point
-{
-	uint32_t X;
-	uint32_t Y;
-};
 
 class ComputeFrame
 {
