@@ -11,7 +11,7 @@ class ComputeTask;
 class ResizeComputeNode : public ComputeNodeImpl
 {
 	FROX_COMPUTENODE(ResizeComputeNode, "resize")
-	using Super = ResizeComputeNode;
+	using Super = ComputeNodeImpl;
 
 public:
 	ResizeComputeNode(const ComputeNodeInitializer& initializer);

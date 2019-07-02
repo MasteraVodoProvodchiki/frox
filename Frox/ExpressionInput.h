@@ -8,6 +8,9 @@ struct ExpressionInput
 {
 	ExpressionPtr Expr;
 
+	ExpressionInput()
+	{}
+
 	ExpressionInput(ExpressionPtr expr)
 		: Expr(expr)
 	{}

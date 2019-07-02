@@ -19,8 +19,8 @@ public:
 		return std::make_shared<BasicFlowPerformerImpl>();
 	}
 
-	virtual void Perform(ComputeFlowImplPtr flow) override;
-	virtual void Fetch(ComputeFlowImplPtr flow) override;
+	virtual void Perform(ComputeFlowImplPtr flow, FlowDataImplPtr inputData) override;
+	virtual void Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outputData) override;
 	virtual uint32_t GetNumActiveTasks() const override;
 
 	void SetOnPerformedCallback(std::function<void()> onPerformed);

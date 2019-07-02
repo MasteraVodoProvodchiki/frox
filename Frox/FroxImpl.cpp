@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "BasicComputeFlow.h"
 #include "BasicFlowPerformer.h"
+#include "BasicFlowData.h"
 
 #include "ComputeFrameImplV1.h"
 

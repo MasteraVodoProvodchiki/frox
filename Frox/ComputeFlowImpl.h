@@ -2,14 +2,13 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "ComputeNodeImpl.h"
 
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace frox {
-
-class ComputeNodeImpl;
 
 // Entry structs
 struct ComputeFlowEntryNode
@@ -76,8 +75,8 @@ public:
 	virtual int32_t FindEntryByName(const char* name) const = 0;
 	virtual int32_t FindOutputByName(const char* name) const = 0;
 
-	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) = 0;
-	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const = 0;
+	// virtual void SetInput(uint32_t inId, ComputeFramePtr frame) = 0;
+	// virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const = 0;
 
 	virtual void ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) = 0;
 	virtual void DisconnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) = 0;

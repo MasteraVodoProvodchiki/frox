@@ -79,6 +79,7 @@ int32_t BasicComputeFlow::FindOutputByName(const char* name) const
 	return _impl->FindOutputByName(name);
 }
 
+/*
 void BasicComputeFlow::SetInput(uint32_t inId, ComputeFramePtr frame)
 {
 	assert(_impl);
@@ -90,6 +91,7 @@ ComputeFramePtr BasicComputeFlow::GetOutput(uint32_t outId) const
 	assert(_impl);
 	return _impl->GetOutput(outId);
 }
+*/
 
 void BasicComputeFlow::ConnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId)
 {

@@ -15,8 +15,8 @@ class FROX_API FlowPerformer
 {
 public:
 	virtual ~FlowPerformer() {}
-	virtual void Perform(ComputeFlow* flow /* inputData */) = 0;
-	virtual void Fetch(ComputeFlow* flow /* outputData */) = 0;
+	virtual void Perform(ComputeFlow* flow, FlowData* inputData) = 0;
+	virtual void Fetch(ComputeFlow* flow, FlowData* outputData) = 0;
 	virtual uint32_t GetNumActiveTasks() const = 0;
 
 	void Release();

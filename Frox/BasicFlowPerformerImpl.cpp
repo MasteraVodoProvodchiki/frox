@@ -14,27 +14,31 @@ BasicFlowPerformerImpl::BasicFlowPerformerImpl()
 BasicFlowPerformerImpl::~BasicFlowPerformerImpl()
 {}
 
-void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow)
+void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow, FlowDataImplPtr inputData)
 {
 	assert(flow);
 
 	flow->Prepare();
 
 	// Update entries
-	const ComputeFlowEntry* entries = nullptr;
-	uint32_t nbEntries = flow->GetEntries(&entries);
-
-	for (uint32_t index = 0; index < nbEntries; ++index)
+	if (inputData)
 	{
-		const ComputeFlowEntry& entry = entries[index];
-		for (const ComputeFlowEntryNode& entryNode : entry.Nodes)
+		const ComputeFlowEntry* entries = nullptr;
+		uint32_t nbEntries = flow->GetEntries(&entries);
+
+		for (uint32_t index = 0; index < nbEntries; ++index)
 		{
-			entryNode.Node->SetInput(entryNode.InId, entry.Frame);
+			const ComputeFlowEntry& entry = entries[index];
+			ComputeFramePtr frame = inputData->GetFrame(entry.Name.data());
+
+			for (const ComputeFlowEntryNode& entryNode : entry.Nodes)
+			{
+				entryNode.Node->SetInput(entryNode.InId, frame);
+			}
 		}
 	}
 
 	// TODO. Add SubFlow
-
 	const ComputeNodeImplPtr* nodes = nullptr;
 	uint32_t nbNodes = flow->GetNodes(&nodes);
 
@@ -81,7 +85,7 @@ void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow)
 	}
 }
 
-void BasicFlowPerformerImpl::Fetch(ComputeFlowImplPtr flow)
+void BasicFlowPerformerImpl::Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outputData)
 {
 	assert(flow);
 
@@ -96,16 +100,19 @@ void BasicFlowPerformerImpl::Fetch(ComputeFlowImplPtr flow)
 	_tasks.clear();
 
 	// Update outputs
-	const ComputeFlowOutput* outputs = nullptr;
-	uint32_t nbOutputs = flow->GetOutputs(&outputs);
-
-	for (uint32_t index = 0; index < nbOutputs; ++index)
+	if (outputData)
 	{
-		const ComputeFlowOutput& output = outputs[index];
-		for (const ComputeFlowEntryNode& outputNode : output.Nodes)
+		const ComputeFlowOutput* outputs = nullptr;
+		uint32_t nbOutputs = flow->GetOutputs(&outputs);
+
+		for (uint32_t index = 0; index < nbOutputs; ++index)
 		{
-			ComputeFramePtr frame = outputNode.Node->GetOutput(outputNode.InId);
-			output.Frame = frame;
+			const ComputeFlowOutput& output = outputs[index];
+			for (const ComputeFlowEntryNode& outputNode : output.Nodes)
+			{
+				ComputeFramePtr frame = outputNode.Node->GetOutput(outputNode.InId);
+				outputData->SetFrame(output.Name.c_str(), frame);
+			}
 		}
 	}
 }

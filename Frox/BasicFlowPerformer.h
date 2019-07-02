@@ -17,8 +17,8 @@ public:
 		return new BasicFlowPerformer(listerner);
 	}
 
-	virtual void Perform(ComputeFlow* flow /* inputData */) override;
-	virtual void Fetch(ComputeFlow* flow /* outputData */) override;
+	virtual void Perform(ComputeFlow* flow, FlowData* inputData) override;
+	virtual void Fetch(ComputeFlow* flow, FlowData* outputData) override;
 	virtual uint32_t GetNumActiveTasks() const override;
 
 	FlowPerformerImplPtr GetPerformer() const { return _impl; }

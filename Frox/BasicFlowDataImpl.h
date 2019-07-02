@@ -18,6 +18,7 @@ public:
 	}
 
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) override;
+	virtual ComputeFramePtr GetFrame(const char* name) const override;
 
 private:
 	std::map<std::string, ComputeFramePtr> _frames;

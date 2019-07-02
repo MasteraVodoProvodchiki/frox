@@ -38,8 +38,8 @@ public:
 	virtual int32_t FindEntryByName(const char* name) const override;
 	virtual int32_t FindOutputByName(const char* name) const override;
 
-	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
-	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const override;
+	// virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
+	// virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const override;
 
 	virtual void ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) override;
 	virtual void DisconnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) override;

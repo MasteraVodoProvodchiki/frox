@@ -19,6 +19,7 @@ public:
 	}
 
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) = 0;
+	virtual ComputeFramePtr GetFrame(const char* name) const = 0;
 };
 
 } // End frox

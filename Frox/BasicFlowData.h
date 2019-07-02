@@ -17,7 +17,8 @@ public:
 		return new BasicFlowData();
 	}
 
-	virtual void SetFrame(const char* name, ComputeFrame* frame) override;
+	virtual void SetFrame(const char* name, ComputeFramePtr frame) override;
+	virtual ComputeFramePtr GetFrame(const char* name) const override;
 
 	FlowDataImplPtr GetData() const { return _impl; }
 

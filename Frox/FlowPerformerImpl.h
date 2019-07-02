@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFlowImpl.h"
+#include "FlowDataImpl.h"
 
 #include <memory>
 
@@ -18,8 +19,8 @@ public:
 		return shared_from_this();
 	}
 
-	virtual void Perform(ComputeFlowImplPtr flow /* inputData */) = 0;
-	virtual void Fetch(ComputeFlowImplPtr flow /* outputData */) = 0;
+	virtual void Perform(ComputeFlowImplPtr flow, FlowDataImplPtr inputData) = 0;
+	virtual void Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outputData) = 0;
 	virtual uint32_t GetNumActiveTasks() const = 0;
 };
 

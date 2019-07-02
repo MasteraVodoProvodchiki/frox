@@ -175,6 +175,7 @@ int32_t BasicComputeFlowImpl::FindOutputByName(const char* name) const
 	return it != _outputs.end() ? it - _outputs.begin() : -1;
 }
 
+/*
 void BasicComputeFlowImpl::SetInput(uint32_t inId, ComputeFramePtr frame)
 {
 	assert(inId < _entries.size());
@@ -186,11 +187,12 @@ ComputeFramePtr BasicComputeFlowImpl::GetOutput(uint32_t outId) const
 	assert(outId < _outputs.size());
 	return _outputs[outId].Frame;
 }
+*/
 
 void BasicComputeFlowImpl::ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId)
 {
 	assert(entryId < _entries.size());
-	assert(std::find(_nodes.begin(), _nodes.end(), inNode) != _nodes.end());
+	assert(std::find(_nodes.begin(), _nodes.end(), inNode->getptr()) != _nodes.end());
 
 	// Check Pin
 	assert(inNode->GetInputPin(inPinId));
@@ -222,7 +224,7 @@ void BasicComputeFlowImpl::ConnectOutput(uint32_t outputId, ComputeNodeImpl* out
 {
 	assert(outputId < _outputs.size());
 
-	assert(std::find(_nodes.begin(), _nodes.end(), outNode) != _nodes.end());
+	assert(std::find(_nodes.begin(), _nodes.end(), outNode->getptr()) != _nodes.end());
 
 	// Check Pin
 	assert(outNode->GetOutputPin(outPinId));

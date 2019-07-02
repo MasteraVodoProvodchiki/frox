@@ -14,7 +14,7 @@ ResizeComputeNode::ResizeComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
 	, _input(0)
 	, _output(0)
-	, _size({1, 1})
+	, _size(Size({1, 1}))
 {}
 
 ResizeComputeNode::~ResizeComputeNode()
