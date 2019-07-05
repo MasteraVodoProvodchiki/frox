@@ -34,9 +34,9 @@ FROX_COMPUTENODE_IMPL(CropComputeNode)
 
 CropComputeNode::CropComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
-	, _input(0)
-	, _output(0)
-	, _rect({-1, -1, -1, -1})
+	// , _input(0)
+	// , _output(0)
+	, _rect(Rect{-1, -1, -1, -1})
 {}
 
 CropComputeNode::~CropComputeNode()
@@ -44,10 +44,14 @@ CropComputeNode::~CropComputeNode()
 
 void CropComputeNode::AllocateDefaultPins()
 {
-	_input = CreateInput("input");
-	_output = CreateOutput("output");
+	// _input = CreateInput("input");
+	// _output = CreateOutput("output");
+	RegisterInput(&_input);
+	RegisterInput(&_rect);
+	RegisterOutput(&_output);
 }
 
+/*
 void CropComputeNode::OnPostInit()
 {
 	ComputeFramePtr input = GetInput(_input);
@@ -65,9 +69,11 @@ void CropComputeNode::OnPostInit()
 		SetOutput(_output, output);
 	}
 }
+*/
 
 bool CropComputeNode::IsValid() const
 {
+	/*
 	ComputeFramePtr input = GetInput(_input);
 	ComputeFramePtr output = GetOutput(_output);
 
@@ -77,16 +83,38 @@ bool CropComputeNode::IsValid() const
 		input->GetType() == output->GetType() &&
 		_rect.IsValid() &&
 		input->IsValid();
+	*/
+	return false;
 }
 
-ComputeTask* CropComputeNode::CreateComputeTask()
+ComputeTask* CropComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-	Rect rect = _rect;
+	// ComputeFramePtr input = GetInput(_input);
+	// ComputeFramePtr output = GetOutput(_output);
+	// Rect rect = _rect;
+	auto input = _input.GetValue(inputData);
+	auto rect = _rect.GetValue(inputData);
+	auto output = _output.GetValue(outputData);
 
 	return ComputeTaskUtils::Make([input, output, rect]() {
-		functions::Crop(input, output, rect);
+		ComputeFramePtr inputFrame = *input;
+		Rect rectValue = *rect;
+
+		Size inputSize = inputFrame->GetSize();
+
+		// min W/H
+		int32_t width = std::min(rectValue.Width, int32_t(inputSize.Width) - rectValue.X);
+		int32_t height = std::min(rectValue.Heihgt, int32_t(inputSize.Height) - rectValue.Y);
+
+		Size outputSize = Size{ uint32_t(width), uint32_t(height) };
+
+		output.SetValue(
+			outputSize,
+			inputFrame->GetType(),
+			[inputFrame, rectValue](ComputeFramePtr outputFrame) {
+				functions::Crop(inputFrame, outputFrame, rectValue);
+			}
+		);		
 	});
 }
 

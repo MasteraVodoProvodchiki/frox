@@ -13,11 +13,11 @@ namespace functions {
 
 void Avg(ComputeFramePtr input, ComputeFramePtr output)
 {
-	EComputeFrameType type = input->GetType();
+	ComputeFrameType type = input->GetType();
 	Size size = input->GetSize();
 	uint32_t nbElemenents = size.Width * size.Height;
 
-	switch (type)
+	switch (type.Type)
 	{
 	case ECFT_Bool: {
 		uint32_t sum = 0;
@@ -108,6 +108,7 @@ void AvgComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 
 bool AvgComputeNode::IsValid() const
 {
+	/*
 	ComputeFramePtr input = GetInput(_input);
 	ComputeFramePtr output = GetOutput(_output);
 
@@ -116,6 +117,8 @@ bool AvgComputeNode::IsValid() const
 		output != nullptr &&
 		input->GetType() == output->GetType();
 		output->GetSize() == Size{1, 1};
+	*/
+	return false;
 }
 
 ComputeTask* AvgComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

@@ -61,9 +61,14 @@ MakeFrameBaseComputeNode::~MakeFrameBaseComputeNode()
 
 void MakeFrameBaseComputeNode::AllocateDefaultPins()
 {
-	_output = CreateOutput("output");
+	RegisterInput(&_width);
+	RegisterInput(&_height);
+	RegisterInput(&_channels);
+	RegisterOutput(&_output);
+	// _output = CreateOutput("output");
 }
 
+/*
 void MakeFrameBaseComputeNode::OnPostInit()
 {
 	if (_width > 0 && _height > 0 && _type != EComputeFrameType::ECFT_None)
@@ -72,14 +77,18 @@ void MakeFrameBaseComputeNode::OnPostInit()
 		SetOutput(_output, output);
 	}
 }
+*/
 
 bool MakeFrameBaseComputeNode::IsValid() const
 {
+	/*
 	return
 		_width > 0 && _height > 0 &&
 		_type != EComputeFrameType::ECFT_None &&
 		_channels > 0 &&
 		GetOutput(_output) != nullptr;
+	*/
+	return false;
 }
 
 void MakeFrameBaseComputeNode::SetWidth(uint32_t width)
@@ -109,50 +118,67 @@ MakeFrameComputeNode::MakeFrameComputeNode(const ComputeNodeInitializer& initial
 
 bool MakeFrameComputeNode::IsValid() const
 {
+	/*
 	return
 		Super::IsValid() &&
 		_value.IsValid();
+	*/
+	return false;
 }
 
-ComputeTask* MakeFrameComputeNode::CreateComputeTask()
+ComputeTask* MakeFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
 	Variant value = _value;
+	// ComputeFramePtr output = GetOutput(_output);
+	auto width = _width.GetValue(inputData);
+	auto height = _height.GetValue(inputData);
+	auto channels = _channels.GetValue(inputData);
+	auto output = _output.GetValue(outputData);
+	auto type = _type;
 
-	ComputeFramePtr output = GetOutput(_output);
+	return ComputeTaskUtils::Make([width, height, type, channels, value, output]() {
+		uint32_t widthValue = *width;
+		uint32_t heightValue = *height;
+		uint32_t channelsValue = *channels;
 
-	return ComputeTaskUtils::Make([value, output]() {
-		EComputeFrameType type = output->GetType();
-		Size size = output->GetSize();
-		switch (type)
-		{
-		case ECFT_Bool: {
-			bool boolValue = value.To<bool>();
-			utils::Fill<bool>(output, utils::StaticValue<bool>(boolValue));
-			break;
-		}
-		case ECFT_UInt8: {
-			uint8_t intValue = value.To<uint8_t>();
-			utils::Fill<uint8_t>(output, utils::StaticValue<uint8_t>(intValue));
-			break;
-		}
-		case ECFT_UInt16: {
-			uint16_t intValue = value.To<uint16_t>();
-			utils::Fill<uint16_t>(output, utils::StaticValue<uint16_t>(intValue));
-			break;
-		}
-		case ECFT_UInt32: {
-			uint32_t intValue = value.To<uint32_t>();
-			utils::Fill<uint32_t>(output, utils::StaticValue<uint32_t>(intValue));
-			break;
-		}
-		case ECFT_Float: {
-			float floatValue = value.To<float>();
-			utils::Fill<float>(output, utils::StaticValue<float>(floatValue));
-			break;
-		}
-		default:
-			break;
-		}
+		output.SetValue(
+			Size{ widthValue, heightValue },
+			ComputeFrameType{ type, channelsValue },
+			[value](ComputeFramePtr output) {
+				ComputeFrameType type = output->GetType();
+				Size size = output->GetSize();
+				switch (type.Type)
+				{
+				case ECFT_Bool: {
+					bool boolValue = value.To<bool>();
+					utils::Fill<bool>(output, utils::StaticValue<bool>(boolValue));
+					break;
+				}
+				case ECFT_UInt8: {
+					uint8_t intValue = value.To<uint8_t>();
+					utils::Fill<uint8_t>(output, utils::StaticValue<uint8_t>(intValue));
+					break;
+				}
+				case ECFT_UInt16: {
+					uint16_t intValue = value.To<uint16_t>();
+					utils::Fill<uint16_t>(output, utils::StaticValue<uint16_t>(intValue));
+					break;
+				}
+				case ECFT_UInt32: {
+					uint32_t intValue = value.To<uint32_t>();
+					utils::Fill<uint32_t>(output, utils::StaticValue<uint32_t>(intValue));
+					break;
+				}
+				case ECFT_Float: {
+					float floatValue = value.To<float>();
+					utils::Fill<float>(output, utils::StaticValue<float>(floatValue));
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		);
 	});
 }
 
@@ -174,38 +200,54 @@ MakeNoiseFrameComputeNode::MakeNoiseFrameComputeNode(const ComputeNodeInitialize
 	: Super(initializer)
 {}
 
-ComputeTask* MakeNoiseFrameComputeNode::CreateComputeTask()
+ComputeTask* MakeNoiseFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	ComputeFramePtr output = GetOutput(_output);
+	// ComputeFramePtr output = GetOutput(_output);
+	auto width = _width.GetValue(inputData);
+	auto height = _height.GetValue(inputData);
+	auto channels = _channels.GetValue(inputData);
+	auto output = _output.GetValue(outputData);
+	auto type = _type;
 
-	return ComputeTaskUtils::Make([output]() {
-		EComputeFrameType type = output->GetType();
-		Size size = output->GetSize();
-		switch (type)
-		{
-		case ECFT_Bool: {
-			utils::Fill<bool>(output, utils::RandomValue());
-			break;
-		}
-		case ECFT_UInt8: {
-			utils::Fill<uint8_t>(output, utils::RandomValue());
-			break;
-		}
-		case ECFT_UInt16: {
-			utils::Fill<uint16_t>(output, utils::RandomValue());
-			break;
-		}
-		case ECFT_UInt32: {
-			utils::Fill<uint32_t>(output, utils::RandomValue());
-			break;
-		}
-		case ECFT_Float: {
-			utils::Fill<float>(output, utils::RandomValue());
-			break;
-		}
-		default:
-			break;
-		}
+	return ComputeTaskUtils::Make([width, height, type, channels, output]() {
+		uint32_t widthValue = *width;
+		uint32_t heightValue = *height;
+		uint32_t channelsValue = *channels;
+
+		output.SetValue(
+			Size{ widthValue, heightValue },
+			ComputeFrameType{ type, channelsValue },
+			[](ComputeFramePtr output) {
+				ComputeFrameType type = output->GetType();
+				Size size = output->GetSize();
+				switch (type.Type)
+				{
+					case ECFT_Bool: {
+						utils::Fill<bool>(output, utils::RandomValue());
+						break;
+					}
+					case ECFT_UInt8: {
+						utils::Fill<uint8_t>(output, utils::RandomValue());
+						break;
+					}
+					case ECFT_UInt16: {
+						utils::Fill<uint16_t>(output, utils::RandomValue());
+						break;
+					}
+					case ECFT_UInt32: {
+						utils::Fill<uint32_t>(output, utils::RandomValue());
+						break;
+					}
+					case ECFT_Float: {
+						utils::Fill<float>(output, utils::RandomValue());
+						break;
+					}
+					default:
+						break;
+				}
+			}
+		);	
+		
 	});
 }
 
@@ -219,9 +261,11 @@ ConstFrameComputeNode::~ConstFrameComputeNode()
 
 void ConstFrameComputeNode::AllocateDefaultPins()
 {
-	_output = CreateOutput("output");
+	RegisterOutput(&_output);
+	// _output = CreateOutput("output");
 }
 
+/*
 void ConstFrameComputeNode::OnPostInit()
 {
 	if (_frame)
@@ -229,15 +273,19 @@ void ConstFrameComputeNode::OnPostInit()
 		SetOutput(_output, _frame);
 	}
 }
+*/
 
 bool ConstFrameComputeNode::IsValid() const
 {
-	return GetOutput(_output) != nullptr;
+	// return GetOutput(_output) != nullptr;
+	return false;
 }
 
-ComputeTask* ConstFrameComputeNode::CreateComputeTask()
+ComputeTask* ConstFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	ComputeFramePtr output = GetOutput(_output);
+	// ComputeFramePtr output = GetOutput(_output);
+	auto output = _output.GetValue(outputData);
+
 	return ComputeTaskUtils::Make([output]() {
 		// Nothing
 	});

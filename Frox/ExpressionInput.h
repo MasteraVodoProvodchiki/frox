@@ -27,7 +27,7 @@ struct TLazyValueByExpression
 	FlowDataImplPtr Data;
 	T DefaultValue;
 
-	TLazyValueByExpression(FlowDataImplPtr expr, FlowDataImplPtr data, T defaultValue)
+	TLazyValueByExpression(ExpressionPtr expr, FlowDataImplPtr data, T defaultValue)
 		: Expr(expr)
 		, Data(data)
 		, DefaultValue(defaultValue)

@@ -15,7 +15,7 @@ namespace utils {
 void SortNodes(const std::vector<ComputeNodeImplPtr>& in, std::vector<ComputeNodeImplPtr>& out)
 {
 	out.reserve(in.size());
-
+	/*
 	for (ComputeNodeImplPtr node : in)
 	{
 		size_t nearestIndex = std::numeric_limits<size_t>::max();
@@ -41,6 +41,7 @@ void SortNodes(const std::vector<ComputeNodeImplPtr>& in, std::vector<ComputeNod
 			out.push_back(node);
 		}
 	}
+	*/
 }
 
 } // End utils

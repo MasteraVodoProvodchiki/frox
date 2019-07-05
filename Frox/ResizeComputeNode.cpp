@@ -20,9 +20,9 @@ FROX_COMPUTENODE_IMPL(ResizeComputeNode)
 
 ResizeComputeNode::ResizeComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
-	, _input(0)
-	, _output(0)
-	, _size(Size({1, 1}))
+	// , _input(0)
+	// , _output(0)
+	, _size(Size{1, 1})
 {}
 
 ResizeComputeNode::~ResizeComputeNode()
@@ -30,10 +30,14 @@ ResizeComputeNode::~ResizeComputeNode()
 
 void ResizeComputeNode::AllocateDefaultPins()
 {
-	_input = CreateInput("input");
-	_output = CreateOutput("output");
+	RegisterInput(&_input);
+	RegisterInput(&_size);
+	RegisterOutput(&_output);
+	// _input = CreateInput("input");
+	// _output = CreateOutput("output");
 }
 
+/*
 void ResizeComputeNode::OnPostInit()
 {
 	ComputeFramePtr input = GetInput(_input);
@@ -44,9 +48,11 @@ void ResizeComputeNode::OnPostInit()
 		// SetOutput(_output, output);
 	}
 }
+*/
 
 bool ResizeComputeNode::IsValid() const
 {
+/*
 	ComputeFramePtr input = GetInput(_input);
 	ComputeFramePtr output = GetOutput(_output);
 
@@ -56,19 +62,31 @@ bool ResizeComputeNode::IsValid() const
 		input->GetType() == output->GetType() &&
 		_size.IsValid() &&
 		input->IsValid();
+*/
 }
 
 ComputeTask* ResizeComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
 	// ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-
-	ComputeFramePtr input = _input.GetValue(inputData);
-	Size size = _size.GetValue(inputData);
+	// ComputeFramePtr output = GetOutput(_output);
+	// ComputeFramePtr input = _input.GetValue(inputData);
+	// Size size = _size.GetValue(inputData);
+	auto input = _input.GetValue(inputData);
+	auto size = _size.GetValue(inputData);
+	auto output = _output.GetValue(outputData);
 
 	return ComputeTaskUtils::Make([input, output, size]() {
+		ComputeFramePtr inputFrame = *input;
+		Size sizeValue = *size;
 
-		functions::Resize(input, output);
+		output.SetValue(
+			sizeValue,
+			inputFrame->GetType(),
+			[inputFrame](ComputeFramePtr outputFrame) {
+				functions::Resize(inputFrame, outputFrame);
+			}
+		);	
+		
 	});
 }
 

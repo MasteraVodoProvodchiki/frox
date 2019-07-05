@@ -53,8 +53,8 @@ FROX_COMPUTENODE_IMPL(ConvertToComputeNode)
 
 ConvertToComputeNode::ConvertToComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
-	, _input(0)
-	, _output(0)
+	// , _input(0)
+	// , _output(0)
 	, _type(EComputeFrameType::ECFT_UInt8)
 	, _alpha(1.0)
 	, _beta(0.0)
@@ -65,8 +65,12 @@ ConvertToComputeNode::~ConvertToComputeNode()
 
 void ConvertToComputeNode::AllocateDefaultPins()
 {
+	RegisterInput(&_input);
+	RegisterOutput(&_output);
+	/*
 	_input = CreateInput("input");
 	_output = CreateOutput("output");
+	*/
 }
 
 /*
@@ -84,6 +88,7 @@ void ConvertToComputeNode::OnPostInit()
 
 bool ConvertToComputeNode::IsValid() const
 {
+	/*
 	ComputeFramePtr input = GetInput(_input);
 	ComputeFramePtr output = GetOutput(_output);
 
@@ -92,6 +97,8 @@ bool ConvertToComputeNode::IsValid() const
 		output != nullptr &&
 		input->GetSize() == output->GetSize() &&
 		input->IsValid();
+	*/
+	return false;
 }
 
 ComputeTask* ConvertToComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

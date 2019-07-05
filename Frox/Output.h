@@ -83,7 +83,7 @@ struct TLazyFrame
 
 		callback(frame);
 
-		Data->SetFrame(Id, value);
+		Data->SetFrame(Id, frame);
 		// SetValue(frame);
 	}
 };

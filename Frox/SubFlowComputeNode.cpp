@@ -53,15 +53,17 @@ void SubFlowComputeNode::AllocateDefaultPins()
 	}
 }
 
+/*
 void SubFlowComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 {}
+*/
 
 bool SubFlowComputeNode::IsValid() const
 {
 	return _subFlow != nullptr;
 }
 
-ComputeTask* SubFlowComputeNode::CreateComputeTask()
+ComputeTask* SubFlowComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
 	ComputeFlow* subFlow = _subFlow;
 

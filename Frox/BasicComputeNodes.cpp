@@ -63,11 +63,15 @@ OperationComputeNode::~OperationComputeNode()
 
 void OperationComputeNode::AllocateDefaultPins()
 {
-	_left = CreateInput("left");
-	_right = CreateInput("right");
-	_output = CreateOutput("output");
+	RegisterInput(&_left);
+	RegisterInput(&_right);
+	RegisterOutput(&_output);
+	// _left = CreateInput("left");
+	// _right = CreateInput("right");
+	// _output = CreateOutput("output");
 }
 
+/*
 void OperationComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 {
 	ComputeFramePtr left = GetInput(_left);
@@ -78,9 +82,10 @@ void OperationComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
 		SetOutput(_output, output);
 	}
 }
-
+*/
 bool OperationComputeNode::IsValid() const
 {
+	/*
 	ComputeFramePtr left = GetInput(_left);
 	ComputeFramePtr right = GetInput(_right);
 	ComputeFramePtr output = GetOutput(_output);
@@ -93,6 +98,8 @@ bool OperationComputeNode::IsValid() const
 		left->GetType() == output->GetType();
 		left->GetSize() == right->GetSize() &&
 		left->GetSize() == output->GetSize();
+	*/
+	return false;
 }
 
 ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
@@ -100,29 +107,42 @@ ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, 
 	// Calculate By Expression
 
 	EType type = _type;
-	ComputeFramePtr left = inputData->GetFrame(_left); // GetInput(_left);
-	ComputeFramePtr right = GetInput(_right);
-	ComputeFramePtr output = GetOutput(_output);
+	// ComputeFramePtr left = inputData->GetFrame(_left); // GetInput(_left);
+	// ComputeFramePtr right = GetInput(_right);
+	// ComputeFramePtr output = GetOutput(_output);
+	auto left = _left.GetValue(inputData);
+	auto right = _right.GetValue(inputData);
+	auto output = _output.GetValue(outputData);
 
 	return ComputeTaskUtils::Make([type, left, right, output]() {
+		ComputeFramePtr leftFrame = *left;
+		ComputeFramePtr rightFrame = *right;
+		// Check
+
+		output.SetValue(
+			leftFrame->GetSize(),
+			leftFrame->GetType(),
+			[type, leftFrame, rightFrame](ComputeFramePtr outputFrame) {
+				switch (type)
+				{
+				case OperationComputeNode::ET_Add:
+					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::AddOperation());
+					break;
+				case OperationComputeNode::ET_Sub:
+					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::SubOperation());
+					break;
+				case OperationComputeNode::ET_Mul:
+					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::MulOperation());
+					break;
+				case OperationComputeNode::ET_Div:
+					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::DivOperation());
+					break;
+				default:
+					break;
+				}
+			}
+		);
 		
-		switch (type)
-		{
-		case OperationComputeNode::ET_Add:
-			utils::Foreach(left, right, output, utils::AddOperation());
-			break;
-		case OperationComputeNode::ET_Sub:
-			utils::Foreach(left, right, output, utils::SubOperation());
-			break;
-		case OperationComputeNode::ET_Mul:
-			utils::Foreach(left, right, output, utils::MulOperation());
-			break;
-		case OperationComputeNode::ET_Div:
-			utils::Foreach(left, right, output, utils::DivOperation());
-			break;
-		default:
-			break;
-		}
 	});
 }
 

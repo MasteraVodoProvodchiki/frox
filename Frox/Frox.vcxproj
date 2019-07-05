@@ -183,6 +183,7 @@
     <ClCompile Include="ConvertToComputeNode.cpp" />
     <ClCompile Include="CropComputeNode.cpp" />
     <ClCompile Include="Expression.cpp" />
+    <ClCompile Include="ExpressionInput.cpp" />
     <ClCompile Include="FlowData.cpp" />
     <ClCompile Include="BasicFlowDataImpl.cpp" />
     <ClCompile Include="FlowDataImpl.cpp" />

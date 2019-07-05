@@ -19,22 +19,22 @@ public:
 	// ComputeNode overrides
 	virtual void AllocateDefaultPins() override;
 	virtual bool IsValid() const override;
-	virtual ComputeTask* CreateComputeTask() override;
+	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
 	FROX_API void SetRect(Rect rect);
 
 protected:
 	// ComputeNodeImpl overrides
-	virtual void OnPostInit() override;
+	// virtual void OnPostInit() override;
 
 private:
 	TExpressionInput<ComputeFramePtr> _input;
-	TOutput<ComputeFramePtr> _output;
+	TOutputFrame<ComputeFramePtr> _output;
 
 	// uint32_t _input;
 	// uint32_t _output;
 
-	TExpressionInput<Rect> _output;
+	TExpressionInput<Rect> _rect;
 	// Rect _rect;
 };
 

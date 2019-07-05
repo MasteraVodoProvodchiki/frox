@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Common.h"
 
 namespace frox {
@@ -16,6 +18,11 @@ struct Guid
 	friend bool operator != (const Guid& left, const Guid& right)
 	{
 		return left.A != right.A;
+	}
+
+	friend bool operator < (const Guid& left, const Guid& right)
+	{
+		return left.A < right.A;
 	}
 };
 

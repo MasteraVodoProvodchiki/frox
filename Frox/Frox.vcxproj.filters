@@ -260,5 +260,8 @@
     <ClCompile Include="Guid.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="ExpressionInput.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

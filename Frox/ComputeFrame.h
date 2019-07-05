@@ -22,6 +22,16 @@ struct ComputeFrameType
 {
 	EComputeFrameType Type;
 	uint32_t Channels;
+
+	friend bool operator == (const ComputeFrameType& left, const ComputeFrameType& right)
+	{
+		return left.Type == right.Type && left.Channels == right.Channels;
+	}
+
+	friend bool operator != (const ComputeFrameType& left, const ComputeFrameType& right)
+	{
+		return left.Type != right.Type || left.Channels != right.Channels;
+	}
 };
 
 namespace utils {

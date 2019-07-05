@@ -44,7 +44,7 @@ public:
 	}
 
 	// ComputeFrame overrides
-	virtual EComputeFrameType GetType() const override;
+	virtual ComputeFrameType GetType() const override;
 	virtual uint32_t GetChannels() const override;
 	virtual uint32_t GetElementSize() const override;
 	virtual bool IsValid() const override;
