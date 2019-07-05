@@ -19,10 +19,12 @@ public:
 		return std::make_shared<BasicFlowPerformerImpl>();
 	}
 
+	// FlowPerformerImpl overrides
 	virtual void Perform(ComputeFlowImplPtr flow, FlowDataImplPtr inputData) override;
 	virtual void Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outputData) override;
 	virtual uint32_t GetNumActiveTasks() const override;
 
+public:
 	void SetOnPerformedCallback(std::function<void()> onPerformed);
 	void ClearOnPerformedCallback();
 
@@ -31,7 +33,7 @@ private:
 	void Performed();
 
 private:
-	ComputeFlowImplPtr _flow;
+	FlowDataImplPtr _privateData;
 
 	mutable std::mutex _tasksMutex;
 	std::vector<ComputeTaskPtr> _tasks;

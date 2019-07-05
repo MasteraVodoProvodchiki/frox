@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "ComputeFrame.h"
 #include "Variant.h"
+#include "FlowDataImpl.h"
 
 #include <memory>
 
@@ -28,27 +29,27 @@ public:
 	virtual Type GetType() const { return ET_Variant; }
 	virtual bool IsValid() const { return true; }
 
-	virtual ComputeFramePtr GetFrame() const
+	virtual ComputeFramePtr GetFrame(FlowDataImplPtr data) const
 	{
 		return nullptr;
 	}
 
-	virtual Variant GetValue() const
+	virtual Variant GetValue(FlowDataImplPtr data) const
 	{
 		return Variant();
 	}
 
 	template<typename T>
-	inline T GetValue() const
+	inline T GetValue(FlowDataImplPtr data) const
 	{
 		return T();
 	}
 };
 
 template<>
-inline ComputeFramePtr Expression::GetValue<ComputeFramePtr>() const
+inline ComputeFramePtr Expression::GetValue<ComputeFramePtr>(FlowDataImplPtr data) const
 {
-	return this->GetFrame();
+	return this->GetFrame(data);
 }
 
 using ExpressionPtr = std::shared_ptr<Expression>;

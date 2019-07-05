@@ -2,11 +2,12 @@
 
 namespace frox {
 
-ComputeNodePin::ComputeNodePin(ComputeNodeImpl* owner, PinType type, const std::string& name, std::function<void(ComputeFramePtr)> onChanged)
+ComputeNodePin::ComputeNodePin(ComputeNodeImpl* owner, PinType type, const std::string& name/*, std::function<void(ComputeFramePtr)> onChanged*/)
 	: Owner(owner)
 	, Type(type)
 	, Name(name)
-	, OnChanged(onChanged)
+	, Id(Guid::NewGuid())
+	// , OnChanged(onChanged)
 {}
 
 ComputeNodePin::~ComputeNodePin()
@@ -16,6 +17,7 @@ void ComputeNodePin::ConnectTo(ComputeNodePinPtr pin)
 {
 	// Add observer on Notify
 	// connect SetData in pin
+	/*
 	std::weak_ptr<ComputeNodePin> weakPin = pin;
 	std::function<void(ComputeFramePtr)> func = [weakPin](ComputeFramePtr frame) {
 		ComputeNodePinPtr pin = weakPin.lock();
@@ -26,12 +28,15 @@ void ComputeNodePin::ConnectTo(ComputeNodePinPtr pin)
 	};
 		
 	_functions.push_back(func);
+	*/
+
 	NextPins.push_back(pin);
 }
 
+/*
 void ComputeNodePin::SetData(ComputeFramePtr frame)
 {
-	Frame = frame;
+	// Frame = frame;
 	Notify(frame);
 }
 
@@ -47,5 +52,6 @@ void ComputeNodePin::Notify(ComputeFramePtr frame)
 		OnChanged(frame);
 	}
 }
+*/
 
 } // End frox.

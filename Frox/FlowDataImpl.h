@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "Guid.h"
 
 #include <memory>
 
@@ -20,6 +21,9 @@ public:
 
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) = 0;
 	virtual ComputeFramePtr GetFrame(const char* name) const = 0;
+
+	virtual void SetFrame(const Guid& guid, ComputeFramePtr frame) = 0;
+	virtual ComputeFramePtr GetFrame(const Guid& guid) const = 0;
 };
 
 } // End frox

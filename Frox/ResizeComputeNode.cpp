@@ -8,6 +8,14 @@
 
 namespace frox {
 
+namespace functions {
+
+void Resize(ComputeFramePtr input, ComputeFramePtr output)
+{
+}
+
+} // End functions
+
 FROX_COMPUTENODE_IMPL(ResizeComputeNode)
 
 ResizeComputeNode::ResizeComputeNode(const ComputeNodeInitializer& initializer)
@@ -50,17 +58,17 @@ bool ResizeComputeNode::IsValid() const
 		input->IsValid();
 }
 
-ComputeTask* ResizeComputeNode::CreateComputeTask()
+ComputeTask* ResizeComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	ComputeFramePtr input = GetInput(_input);
+	// ComputeFramePtr input = GetInput(_input);
 	ComputeFramePtr output = GetOutput(_output);
 
-	// Actual Size !!
-	Size size = _size.GetValue();
+	ComputeFramePtr input = _input.GetValue(inputData);
+	Size size = _size.GetValue(inputData);
 
 	return ComputeTaskUtils::Make([input, output, size]() {
 
-
+		functions::Resize(input, output);
 	});
 }
 

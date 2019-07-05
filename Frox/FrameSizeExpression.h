@@ -20,7 +20,7 @@ public:
 	virtual ~FrameSizeExpression()
 	{}
 
-	virtual Variant GetValue() const override;
+	virtual Variant GetValue(FlowDataImplPtr data) const override;
 
 private:
 	TExpressionInput<ComputeFramePtr> _frame;

@@ -95,10 +95,12 @@ bool OperationComputeNode::IsValid() const
 		left->GetSize() == output->GetSize();
 }
 
-ComputeTask* OperationComputeNode::CreateComputeTask()
+ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Calculate By Expression
+
 	EType type = _type;
-	ComputeFramePtr left = GetInput(_left);
+	ComputeFramePtr left = inputData->GetFrame(_left); // GetInput(_left);
 	ComputeFramePtr right = GetInput(_right);
 	ComputeFramePtr output = GetOutput(_output);
 

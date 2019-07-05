@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "ComputeFrame.h"
 #include "ComputeNodeImpl.h"
+#include "Guid.h"
 
 #include <memory>
 #include <string>
@@ -14,7 +15,7 @@ namespace frox {
 struct ComputeFlowEntryNode
 {
 	ComputeNodeImpl* Node;
-	uint32_t InId;
+	Guid PinId; 
 };
 
 struct ComputeFlowEntry

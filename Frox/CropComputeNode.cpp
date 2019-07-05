@@ -8,6 +8,28 @@
 
 namespace frox {
 
+namespace functions {
+
+void Crop(ComputeFramePtr input, ComputeFramePtr output, Rect rect)
+{
+	uint32_t inColumn = rect.X;
+	uint32_t inRow = rect.Y;
+
+	uint32_t width = rect.Width;
+	uint32_t height = rect.Heihgt;
+
+	uint32_t elementSize = input->GetElementSize();
+
+	for (uint32_t outRow = 0; outRow < height; ++outRow)
+	{
+		const uint8_t* srcRowData = input->GetRowData<uint8_t>(outRow + inRow);
+		uint8_t* dstRowData = output->GetRowData<uint8_t>(outRow);
+		memcpy(dstRowData, srcRowData + inColumn * elementSize, width * elementSize);
+	}
+}
+
+} // End functins
+
 FROX_COMPUTENODE_IMPL(CropComputeNode)
 
 CropComputeNode::CropComputeNode(const ComputeNodeInitializer& initializer)
@@ -64,21 +86,7 @@ ComputeTask* CropComputeNode::CreateComputeTask()
 	Rect rect = _rect;
 
 	return ComputeTaskUtils::Make([input, output, rect]() {
-
-		uint32_t inColumn = rect.X;
-		uint32_t inRow = rect.Y;
-
-		uint32_t width = rect.Width;
-		uint32_t height = rect.Heihgt;
-
-		uint32_t elementSize = input->GetElementSize();
-
-		for (uint32_t outRow=0; outRow < height; ++outRow)
-		{
-			const uint8_t* srcRowData = input->GetRowData<uint8_t>(outRow + inRow);
-			uint8_t* dstRowData = output->GetRowData<uint8_t>(outRow);
-			memcpy(dstRowData, srcRowData + inColumn * elementSize, width * elementSize);
-		}
+		functions::Crop(input, output, rect);
 	});
 }
 

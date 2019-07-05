@@ -2,9 +2,9 @@
 
 namespace frox {
 
-Variant FrameSizeExpression::GetValue() const
+Variant FrameSizeExpression::GetValue(FlowDataImplPtr data) const
 {
-	ComputeFramePtr frame = _frame.GetValue();
+	ComputeFramePtr frame = _frame.GetValue(data);
 	return frame ? frame->GetSize() : Size({ 0, 0 });
 }
 

@@ -35,7 +35,7 @@ class ComputeFrame
 public:
 	virtual ~ComputeFrame() {}
 
-	virtual EComputeFrameType GetType() const = 0;
+	virtual ComputeFrameType GetType() const = 0;
 	virtual uint32_t GetChannels() const = 0;
 	virtual uint32_t GetElementSize() const = 0;
 	virtual bool IsValid() const = 0;

@@ -30,12 +30,18 @@ protected:
 	virtual void OnPostInit() override;
 
 protected:
+	TExpressionInput<uint32_t> _width;
+	TExpressionInput<uint32_t> _height;
+	TExpressionInput<uint32_t> _channels;
+
 	uint32_t _width;
 	uint32_t _height;
 	EComputeFrameType _type;
 	uint32_t _channels;
 
-	uint32_t _output;
+	
+	TOutput<ComputeFramePtr> _output;
+	// uint32_t _output;
 };
 
 class MakeFrameComputeNode : public MakeFrameBaseComputeNode
@@ -53,7 +59,8 @@ public:
 	FROX_API void SetValue(Variant value);
 
 private:
-	Variant _value;
+	TExpressionInput<Variant> _channels;
+	// Variant _value;
 };
 
 class MakeZeroFrameComputeNode : public MakeFrameComputeNode
@@ -99,7 +106,8 @@ protected:
 
 private:
 	ComputeFramePtr _frame;
-	uint32_t _output;
+	TOutput<ComputeFramePtr> _output;
+	// uint32_t _output;
 };
 
 

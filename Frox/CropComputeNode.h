@@ -28,10 +28,14 @@ protected:
 	virtual void OnPostInit() override;
 
 private:
-	uint32_t _input;
-	uint32_t _output;
+	TExpressionInput<ComputeFramePtr> _input;
+	TOutput<ComputeFramePtr> _output;
 
-	Rect _rect;
+	// uint32_t _input;
+	// uint32_t _output;
+
+	TExpressionInput<Rect> _output;
+	// Rect _rect;
 };
 
 } // End frox

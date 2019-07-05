@@ -150,6 +150,12 @@
     <ClInclude Include="FlowDataImpl.h">
       <Filter>Private\Base</Filter>
     </ClInclude>
+    <ClInclude Include="Guid.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
+      <Filter>Private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -250,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="FlowDataImpl.cpp">
       <Filter>Private\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Guid.cpp">
+      <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

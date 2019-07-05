@@ -1,4 +1,6 @@
 #include "BasicFlowPerformerImpl.h"
+#include "BasicFlowDataImpl.h"
+
 #include "Log.h"
 #include "ComputeThread.h"
 #include "ComputeNodeImpl.h"
@@ -9,6 +11,7 @@
 namespace frox {
 
 BasicFlowPerformerImpl::BasicFlowPerformerImpl()
+	: _privateData(BasicFlowDataImpl::Create())
 {}
 
 BasicFlowPerformerImpl::~BasicFlowPerformerImpl()
@@ -17,6 +20,7 @@ BasicFlowPerformerImpl::~BasicFlowPerformerImpl()
 void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow, FlowDataImplPtr inputData)
 {
 	assert(flow);
+	assert(_privateData);
 
 	flow->Prepare();
 
@@ -30,10 +34,10 @@ void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow, FlowDataImplPtr in
 		{
 			const ComputeFlowEntry& entry = entries[index];
 			ComputeFramePtr frame = inputData->GetFrame(entry.Name.data());
-
+			// Type ??
 			for (const ComputeFlowEntryNode& entryNode : entry.Nodes)
 			{
-				entryNode.Node->SetInput(entryNode.InId, frame);
+				_privateData->SetFrame(entryNode.PinId, frame);
 			}
 		}
 	}
@@ -51,7 +55,7 @@ void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow, FlowDataImplPtr in
 		if (node->IsValid())
 		{
 			// TODO. Optimize allocations
-			ComputeTask* task = node->CreateComputeTask();
+			ComputeTask* task = node->CreateComputeTask(_privateData, _privateData);
 			assert(task != nullptr);
 
 			ComputeTaskPtr taskPtr = ComputeTaskPtr(task);
@@ -110,7 +114,7 @@ void BasicFlowPerformerImpl::Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outp
 			const ComputeFlowOutput& output = outputs[index];
 			for (const ComputeFlowEntryNode& outputNode : output.Nodes)
 			{
-				ComputeFramePtr frame = outputNode.Node->GetOutput(outputNode.InId);
+				ComputeFramePtr frame = _privateData->GetFrame(outputNode.PinId);
 				outputData->SetFrame(output.Name.c_str(), frame);
 			}
 		}

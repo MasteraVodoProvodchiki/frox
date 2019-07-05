@@ -17,10 +17,12 @@ public:
 		return new BasicFlowPerformer(listerner);
 	}
 
+	// FlowPerformer overrides
 	virtual void Perform(ComputeFlow* flow, FlowData* inputData) override;
 	virtual void Fetch(ComputeFlow* flow, FlowData* outputData) override;
 	virtual uint32_t GetNumActiveTasks() const override;
 
+public:
 	FlowPerformerImplPtr GetPerformer() const { return _impl; }
 
 private:

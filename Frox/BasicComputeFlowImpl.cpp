@@ -98,11 +98,14 @@ void BasicComputeFlowImpl::DestoyNode(ComputeNodeImpl* node)
 bool BasicComputeFlowImpl::ConnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId)
 {
 	// Get
-	ComputeNodePinPtr outputPin = outNode->GetOutputPin(outPinId);
-	ComputeNodePinPtr inputPin = inNode->GetInputPin(inPinId);
+	// ComputeNodePinPtr outputPin = outNode->GetOutputPin(outPinId);
+	// ComputeNodePinPtr inputPin = inNode->GetInputPin(inPinId);
+	Pin* outputPin = outNode->GetOutputPin(outPinId);
+	Pin* inputPin = inNode->GetInputPin(inPinId);
 
 	// Connect
-	outputPin->ConnectTo(inputPin);
+	// outputPin->ConnectTo(inputPin);
+	inputPin->ConnectFrom(outputPin);
 
 	MakeDirty();
 
@@ -112,9 +115,11 @@ bool BasicComputeFlowImpl::ConnectNodes(ComputeNodeImpl* outNode, uint32_t outPi
 bool BasicComputeFlowImpl::DisconnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId)
 {
 	// Get
-	ComputeNodePinPtr outputPin = outNode->GetOutputPin(outPinId);
-	ComputeNodePinPtr inputPin = inNode->GetInputPin(inPinId);
-	
+	// ComputeNodePinPtr outputPin = outNode->GetOutputPin(outPinId);
+	// ComputeNodePinPtr inputPin = inNode->GetInputPin(inPinId);
+	Pin* outputPin = outNode->GetOutputPin(outPinId);
+	Pin* inputPin = inNode->GetInputPin(inPinId);
+
 	// Disonnect
 	// TODO. Add disconnect
 	outputPin; inputPin;
@@ -195,12 +200,14 @@ void BasicComputeFlowImpl::ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNod
 	assert(std::find(_nodes.begin(), _nodes.end(), inNode->getptr()) != _nodes.end());
 
 	// Check Pin
-	assert(inNode->GetInputPin(inPinId));
+	// ComputeNodePinPtr pin = inNode->GetInputPin(inPinId);
+	Pin* pin = inNode->GetInputPin(inPinId);
+	assert(pin);
 
 	// Append
 	_entries[entryId].Nodes.push_back(ComputeFlowEntryNode{
 		inNode,
-		inPinId,
+		pin->Id,
 	});
 
 	MakeDirty();
@@ -210,10 +217,15 @@ void BasicComputeFlowImpl::DisconnectEntry(uint32_t entryId, ComputeNodeImpl* in
 {
 	assert(entryId < _entries.size());
 
+	// Check Pin
+	// ComputeNodePinPtr pin = inNode->GetInputPin(inPinId);
+	Pin* pin = inNode->GetInputPin(inPinId);
+	assert(pin);
+
 	// Remove
 	auto& nodes = _entries[entryId].Nodes;
-	auto it = std::remove_if(nodes.begin(), nodes.end(), [inNode, inPinId](const ComputeFlowEntryNode& nodeEntry) {
-		return nodeEntry.Node == inNode && nodeEntry.InId == inPinId;
+	auto it = std::remove_if(nodes.begin(), nodes.end(), [inNode, pin](const ComputeFlowEntryNode& nodeEntry) {
+		return nodeEntry.Node == inNode && nodeEntry.PinId == pin->Id;
 	});
 	nodes.erase(it, nodes.end());
 
@@ -227,12 +239,14 @@ void BasicComputeFlowImpl::ConnectOutput(uint32_t outputId, ComputeNodeImpl* out
 	assert(std::find(_nodes.begin(), _nodes.end(), outNode->getptr()) != _nodes.end());
 
 	// Check Pin
-	assert(outNode->GetOutputPin(outPinId));
+	// ComputeNodePinPtr pin = outNode->GetInputPin(outPinId);
+	Pin* pin = outNode->GetOutputPin(outPinId);
+	assert(pin);
 
 	// Append
 	_outputs[outputId].Nodes.push_back(ComputeFlowEntryNode{
 		outNode,
-		outPinId,
+		pin->Id,
 	});
 
 	MakeDirty();
@@ -242,10 +256,15 @@ void BasicComputeFlowImpl::DisconnectOutput(uint32_t outputId, ComputeNodeImpl* 
 {
 	assert(outputId < _outputs.size());
 
+	// Check Pin
+	// ComputeNodePinPtr pin = outNode->GetInputPin(outPinId);
+	Pin* pin = outNode->GetOutputPin(outPinId);
+	assert(pin);
+
 	// Remove
 	auto& nodes = _outputs[outputId].Nodes;
-	auto it = std::remove_if(nodes.begin(), nodes.end(), [outNode, outPinId](const ComputeFlowEntryNode& nodeEntry) {
-		return nodeEntry.Node == outNode && nodeEntry.InId == outPinId;
+	auto it = std::remove_if(nodes.begin(), nodes.end(), [outNode, pin](const ComputeFlowEntryNode& nodeEntry) {
+		return nodeEntry.Node == outNode && nodeEntry.PinId == pin->Id;
 	});
 	nodes.erase(it, nodes.end());
 
@@ -256,10 +275,12 @@ void BasicComputeFlowImpl::Initialize()
 {
 	for (ComputeNodeImplPtr node : _sortedNodes)
 	{
+		/*
 		if (!node->WasInitialized())
 		{
 			node->Initialize();
 		}
+		*/
 	}
 
 	_bWasInitialized = true;

@@ -147,6 +147,8 @@
     <ClInclude Include="FlowPerformer.h" />
     <ClInclude Include="FlowPerformerImpl.h" />
     <ClInclude Include="FrameSizeExpression.h" />
+    <ClInclude Include="Guid.h" />
+    <ClInclude Include="Output.h" />
     <ClInclude Include="OutputFrameExpression.h" />
     <ClInclude Include="ResizeComputeNode.h" />
     <ClInclude Include="SubFlowComputeNode.h" />
@@ -189,6 +191,7 @@
     <ClCompile Include="FrameSizeExpression.cpp" />
     <ClCompile Include="Frox.cpp" />
     <ClCompile Include="FroxImpl.cpp" />
+    <ClCompile Include="Guid.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MakeFrameComputeNode.cpp" />
     <ClCompile Include="OutputFrameExpression.cpp" />

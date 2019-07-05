@@ -40,6 +40,15 @@ struct ConvertToOperation
 
 } // End utils
 
+namespace functions {
+
+void ConvertTo(ComputeFramePtr input, ComputeFramePtr output, double alpha, double beta)
+{
+	utils::Foreach(input, output, utils::ConvertToOperation(alpha, beta));
+}
+
+} // End functions
+
 FROX_COMPUTENODE_IMPL(ConvertToComputeNode)
 
 ConvertToComputeNode::ConvertToComputeNode(const ComputeNodeInitializer& initializer)
@@ -60,6 +69,7 @@ void ConvertToComputeNode::AllocateDefaultPins()
 	_output = CreateOutput("output");
 }
 
+/*
 void ConvertToComputeNode::OnPostInit()
 {
 	ComputeFramePtr input = GetInput(_input);
@@ -70,6 +80,7 @@ void ConvertToComputeNode::OnPostInit()
 		SetOutput(_output, output);
 	}
 }
+*/
 
 bool ConvertToComputeNode::IsValid() const
 {
@@ -83,15 +94,31 @@ bool ConvertToComputeNode::IsValid() const
 		input->IsValid();
 }
 
-ComputeTask* ConvertToComputeNode::CreateComputeTask()
+ComputeTask* ConvertToComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-	double alpha = _alpha;
-	double beta = _beta;
+	// ComputeFramePtr input = GetInput(_input);
+	// ComputeFramePtr output = GetOutput(_output);
+	// double alpha = _alpha;
+	// double beta = _beta;
+	auto input = _input.GetValue(inputData);
+	auto alpha = _alpha.GetValue(inputData);
+	auto beta = _beta.GetValue(inputData);
+	auto output = _output.GetValue(outputData);
+	auto type = _type;
 
-	return ComputeTaskUtils::Make([input, output, alpha, beta]() {
-		utils::Foreach(input, output, utils::ConvertToOperation(alpha, beta));
+	return ComputeTaskUtils::Make([input, type, alpha, beta, output]() {
+		ComputeFramePtr inputFrame = *input;
+		double alphaValue = *alpha;
+		double betaValue = *beta;
+		// Check IsValid
+		
+		output.SetValue(
+			inputFrame->GetSize(),
+			ComputeFrameType{ type, inputFrame->GetChannels() },
+			[inputFrame, alphaValue, betaValue](ComputeFramePtr outputFrame) {
+				functions::ConvertTo(inputFrame, outputFrame, alphaValue, betaValue);
+			}
+		);	
 	});
 }
 

@@ -2,10 +2,12 @@
 
 namespace frox {
 
-ComputeFramePtr OutputFrameExpression::GetFrame() const
+ComputeFramePtr OutputFrameExpression::GetFrame(FlowDataImplPtr data) const
 {
-	ComputeNodeImplPtr node = _nodeWeak.lock();
-	return node ? node->GetOutput(_pinId) : nullptr;
+	// ComputeNodeImplPtr node = _nodeWeak.lock();
+	//return node ? node->GetOutput(_pinId) : nullptr;
+	ComputeFramePtr frame = data->GetFrame(_pinId);
+	return frame;
 }
 
 } // End frox
