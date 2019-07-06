@@ -22,7 +22,9 @@ ResizeComputeNode::ResizeComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
 	// , _input(0)
 	// , _output(0)
-	, _size(Size{1, 1})
+	, _input("input")
+	, _output("output")
+	, _size("size", Size{1, 1})
 {}
 
 ResizeComputeNode::~ResizeComputeNode()
@@ -63,6 +65,7 @@ bool ResizeComputeNode::IsValid() const
 		_size.IsValid() &&
 		input->IsValid();
 */
+	return true;
 }
 
 ComputeTask* ResizeComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

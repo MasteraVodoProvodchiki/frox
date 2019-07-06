@@ -3,6 +3,8 @@
 #include <Types.h>
 
 #include <ComputeFlow.h>
+#include <FlowPerformer.h>
+#include <FlowData.h>
 
 #include <BasicComputeNodes.h>
 #include <AvgComputeNode.h>
@@ -167,10 +169,19 @@ bool simpleTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData
 	flow.ConnectNodes(add, mul, 0);
 
 	// Set inputs
-	add->SetInputScalar(0, 1.f);
-	add->SetInputScalar(1, 2.f);
-	mul->SetInputScalar(1, 3.f);
+	// add->SetInputScalar(0, 1.f);
+	// add->SetInputScalar(1, 2.f);
+	// mul->SetInputScalar(1, 3.f);
+	inputData.SetInputScalar("A", 1.f);
+	inputData.SetInputScalar("B", 2.f);
+	inputData.SetInputScalar("C", 3.f);
 
+	auto A = flow.CreateEntry("A");
+	auto B = flow.CreateEntry("B");
+	auto C = flow.CreateEntry("C");
+	flow.ConnectEntry(A, add, 0);
+	flow.ConnectEntry(B, add, 1);
+	flow.ConnectEntry(C, mul, 1);
 	flow.ConnectOutput(flow.CreateOutput("out"), mul);
 
 	return runFlow(

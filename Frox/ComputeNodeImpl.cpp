@@ -87,11 +87,13 @@ uint32_t ComputeNodeImpl::CreateOutput(const char* name)
 
 void ComputeNodeImpl::RegisterInput(InputPin* pin)
 {
+	pin->Owner = this;
 	_inputs.push_back(pin);
 }
 
 void ComputeNodeImpl::RegisterOutput(OutputPin* pin)
 {
+	pin->Owner = this;
 	_outputs.push_back(pin);
 }
 

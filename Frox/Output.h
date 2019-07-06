@@ -91,6 +91,10 @@ struct TLazyFrame
 template<typename T>
 struct TOutput : public OutputPin
 {
+	TOutput(const char* name)
+		: OutputPin(name)
+	{}
+
 	inline TLazyValue<T> GetValue(FlowDataImplPtr data) const
 	{
 		return TLazyValue<T>(data, Id);
@@ -100,6 +104,10 @@ struct TOutput : public OutputPin
 template<typename T>
 struct TOutputFrame : public OutputPin
 {
+	TOutputFrame(const char* name)
+		: OutputPin(name)
+	{}
+
 	inline TLazyFrame GetValue(FlowDataImplPtr data) const
 	{
 		return TLazyFrame(data, Id);

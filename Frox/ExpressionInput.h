@@ -10,14 +10,17 @@ struct ExpressionInput : public InputPin
 {
 	ExpressionPtr Expr;
 
-	ExpressionInput()
+	ExpressionInput(const char* name)
+		: InputPin(name)
 	{}
 
-	ExpressionInput(ExpressionPtr expr)
-		: Expr(expr)
+	ExpressionInput(const char* name, ExpressionPtr expr)
+		: InputPin(name)
+		, Expr(expr)
 	{}
 
 	virtual void ConnectFrom(Pin* pin) override;
+	virtual void ConnectFrom(Guid id) override;
 };
 
 template<typename T>
@@ -55,13 +58,14 @@ struct TExpressionInput : public ExpressionInput
 {
 	T DefaultValue;
 	
-	explicit TExpressionInput(ExpressionPtr expr)
-		: ExpressionInput(expr)
+	explicit TExpressionInput(const char* name, ExpressionPtr expr)
+		: ExpressionInput(name, expr)
 	{}
 
 	template<typename ...ArgsT>
-	TExpressionInput(ArgsT... args)
-		: DefaultValue(args...)
+	TExpressionInput(const char* name, ArgsT... args)
+		: ExpressionInput(name)
+		, DefaultValue(args...)
 	{}
 
 	inline bool IsValid() const
@@ -73,6 +77,12 @@ struct TExpressionInput : public ExpressionInput
 	{
 		return TLazyValueByExpression<T>(Expr, data, DefaultValue);
 			// Expr ? Expr->GetValue<T>(data) : DefaultValue;
+	}
+
+	TExpressionInput<T>& operator = (T value)
+	{
+		DefaultValue = value;
+		return *this;
 	}
 };
 

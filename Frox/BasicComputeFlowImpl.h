@@ -15,6 +15,15 @@ namespace frox {
 class BasicComputeFlowImpl : public ComputeFlowImpl
 {
 public:
+	struct Connection
+	{
+		ComputeNodeImpl* OutNode;
+		Pin* OutputPin;
+		ComputeNodeImpl* InNode;
+		Pin* InputPin;
+	};
+
+public:
 	BasicComputeFlowImpl();
 	virtual ~BasicComputeFlowImpl() override;
 
@@ -63,6 +72,7 @@ public:
 	// void ClearOnPerformedCallback();
 
 private:
+	void DisconnectAll(ComputeNodeImpl* node);
 	// void OnTaskCompleted(ComputeTask* task);
 	// void Performed();
 	void MakeDirty();
@@ -73,7 +83,7 @@ private:
 
 	std::vector<ComputeNodeImplPtr> _nodes;
 	std::vector<ComputeNodeImplPtr> _sortedNodes;
-
+	std::vector<Connection> _connections;
 	// mutable std::mutex _tasksMutex;
 	// std::vector<ComputeTaskPtr> _tasks;
 

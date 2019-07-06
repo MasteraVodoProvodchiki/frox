@@ -80,6 +80,8 @@ AvgComputeNode::AvgComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
 	// , _input(0)
 	// , _output(0)
+	, _input("input")
+	, _output("output")
 {}
 
 AvgComputeNode::~AvgComputeNode()
@@ -118,7 +120,7 @@ bool AvgComputeNode::IsValid() const
 		input->GetType() == output->GetType();
 		output->GetSize() == Size{1, 1};
 	*/
-	return false;
+	return true;
 }
 
 ComputeTask* AvgComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

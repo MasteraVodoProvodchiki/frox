@@ -56,6 +56,9 @@ struct DivOperation
 OperationComputeNode::OperationComputeNode(const ComputeNodeInitializer& initializer, EType type)
 	: Super(initializer)
 	, _type(type)
+	, _left("left")
+	, _right("right")
+	, _output("output")
 {}
 
 OperationComputeNode::~OperationComputeNode()
@@ -99,7 +102,7 @@ bool OperationComputeNode::IsValid() const
 		left->GetSize() == right->GetSize() &&
 		left->GetSize() == output->GetSize();
 	*/
-	return false;
+	return true;
 }
 
 ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

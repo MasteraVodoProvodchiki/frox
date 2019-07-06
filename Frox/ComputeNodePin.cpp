@@ -54,4 +54,12 @@ void ComputeNodePin::Notify(ComputeFramePtr frame)
 }
 */
 
+Pin::Pin(const char* name)
+	: Name(name)
+	, Id(Guid::NewGuid())
+{}
+
+Pin::~Pin()
+{}
+
 } // End frox.

@@ -55,9 +55,11 @@ ConvertToComputeNode::ConvertToComputeNode(const ComputeNodeInitializer& initial
 	: Super(initializer)
 	// , _input(0)
 	// , _output(0)
+	, _input("input")
+	, _output("output")
 	, _type(EComputeFrameType::ECFT_UInt8)
-	, _alpha(1.0)
-	, _beta(0.0)
+	, _alpha("alpha", 1.0)
+	, _beta("beta", 0.0)
 {}
 
 ConvertToComputeNode::~ConvertToComputeNode()
@@ -98,7 +100,7 @@ bool ConvertToComputeNode::IsValid() const
 		input->GetSize() == output->GetSize() &&
 		input->IsValid();
 	*/
-	return false;
+	return true;
 }
 
 ComputeTask* ConvertToComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

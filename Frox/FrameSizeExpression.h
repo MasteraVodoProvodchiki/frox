@@ -10,11 +10,11 @@ class FrameSizeExpression : public Expression
 {
 public:
 	FrameSizeExpression(ExpressionPtr expr)
-		: _frame(expr)
+		: _frame("frame", expr)
 	{}
 
 	FrameSizeExpression(ComputeFramePtr frame)
-		: _frame(frame)
+		: _frame("frame", frame)
 	{}
 
 	virtual ~FrameSizeExpression()

@@ -25,7 +25,7 @@ public:
 	
 	std::shared_ptr<ComputeNodeImpl> getptr()
 	{
-		return std::shared_ptr<ComputeNodeImpl>(this);
+		return shared_from_this();
 	}
 
 	// ComputeNode overrides

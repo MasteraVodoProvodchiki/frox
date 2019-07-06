@@ -59,7 +59,6 @@ public:
 	FROX_API void SetValue(Variant value);
 
 private:
-	TExpressionInput<uint32_t> _channels;
 	Variant _value;
 };
 

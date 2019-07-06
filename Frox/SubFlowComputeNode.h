@@ -26,6 +26,7 @@ public:
 	FROX_API void SetSubFlow(ComputeFlow* subFlow);
 
 protected:
+	void ClearPins();
 	// ComputeNodeImpl overrides
 	// virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame) override;
 
@@ -33,8 +34,10 @@ private:
 	ComputeFlow* _subFlow;
 	ComputeFlowImplPtr _computeFlowImpl;
 
-	std::vector<uint32_t> inPinIds;
-	std::vector<uint32_t> outPinIds;
+	// std::vector<uint32_t> inPinIds;
+	// std::vector<uint32_t> outPinIds;
+	std::vector<ExpressionInput*> _inPins;
+	std::vector<OutputPin*> _outPins;
 };
 
 

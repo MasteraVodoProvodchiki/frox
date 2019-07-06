@@ -26,8 +26,7 @@ SubFlowComputeNode::~SubFlowComputeNode()
 
 void SubFlowComputeNode::AllocateDefaultPins()
 {
-	inPinIds.clear();
-	outPinIds.clear();
+	ClearPins();
 
 	if (_computeFlowImpl != nullptr)
 	{
@@ -37,8 +36,11 @@ void SubFlowComputeNode::AllocateDefaultPins()
 		for (uint32_t index=0; index < nbEntries; ++index)
 		{
 			const ComputeFlowEntry& entry = entries[index];
-			uint32_t inPinId = CreateInput(entry.Name.data());
-			inPinIds.push_back(inPinId);
+			// uint32_t inPinId = CreateInput(entry.Name.data());
+			// inPinIds.push_back(inPinId);
+
+			auto pin = new ExpressionInput(entry.Name.data());
+			_inPins.push_back(pin);	
 		}
 
 		// Outputs
@@ -47,8 +49,11 @@ void SubFlowComputeNode::AllocateDefaultPins()
 		for (uint32_t index = 0; index < nbOutputs; ++index)
 		{
 			const ComputeFlowOutput& output = outputs[index];
-			uint32_t outPinId = CreateOutput(output.Name.data());
-			outPinIds.push_back(outPinId);
+			// uint32_t outPinId = CreateOutput(output.Name.data());
+			// outPinIds.push_back(outPinId);
+
+			auto pin = new OutputPin(output.Name.data());
+			_outPins.push_back(pin);
 		}
 	}
 }
@@ -90,6 +95,21 @@ void SubFlowComputeNode::SetSubFlow(ComputeFlow* subFlow)
 	}
 	
 	ReallocatePins();
+}
+
+void SubFlowComputeNode::ClearPins()
+{
+	for (Pin* pin : _inPins)
+	{
+		delete pin;
+	}
+	_inPins.clear();
+
+	for (Pin* pin : _outPins)
+	{
+		delete pin;
+	}
+	_outPins.clear();
 }
 
 } // End frox

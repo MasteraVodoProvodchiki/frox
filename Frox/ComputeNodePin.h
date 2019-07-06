@@ -57,22 +57,31 @@ struct Pin
 	std::string Name;
 	Guid Id;
 
+	Pin(const char* name);
+	virtual ~Pin();
+
 	virtual void ConnectFrom(Pin* pin) = 0;
+	virtual void ConnectFrom(Guid id) = 0;
 };
 
 struct InputPin : public Pin
 {
-	InputPin()
+	InputPin(const char* name)
+		: Pin(name)
 	{}
 };
 
 
 struct OutputPin : public Pin
 {
-	OutputPin()
+	OutputPin(const char* name)
+		: Pin(name)
 	{}
 
 	virtual void ConnectFrom(Pin* pin) override
+	{}
+
+	virtual void ConnectFrom(Guid id) override
 	{}
 };
 

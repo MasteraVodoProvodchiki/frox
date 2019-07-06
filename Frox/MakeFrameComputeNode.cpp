@@ -50,10 +50,11 @@ struct RandomValue
 /// Base
 MakeFrameBaseComputeNode::MakeFrameBaseComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
-	, _width(1)
-	, _height(1)
+	, _width("width", 1)
+	, _height("height", 1)
 	, _type(EComputeFrameType::ECFT_None)
-	, _channels(1)
+	, _channels("channels", 1)
+	, _output("output")
 {}
 
 MakeFrameBaseComputeNode::~MakeFrameBaseComputeNode()
@@ -88,7 +89,7 @@ bool MakeFrameBaseComputeNode::IsValid() const
 		_channels > 0 &&
 		GetOutput(_output) != nullptr;
 	*/
-	return false;
+	return true;
 }
 
 void MakeFrameBaseComputeNode::SetWidth(uint32_t width)
@@ -123,7 +124,7 @@ bool MakeFrameComputeNode::IsValid() const
 		Super::IsValid() &&
 		_value.IsValid();
 	*/
-	return false;
+	return _value.IsValid();
 }
 
 ComputeTask* MakeFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
@@ -254,6 +255,7 @@ ComputeTask* MakeNoiseFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputD
 /// UEImageReaderComputeNode
 ConstFrameComputeNode::ConstFrameComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
+	, _output("output")
 {}
 
 ConstFrameComputeNode::~ConstFrameComputeNode()

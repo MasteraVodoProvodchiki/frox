@@ -36,7 +36,9 @@ CropComputeNode::CropComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
 	// , _input(0)
 	// , _output(0)
-	, _rect(Rect{-1, -1, -1, -1})
+	, _input("input")
+	, _output("output")
+	, _rect("rect", Rect{-1, -1, -1, -1})
 {}
 
 CropComputeNode::~CropComputeNode()
@@ -84,7 +86,7 @@ bool CropComputeNode::IsValid() const
 		_rect.IsValid() &&
 		input->IsValid();
 	*/
-	return false;
+	return true;
 }
 
 ComputeTask* CropComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

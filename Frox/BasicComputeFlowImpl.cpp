@@ -12,10 +12,11 @@ namespace frox {
 
 namespace utils {
 
+/*
 void SortNodes(const std::vector<ComputeNodeImplPtr>& in, std::vector<ComputeNodeImplPtr>& out)
 {
 	out.reserve(in.size());
-	/*
+	
 	for (ComputeNodeImplPtr node : in)
 	{
 		size_t nearestIndex = std::numeric_limits<size_t>::max();
@@ -41,7 +42,51 @@ void SortNodes(const std::vector<ComputeNodeImplPtr>& in, std::vector<ComputeNod
 			out.push_back(node);
 		}
 	}
-	*/
+}
+*/
+
+std::vector<Pin*> FilterNextPins(OutputPin* pin, const std::vector<BasicComputeFlowImpl::Connection>& connections)
+{
+	std::vector<Pin*> out;
+
+	for (auto& connection : connections)
+	{
+		out.push_back(connection.InputPin);
+	}
+
+	return out;
+}
+
+void SortNodes(const std::vector<ComputeNodeImplPtr>& in, const std::vector<BasicComputeFlowImpl::Connection>& connections, std::vector<ComputeNodeImplPtr>& out)
+{
+	out.reserve(in.size());
+
+	for (ComputeNodeImplPtr node : in)
+	{
+		size_t nearestIndex = std::numeric_limits<size_t>::max();
+		for (OutputPin* pin : node->GetOutputPins())
+		{
+			std::vector<Pin*> nextPins = FilterNextPins(pin, connections);
+			for (Pin* nextPin : nextPins)
+			{
+				ComputeNodeImplPtr nextNode = nextPin->Owner->getptr();
+				auto it = std::find(out.begin(), out.end(), nextNode);
+				if (it != out.end() && nearestIndex > (it - out.begin()))
+				{
+					nearestIndex = it - out.begin();
+				}
+			}
+		}
+
+		if (nearestIndex != std::numeric_limits<size_t>::max())
+		{
+			out.insert(out.begin() + nearestIndex, node);
+		}
+		else
+		{
+			out.push_back(node);
+		}
+	}
 }
 
 } // End utils
@@ -74,7 +119,7 @@ ComputeNodeImpl* BasicComputeFlowImpl::CreateNode(const char* type, const char* 
 	node->AllocateDefaultPins();
 
 	// Append
-	ComputeNodeImplPtr nodePtr = node->getptr();
+	ComputeNodeImplPtr nodePtr = std::shared_ptr<ComputeNodeImpl>(node);
 	_nodes.push_back(nodePtr);
 
 	MakeDirty();
@@ -86,6 +131,7 @@ void BasicComputeFlowImpl::DestoyNode(ComputeNodeImpl* node)
 {
 	// Remove From Entries/Outputs
 	// TODO. Add code
+	DisconnectAll(node);
 
 	// Remove
 	auto it = std::remove_if(_nodes.begin(), _nodes.end(), [node](ComputeNodeImplPtr other) {
@@ -103,10 +149,18 @@ bool BasicComputeFlowImpl::ConnectNodes(ComputeNodeImpl* outNode, uint32_t outPi
 	// ComputeNodePinPtr inputPin = inNode->GetInputPin(inPinId);
 	Pin* outputPin = outNode->GetOutputPin(outPinId);
 	Pin* inputPin = inNode->GetInputPin(inPinId);
+	assert(outputPin != nullptr && inputPin != nullptr);
 
 	// Connect
 	// outputPin->ConnectTo(inputPin);
 	inputPin->ConnectFrom(outputPin);
+
+	_connections.push_back(Connection{
+		outNode,
+		outputPin,
+		inNode,
+		inputPin
+	});
 
 	MakeDirty();
 
@@ -120,8 +174,18 @@ bool BasicComputeFlowImpl::DisconnectNodes(ComputeNodeImpl* outNode, uint32_t ou
 	// ComputeNodePinPtr inputPin = inNode->GetInputPin(inPinId);
 	Pin* outputPin = outNode->GetOutputPin(outPinId);
 	Pin* inputPin = inNode->GetInputPin(inPinId);
+	assert(outputPin != nullptr && inputPin != nullptr);
 
 	// Disonnect
+	auto it = std::remove_if(_connections.begin(), _connections.end(), [outNode, outputPin, inNode, inputPin](const Connection& connection) {
+		return
+			connection.OutNode == outNode &&
+			connection.OutputPin == outputPin &&
+			connection.InNode == inNode &&
+			connection.InputPin == inputPin;
+	});
+	_connections.erase(it, _connections.end());
+	
 	// TODO. Add disconnect
 	outputPin; inputPin;
 
@@ -211,6 +275,8 @@ void BasicComputeFlowImpl::ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNod
 		pin->Id,
 	});
 
+	pin->ConnectFrom(pin->Id);
+
 	MakeDirty();
 }
 
@@ -297,7 +363,7 @@ void BasicComputeFlowImpl::Prepare()
 	if (_bDirty)
 	{
 		_sortedNodes.clear();
-		utils::SortNodes(_nodes, _sortedNodes);
+		utils::SortNodes(_nodes, _connections, _sortedNodes);
 
 		_bDirty = false;
 	}
@@ -312,6 +378,14 @@ uint32_t BasicComputeFlowImpl::GetNodes(const ComputeNodeImplPtr** outNodes) con
 {
 	*outNodes = _sortedNodes.data();
 	return uint32_t(_sortedNodes.size());
+}
+
+void BasicComputeFlowImpl::DisconnectAll(ComputeNodeImpl* node)
+{
+	auto it = std::remove_if(_connections.begin(), _connections.end(), [node](const Connection& connection) {
+		return connection.OutNode == node || connection.InNode == node;
+	});
+	_connections.erase(it, _connections.end());
 }
 
 /*
