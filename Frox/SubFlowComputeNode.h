@@ -21,20 +21,19 @@ public:
 	// ComputeNode overrides
 	virtual void AllocateDefaultPins() override;
 	virtual bool IsValid() const override;
-	virtual ComputeTask* CreateComputeTask() override;
+	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
 	FROX_API void SetSubFlow(ComputeFlow* subFlow);
 
 protected:
-	// ComputeNodeImpl overrides
-	virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame) override;
+	void ClearPins();
 
 private:
 	ComputeFlow* _subFlow;
 	ComputeFlowImplPtr _computeFlowImpl;
 
-	std::vector<uint32_t> inPinIds;
-	std::vector<uint32_t> outPinIds;
+	std::vector<ExpressionInput*> _inPins;
+	std::vector<OutputPin*> _outPins;
 };
 
 

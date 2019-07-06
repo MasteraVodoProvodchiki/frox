@@ -5,19 +5,12 @@
 
 namespace frox {
 
-BasicComputeFlow::BasicComputeFlow(IComputeFlowListerner* listerner)
+BasicComputeFlow::BasicComputeFlow()
 	: _impl(BasicComputeFlowImpl::Create())
-	, _listerner(listerner)
-{
-	BasicComputeFlowImpl* impl = reinterpret_cast<BasicComputeFlowImpl*>(_impl.get());
-	impl->SetOnPerformedCallback(std::bind(&BasicComputeFlow::OnPerformed, this));
-}
+{}
 
 BasicComputeFlow::~BasicComputeFlow()
-{
-	BasicComputeFlowImpl* impl = reinterpret_cast<BasicComputeFlowImpl*>(_impl.get());
-	impl->ClearOnPerformedCallback();
-}
+{}
 
 ComputeNode* BasicComputeFlow::CreateNode(const char* type, const char* name)
 {
@@ -79,18 +72,6 @@ int32_t BasicComputeFlow::FindOutputByName(const char* name) const
 	return _impl->FindOutputByName(name);
 }
 
-void BasicComputeFlow::SetInput(uint32_t inId, ComputeFramePtr frame)
-{
-	assert(_impl);
-	return _impl->SetInput(inId, frame);
-}
-
-ComputeFramePtr BasicComputeFlow::GetOutput(uint32_t outId) const
-{
-	assert(_impl);
-	return _impl->GetOutput(outId);
-}
-
 void BasicComputeFlow::ConnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId)
 {
 	assert(_impl);
@@ -121,45 +102,6 @@ void BasicComputeFlow::DisconnectOutput(uint32_t outputId, ComputeNode* outNode,
 
 	ComputeNodeImpl* outNodeImpl = reinterpret_cast<ComputeNodeImpl*>(outNode);
 	return _impl->DisconnectEntry(outputId, outNodeImpl, outPinId);
-}
-
-void BasicComputeFlow::Initialize()
-{
-	assert(_impl);
-	_impl->Initialize();
-}
-
-bool BasicComputeFlow::WasInitialized() const
-{
-	assert(_impl);
-	return _impl->WasInitialized();
-}
-
-void BasicComputeFlow::Perform()
-{
-	assert(_impl);
-	_impl->Perform();
-}
-
-void BasicComputeFlow::Fetch()
-{
-	assert(_impl);
-	_impl->Fetch();
-}
-
-uint32_t BasicComputeFlow::GetNumActiveTasks() const
-{
-	assert(_impl);
-	return _impl->GetNumActiveTasks();
-
-}
-
-void BasicComputeFlow::OnPerformed()
-{
-	if (_listerner != nullptr)
-	{
-		_listerner->OnPerformed();
-	}
 }
 
 } // End frox

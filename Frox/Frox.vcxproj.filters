@@ -13,6 +13,18 @@
     <Filter Include="Private\Utils">
       <UniqueIdentifier>{d2d2de6d-6842-4e81-aac2-589b2210111a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Private\Expressions">
+      <UniqueIdentifier>{ed91c9c6-fefe-432d-81c8-53ff85e630d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Basic">
+      <UniqueIdentifier>{a3164571-54c8-43ae-8d63-649bbb7f7f0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\BasicImpl">
+      <UniqueIdentifier>{6ada0a9b-414f-488b-a585-7685c37ee127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Base">
+      <UniqueIdentifier>{565cadca-428a-4cbf-a332-10edaf5beed7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frox.h">
@@ -81,15 +93,6 @@
     <ClInclude Include="SubFlowComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="BasicComputeFlow.h">
-      <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="BasicComputeFlowImpl.h">
-      <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="ComputeFlowImpl.h">
-      <Filter>Private</Filter>
-    </ClInclude>
     <ClInclude Include="ConvertToComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
@@ -98,6 +101,63 @@
     </ClInclude>
     <ClInclude Include="Types.h">
       <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionInput.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameSizeExpression.h">
+      <Filter>Private\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="Expression.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizeComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputFrameExpression.h">
+      <Filter>Private\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowPerformer.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComputeFlow.h">
+      <Filter>Private\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicFlowPerformer.h">
+      <Filter>Private\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowData.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicFlowData.h">
+      <Filter>Private\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComputeFlowImpl.h">
+      <Filter>Private\BasicImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicFlowPerformerImpl.h">
+      <Filter>Private\BasicImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFlowImpl.h">
+      <Filter>Private\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowPerformerImpl.h">
+      <Filter>Private\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicFlowDataImpl.h">
+      <Filter>Private\BasicImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowDataImpl.h">
+      <Filter>Private\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Guid.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeTaskHelper.h">
+      <Filter>Private</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,20 +209,62 @@
     <ClCompile Include="SubFlowComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="BasicComputeFlow.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
-    <ClCompile Include="BasicComputeFlowImpl.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputeFlowImpl.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
     <ClCompile Include="ConvertToComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="CropComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameSizeExpression.cpp">
+      <Filter>Private\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="Expression.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizeComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputFrameExpression.cpp">
+      <Filter>Private\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowPerformer.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComputeFlow.cpp">
+      <Filter>Private\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicFlowPerformer.cpp">
+      <Filter>Private\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowData.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicFlowData.cpp">
+      <Filter>Private\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComputeFlowImpl.cpp">
+      <Filter>Private\BasicImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicFlowPerformerImpl.cpp">
+      <Filter>Private\BasicImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFlowImpl.cpp">
+      <Filter>Private\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowPerformerImpl.cpp">
+      <Filter>Private\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicFlowDataImpl.cpp">
+      <Filter>Private\BasicImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowDataImpl.cpp">
+      <Filter>Private\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Guid.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionInput.cpp">
+      <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

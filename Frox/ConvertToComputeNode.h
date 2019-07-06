@@ -19,23 +19,18 @@ public:
 	// ComputeNode overrides
 	virtual void AllocateDefaultPins() override;
 	virtual bool IsValid() const override;
-	virtual ComputeTask* CreateComputeTask() override;
+	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
 	FROX_API void SetType(EComputeFrameType type);
 	FROX_API void SetAlpha(double alpha);
 	FROX_API void SetBeta(double beta);
 
-protected:
-	// ComputeNodeImpl overrides
-	virtual void OnPostInit() override;
-
 private:
-	uint32_t _input;
-	uint32_t _output;
-
+	TExpressionInput<ComputeFramePtr> _input;
 	EComputeFrameType _type;
-	double _alpha;
-	double _beta;
+	TExpressionInput<double> _alpha;
+	TExpressionInput<double> _beta;
+	TOutputFrame<ComputeFramePtr> _output;
 };
 
 } // End frox

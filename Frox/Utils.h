@@ -29,8 +29,8 @@ void Foreach(ComputeFramePtr left, ComputeFramePtr right, CallbackT callback)
 template <typename LeftT, typename OperatorT>
 void Foreach(ComputeFramePtr left, ComputeFramePtr right, OperatorT callback)
 {
-	EComputeFrameType rightType = right->GetType();
-	switch (rightType)
+	ComputeFrameType rightType = right->GetType();
+	switch (rightType.Type)
 	{
 	case ECFT_Bool: {
 		Foreach<LeftT, bool>(left, right, callback);
@@ -62,9 +62,9 @@ void Foreach(ComputeFramePtr left, ComputeFramePtr right, OperatorT callback)
 template <typename OperatorT>
 void Foreach(ComputeFramePtr left, ComputeFramePtr right, OperatorT callback)
 {
-	EComputeFrameType leftType = left->GetType();
+	ComputeFrameType leftType = left->GetType();
 
-	switch (leftType)
+	switch (leftType.Type)
 	{
 	case ECFT_Bool: {
 		Foreach<bool>(left, right, callback);
@@ -121,15 +121,15 @@ void Foreach(ComputeFramePtr left, ComputeFramePtr right, ComputeFramePtr output
 template <typename OperatorT>
 void Foreach(ComputeFramePtr left, ComputeFramePtr right, ComputeFramePtr output, OperatorT callback)
 {
-	EComputeFrameType leftType = left->GetType();
-	EComputeFrameType rightType = right->GetType();
-	EComputeFrameType outputType = output->GetType();
-	EComputeFrameType type = outputType;
+	ComputeFrameType leftType = left->GetType();
+	ComputeFrameType rightType = right->GetType();
+	ComputeFrameType outputType = output->GetType();
+	ComputeFrameType type = outputType;
 
 	assert(leftType == outputType);
 	assert(rightType == outputType);
 
-	switch (type)
+	switch (type.Type)
 	{
 	case ECFT_Bool: {
 		Foreach<bool>(left, right, output, callback);

@@ -1,5 +1,7 @@
 #include "ConvertToComputeNode.h"
 #include "ComputeTask.h"
+#include "ComputeTaskHelper.h"
+
 #include "Frox.h"
 #include "Utils.h"
 
@@ -40,15 +42,24 @@ struct ConvertToOperation
 
 } // End utils
 
+namespace functions {
+
+void ConvertTo(ComputeFramePtr input, ComputeFramePtr output, double alpha, double beta)
+{
+	utils::Foreach(input, output, utils::ConvertToOperation(alpha, beta));
+}
+
+} // End functions
+
 FROX_COMPUTENODE_IMPL(ConvertToComputeNode)
 
 ConvertToComputeNode::ConvertToComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
-	, _input(0)
-	, _output(0)
+	, _input("input")
 	, _type(EComputeFrameType::ECFT_UInt8)
-	, _alpha(1.0)
-	, _beta(0.0)
+	, _alpha("alpha", 1.0)
+	, _beta("beta", 0.0)
+	, _output("output")
 {}
 
 ConvertToComputeNode::~ConvertToComputeNode()
@@ -56,43 +67,43 @@ ConvertToComputeNode::~ConvertToComputeNode()
 
 void ConvertToComputeNode::AllocateDefaultPins()
 {
-	_input = CreateInput("input");
-	_output = CreateOutput("output");
-}
-
-void ConvertToComputeNode::OnPostInit()
-{
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-	if (input && !output)
-	{
-		ComputeFramePtr output = FroxInstance()->CreateComputeFrame(input->GetSize(), _type);
-		SetOutput(_output, output);
-	}
+	RegisterInput(&_input);
+	RegisterOutput(&_output);
 }
 
 bool ConvertToComputeNode::IsValid() const
 {
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-
-	return
-		input != nullptr &&
-		output != nullptr &&
-		input->GetSize() == output->GetSize() &&
-		input->IsValid();
+	return _type != EComputeFrameType::ECFT_None;
 }
 
-ComputeTask* ConvertToComputeNode::CreateComputeTask()
+ComputeTask* ConvertToComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-	double alpha = _alpha;
-	double beta = _beta;
+	auto input = _input.GetValue(inputData);
+	auto alpha = _alpha.GetValue(inputData);
+	auto beta = _beta.GetValue(inputData);
+	auto type = _type;
 
-	return ComputeTaskUtils::Make([input, output, alpha, beta]() {
-		utils::Foreach(input, output, utils::ConvertToOperation(alpha, beta));
-	});
+	auto output = _output.GetValue(outputData);
+	
+	return
+		ComputeTaskHelper::UnPackProps(input, type, alpha, beta)
+		// .Validate
+		// .UnPackOutputs
+		// .Invoke
+		.MakeTask(
+			[](ComputeFramePtr input, EComputeFrameType type, double alpha, double beta) {
+				return input != nullptr && input->IsValid() && type != EComputeFrameType::ECFT_None;
+			},
+			[output](ComputeFramePtr input, EComputeFrameType type, double alpha, double beta) {
+				output.SetValue(
+					input->GetSize(),
+					ComputeFrameType{ type, input->GetChannels() },
+					[input, alpha, beta](ComputeFramePtr output) {
+						functions::ConvertTo(input, output, alpha, beta);
+					}
+				);
+			}
+		);
 }
 
 void ConvertToComputeNode::SetType(EComputeFrameType type)

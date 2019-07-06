@@ -71,9 +71,9 @@ ComputeFrameImplV1::~ComputeFrameImplV1()
 	}
 }
 
-EComputeFrameType ComputeFrameImplV1::GetType() const
+ComputeFrameType ComputeFrameImplV1::GetType() const
 {
-	return _data.Type;
+	return ComputeFrameType{ _data.Type, _data.Channels };
 }
 
 uint32_t ComputeFrameImplV1::GetChannels() const

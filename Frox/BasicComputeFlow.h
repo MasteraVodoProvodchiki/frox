@@ -11,14 +11,14 @@ namespace frox {
  */
 class BasicComputeFlow : public ComputeFlow
 {
-	BasicComputeFlow(IComputeFlowListerner* listerner);
+	BasicComputeFlow();
 
 public:
 	virtual ~BasicComputeFlow() override;
 
-	static BasicComputeFlow* Create(IComputeFlowListerner* listerner = nullptr)
+	static BasicComputeFlow* Create()
 	{
-		return new BasicComputeFlow(listerner);
+		return new BasicComputeFlow();
 	}
 
 	// ComputeFlow overrides
@@ -33,30 +33,16 @@ public:
 	virtual int32_t FindEntryByName(const char* name) const override;
 	virtual int32_t FindOutputByName(const char* name) const override;
 
-	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
-	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const override;
-
 	virtual void ConnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId = 0) override;
 	virtual void DisconnectEntry(uint32_t entryId, ComputeNode* inNode, uint32_t inPinId = 0) override;
 
 	virtual void ConnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId = 0) override;
 	virtual void DisconnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId = 0) override;
 
-	virtual void Initialize() override;
-	virtual bool WasInitialized() const override;
-	virtual void Perform() override;
-	virtual void Fetch() override;
-	virtual uint32_t GetNumActiveTasks() const override;
-	// End ComputeFlow overrides
-
 	ComputeFlowImplPtr GetComputeFlow() const { return _impl; }
 
 private:
-	void OnPerformed();
-
-private:
 	ComputeFlowImplPtr _impl;
-	IComputeFlowListerner* _listerner;
 };
 
 } // End frox

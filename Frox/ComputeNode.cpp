@@ -5,6 +5,7 @@
 
 namespace frox {
 
+/*
 void ComputeNode::SetInputScalar(uint32_t inId, uint8_t value)
 {
 	Frox* frox = FroxInstance();
@@ -40,5 +41,6 @@ void ComputeNode::SetInputScalar(uint32_t inId, float value)
 	ComputeFramePtr frame = frox->CreateComputeFrame(Size{ 1, 1 }, ECFT_Float, &value);
 	this->SetInput(inId, frame);
 }
+*/
 
 } // End frox

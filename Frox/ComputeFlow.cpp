@@ -21,6 +21,7 @@ uint32_t ComputeFlow::FindOrCreateOutput(const char* name)
 	return outputId != -1 ? outputId : this->CreateOutput(name);
 }
 
+/*
 void ComputeFlow::SetInputScalar(uint32_t inId, uint8_t value)
 {
 	Frox* frox = FroxInstance();
@@ -56,6 +57,7 @@ void ComputeFlow::SetInputScalar(uint32_t inId, float value)
 	ComputeFramePtr frame = frox->CreateComputeFrame(Size{ 1, 1 }, ECFT_Float, &value);
 	this->SetInput(inId, frame);
 }
+*/
 
 void ComputeFlow::Release()
 {

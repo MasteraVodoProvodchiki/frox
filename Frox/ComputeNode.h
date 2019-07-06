@@ -22,17 +22,12 @@ public:
 
 	virtual const char* GetName() const = 0;
 	virtual void AllocateDefaultPins() = 0;
-	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) = 0;
-	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) = 0;
 	virtual bool IsValid() const = 0;
-	virtual ComputeTask* CreateComputeTask() = 0;
-	virtual void Initialize() = 0;
-	virtual bool WasInitialized() const = 0;
 
-	void SetInputScalar(uint32_t inId, uint8_t value);
-	void SetInputScalar(uint32_t inId, uint16_t value);
-	void SetInputScalar(uint32_t inId, uint32_t value);
-	void SetInputScalar(uint32_t inId, float value);
+	// void SetInputScalar(uint32_t inId, uint8_t value);
+	// void SetInputScalar(uint32_t inId, uint16_t value);
+	// void SetInputScalar(uint32_t inId, uint32_t value);
+	// void SetInputScalar(uint32_t inId, float value);
 };
 
 } // End frox

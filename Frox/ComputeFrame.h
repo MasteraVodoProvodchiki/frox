@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Common.h"
+#include "Types.h"
 
 #include <memory>
-#include <inttypes.h>
+
 
 namespace frox {
 
@@ -21,6 +22,16 @@ struct ComputeFrameType
 {
 	EComputeFrameType Type;
 	uint32_t Channels;
+
+	friend bool operator == (const ComputeFrameType& left, const ComputeFrameType& right)
+	{
+		return left.Type == right.Type && left.Channels == right.Channels;
+	}
+
+	friend bool operator != (const ComputeFrameType& left, const ComputeFrameType& right)
+	{
+		return left.Type != right.Type || left.Channels != right.Channels;
+	}
 };
 
 namespace utils {
@@ -29,44 +40,12 @@ uint32_t FrameTypeToSize(EComputeFrameType type);
 
 } // End utils
 
-struct Size
-{
-	uint32_t Width;
-	uint32_t Height;
-
-	friend bool operator == (const Size& left, const Size& right)
-	{
-		return left.Width == right.Width && left.Height == right.Height;
-	}
-
-	friend bool operator != (const Size& left, const Size& right)
-	{
-		return left.Width != right.Width || left.Height != right.Height;
-	}
-};
-
-struct Rect
-{
-	int32_t X, Y, Width, Heihgt;
-
-	bool IsValid() const
-	{
-		return X >= 0 && Y >= 0 && Width > 0 && Heihgt > 0;
-	}
-};
-
-struct Point
-{
-	uint32_t X;
-	uint32_t Y;
-};
-
 class ComputeFrame
 {
 public:
 	virtual ~ComputeFrame() {}
 
-	virtual EComputeFrameType GetType() const = 0;
+	virtual ComputeFrameType GetType() const = 0;
 	virtual uint32_t GetChannels() const = 0;
 	virtual uint32_t GetElementSize() const = 0;
 	virtual bool IsValid() const = 0;

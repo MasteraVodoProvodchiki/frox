@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComputeFlowImpl.h"
+#include "ComputeNodeImpl.h"
 #include "ComputeTask.h"
 
 #include <vector>
@@ -13,6 +14,15 @@ namespace frox {
  */
 class BasicComputeFlowImpl : public ComputeFlowImpl
 {
+public:
+	struct Connection
+	{
+		ComputeNodeImpl* OutNode;
+		Pin* OutputPin;
+		ComputeNodeImpl* InNode;
+		Pin* InputPin;
+	};
+
 public:
 	BasicComputeFlowImpl();
 	virtual ~BasicComputeFlowImpl() override;
@@ -37,42 +47,26 @@ public:
 	virtual int32_t FindEntryByName(const char* name) const override;
 	virtual int32_t FindOutputByName(const char* name) const override;
 
-	virtual void SetInput(uint32_t inId, ComputeFramePtr frame) override;
-	virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const override;
-
 	virtual void ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) override;
 	virtual void DisconnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) override;
 
 	virtual void ConnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId = 0) override;
 	virtual void DisconnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId = 0) override;
 
-	virtual void Initialize() override;
-	virtual bool WasInitialized() const override;
-	virtual void Perform() override;
-	virtual void Fetch() override;
-	virtual uint32_t GetNumActiveTasks() const override;
+	virtual void Prepare() override;
+	virtual uint32_t GetNodes(const ComputeNodeImplPtr** outNodes) const override;
 	// End ComputeFlow overrides
 	
-	void SetOnPerformedCallback(std::function<void()> onPerformed);
-	void ClearOnPerformedCallback();
-
 private:
-	void OnTaskCompleted(ComputeTask* task);
-	void Performed();
+	void DisconnectAll(ComputeNodeImpl* node);
 	void MakeDirty();
 
 private:
-	bool _bWasInitialized;
 	bool _bDirty;
 
-	std::vector<ComputeNodeImpl*> _nodes;
-	std::vector<ComputeNodeImpl*> _sortedNodes;
-
-	mutable std::mutex _tasksMutex;
-	std::vector<ComputeTaskPtr> _tasks;
-
-	mutable std::mutex _onPerformedMutex;
-	std::function<void()> _onPerformed;
+	std::vector<ComputeNodeImplPtr> _nodes;
+	std::vector<ComputeNodeImplPtr> _sortedNodes;
+	std::vector<Connection> _connections;
 
 	std::vector<ComputeFlowEntry> _entries;
 	std::vector<ComputeFlowOutput> _outputs;

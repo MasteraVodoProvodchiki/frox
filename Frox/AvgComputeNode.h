@@ -19,15 +19,11 @@ public:
 	// ComputeNode overrides
 	virtual void AllocateDefaultPins() override;
 	virtual bool IsValid() const override;
-	virtual ComputeTask* CreateComputeTask() override;
-
-protected:
-	// ComputeNodeImpl overrides
-	virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame) override;
+	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
 private:
-	uint32_t _input;
-	uint32_t _output;
+	TExpressionInput<ComputeFramePtr> _input;
+	TOutputFrame<ComputeFramePtr> _output;
 };
 
 

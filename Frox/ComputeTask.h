@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <memory>
+#include <tuple>
 
 namespace frox {
 
@@ -12,7 +13,9 @@ public:
 		: _bCompleted(false)
 	{}
 	virtual ~ComputeTask() {}
-	virtual void Perform() = 0;
+
+	virtual bool IsValid() const = 0;
+	virtual void Perform() const = 0;
 
 	void BindOnCompleted(std::function<void(ComputeTask*)> callback)
 	{
@@ -48,7 +51,12 @@ public:
 		: _functor(functor)
 	{}
 
-	virtual void Perform() override
+	virtual bool IsValid() const override
+	{
+		return true;
+	}
+
+	virtual void Perform() const override
 	{
 		_functor();
 	}
@@ -57,14 +65,22 @@ private:
 	FunctorT _functor;
 };
 
-class ComputeTaskUtils
+template <typename ValidatorT, typename FunctorT>
+class TComputeTaskWithValidator : public TComputeTask<FunctorT>
 {
 public:
-	template<typename FunctorT>
-	static TComputeTask<FunctorT>* Make(FunctorT functor)
+	TComputeTaskWithValidator(ValidatorT validator, FunctorT functor)
+		: TComputeTask<FunctorT>(functor)
+		, _validator(validator)
+	{}
+
+	virtual bool IsValid() const override
 	{
-		return new TComputeTask<FunctorT>(functor);
+		return _validator();
 	}
+
+private:
+	ValidatorT _validator;
 };
 
 } // End frox

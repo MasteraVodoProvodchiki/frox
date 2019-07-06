@@ -22,4 +22,7 @@ class ComputeNode;
 class IComputeFlowListerner;
 class ComputeFlow;
 
+class FlowData;
+class FlowPerformer;
+
 } // End frox

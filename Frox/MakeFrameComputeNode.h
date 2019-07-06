@@ -26,16 +26,11 @@ public:
 	FROX_API void SetChannels(uint32_t channels);
 
 protected:
-	// ComputeNodeImpl overrides
-	virtual void OnPostInit() override;
-
-protected:
-	uint32_t _width;
-	uint32_t _height;
+	TExpressionInput<uint32_t> _width;
+	TExpressionInput<uint32_t> _height;
 	EComputeFrameType _type;
-	uint32_t _channels;
-
-	uint32_t _output;
+	TExpressionInput<uint32_t> _channels;
+	TOutputFrame<ComputeFramePtr> _output;
 };
 
 class MakeFrameComputeNode : public MakeFrameBaseComputeNode
@@ -48,7 +43,7 @@ public:
 
 	// ComputeNode overrides
 	virtual bool IsValid() const override;
-	virtual ComputeTask* CreateComputeTask() override;
+	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
 	FROX_API void SetValue(Variant value);
 
@@ -74,7 +69,7 @@ public:
 	MakeNoiseFrameComputeNode(const ComputeNodeInitializer& initializer);
 
 	// ComputeNode overrides
-	virtual ComputeTask* CreateComputeTask() override;
+	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 };
 
 class ConstFrameComputeNode : public ComputeNodeImpl
@@ -89,17 +84,13 @@ public:
 	// ComputeNode overrides
 	virtual void AllocateDefaultPins() override;
 	virtual bool IsValid() const override;
-	virtual ComputeTask* CreateComputeTask() override;
+	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
 	FROX_API void SetFrame(ComputeFramePtr frame);
 
-protected:
-	// ComputeNodeImpl overrides
-	virtual void OnPostInit() override;
-
 private:
 	ComputeFramePtr _frame;
-	uint32_t _output;
+	TOutputFrame<ComputeFramePtr> _output;
 };
 
 
