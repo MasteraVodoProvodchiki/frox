@@ -21,7 +21,6 @@ struct ComputeFlowEntryNode
 struct ComputeFlowEntry
 {
 	std::string Name;
-	// ComputeFramePtr Frame;
 	std::vector<ComputeFlowEntryNode> Nodes;
 };
 
@@ -29,7 +28,6 @@ struct ComputeFlowEntry
 struct ComputeFlowOutput
 {
 	std::string Name;
-	// ComputeFramePtr Frame;
 	std::vector<ComputeFlowEntryNode> Nodes;
 };
 
@@ -76,9 +74,6 @@ public:
 	virtual int32_t FindEntryByName(const char* name) const = 0;
 	virtual int32_t FindOutputByName(const char* name) const = 0;
 
-	// virtual void SetInput(uint32_t inId, ComputeFramePtr frame) = 0;
-	// virtual ComputeFramePtr GetOutput(uint32_t outId = 0) const = 0;
-
 	virtual void ConnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) = 0;
 	virtual void DisconnectEntry(uint32_t entryId, ComputeNodeImpl* inNode, uint32_t inPinId = 0) = 0;
 
@@ -86,15 +81,8 @@ public:
 	virtual void DisconnectOutput(uint32_t outputId, ComputeNodeImpl* outNode, uint32_t outPinId = 0) = 0;
 
 	// Common
-	virtual void Initialize() = 0;
-	virtual bool WasInitialized() const = 0;
-
 	virtual void Prepare() = 0;
 	virtual uint32_t GetNodes(const ComputeNodeImplPtr** outNodes) const = 0;
-
-	// virtual void Perform() = 0;
-	// virtual void Fetch() = 0;
-	// virtual uint32_t GetNumActiveTasks() const = 0;
 };
 using ComputeFlowImplPtr = std::shared_ptr<ComputeFlowImpl>;
 

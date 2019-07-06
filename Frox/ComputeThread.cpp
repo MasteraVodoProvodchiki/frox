@@ -23,7 +23,11 @@ void ComputeThread::Run()
 		ComputeTaskPtr task = Pop();
 		if (task != nullptr)
 		{
-			task->Perform();
+			if (task->IsValid())
+			{
+				task->Perform();
+			}
+			
 			task->Complete();
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
