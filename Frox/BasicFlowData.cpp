@@ -12,6 +12,18 @@ BasicFlowData::BasicFlowData()
 BasicFlowData::~BasicFlowData()
 {}
 
+void BasicFlowData::SetValue(const char* name, Variant value)
+{
+	assert(_impl);
+	return _impl->SetValue(name, value);
+}
+
+Variant BasicFlowData::GetValue(const char* name) const
+{
+	assert(_impl);
+	return _impl->GetValue(name);
+}
+
 void BasicFlowData::SetFrame(const char* name, ComputeFramePtr frame)
 {
 	assert(_impl);

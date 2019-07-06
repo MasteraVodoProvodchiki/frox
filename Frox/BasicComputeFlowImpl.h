@@ -38,8 +38,8 @@ public:
 	virtual bool ConnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId) override;
 	virtual bool DisconnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId) override;
 
-	virtual uint32_t CreateEntry(const char* name = nullptr) override;
-	virtual uint32_t CreateOutput(const char* name = nullptr) override;
+	virtual uint32_t CreateEntry(const char* name, EPinValueType type = EPinValueType::Frame) override;
+	virtual uint32_t CreateOutput(const char* name, EPinValueType type = EPinValueType::Frame) override;
 
 	virtual uint32_t GetEntries(const ComputeFlowEntry** outEntries) const override;
 	virtual uint32_t GetOutputs(const ComputeFlowOutput** outOutputs) const override;

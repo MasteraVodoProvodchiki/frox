@@ -14,6 +14,7 @@ class Expression : public std::enable_shared_from_this<Expression>
 public:
 	enum Type
 	{
+		ET_Any = 0,
 		ET_Frame,
 		ET_Variant
 	};
@@ -26,7 +27,7 @@ public:
 	{}
 
 	// Update Or Get ??
-	virtual Type GetType() const { return ET_Variant; }
+	virtual Type GetType() const { return ET_Any; }
 	virtual bool IsValid() const { return true; }
 
 	virtual ComputeFramePtr GetFrame(FlowDataImplPtr data) const
@@ -42,7 +43,8 @@ public:
 	template<typename T>
 	inline T GetValue(FlowDataImplPtr data) const
 	{
-		return T();
+		Variant value = this->GetValue(data);
+		return value.To<T>();;
 	}
 };
 

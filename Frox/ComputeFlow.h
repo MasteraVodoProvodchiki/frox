@@ -37,13 +37,13 @@ public:
 	 * @brief 
 	 * @return Entry Id
 	 */
-	virtual uint32_t CreateEntry(const char* name) = 0;
+	virtual uint32_t CreateEntry(const char* name, EPinValueType type = EPinValueType::Frame) = 0;
 
 	/**
 	 * @brief
 	 * @return Output Id
 	 */
-	virtual uint32_t CreateOutput(const char* name) = 0;
+	virtual uint32_t CreateOutput(const char* name, EPinValueType type = EPinValueType::Frame) = 0;
 
 	virtual int32_t FindEntryByName(const char* name) const = 0;
 	virtual int32_t FindOutputByName(const char* name) const = 0;
@@ -54,8 +54,14 @@ public:
 	virtual void ConnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId = 0) = 0;
 	virtual void DisconnectOutput(uint32_t outputId, ComputeNode* outNode, uint32_t outPinId = 0) = 0;
 
-	uint32_t FindOrCreateEntry(const char* name);
-	uint32_t FindOrCreateOutput(const char* name);
+	bool ConnectEntry(const char* entryName, ComputeNode* inNode, const char* inPinName);
+	bool DisconnectEntry(const char* entryName, ComputeNode* inNode, const char* inPinName);
+
+	bool ConnectOutput(const char* outputName, ComputeNode* outNode, const char* outPinName);
+	bool DisconnectOutput(const char* outputName, ComputeNode* outNode, const char* outPinName);
+
+	uint32_t FindOrCreateEntry(const char* name, EPinValueType type = EPinValueType::Frame);
+	uint32_t FindOrCreateOutput(const char* name, EPinValueType type = EPinValueType::Frame);
 
 	// Common
 	void Release();

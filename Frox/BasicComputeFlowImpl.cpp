@@ -12,39 +12,6 @@ namespace frox {
 
 namespace utils {
 
-/*
-void SortNodes(const std::vector<ComputeNodeImplPtr>& in, std::vector<ComputeNodeImplPtr>& out)
-{
-	out.reserve(in.size());
-	
-	for (ComputeNodeImplPtr node : in)
-	{
-		size_t nearestIndex = std::numeric_limits<size_t>::max();
-		for (ComputeNodePinPtr pin : node->GetOutputPins())
-		{
-			for (ComputeNodePinPtr nextPin : pin->NextPins)
-			{
-				ComputeNodeImplPtr nextNode = nextPin->Owner->getptr();
-				auto it = std::find(out.begin(), out.end(), nextNode);
-				if (it != out.end() && nearestIndex > (it - out.begin()))
-				{
-					nearestIndex = it - out.begin();
-				}
-			}
-		}
-		
-		if (nearestIndex != std::numeric_limits<size_t>::max())
-		{
-			out.insert(out.begin() + nearestIndex, node);
-		}
-		else
-		{
-			out.push_back(node);
-		}
-	}
-}
-*/
-
 std::vector<Pin*> FilterNextPins(OutputPin* pin, const std::vector<BasicComputeFlowImpl::Connection>& connections)
 {
 	std::vector<Pin*> out;
@@ -192,22 +159,24 @@ bool BasicComputeFlowImpl::DisconnectNodes(ComputeNodeImpl* outNode, uint32_t ou
 	return false;
 }
 
-uint32_t BasicComputeFlowImpl::CreateEntry(const char* name)
+uint32_t BasicComputeFlowImpl::CreateEntry(const char* name, EPinValueType type)
 {
 	uint32_t id = uint32_t(_entries.size());
 	_entries.push_back(ComputeFlowEntry{
 		name != nullptr ? name : "",
+		type,
 	});
 	MakeDirty();
 
 	return id;
 }
 
-uint32_t BasicComputeFlowImpl::CreateOutput(const char* name)
+uint32_t BasicComputeFlowImpl::CreateOutput(const char* name, EPinValueType type)
 {
 	uint32_t id = uint32_t(_outputs.size());
 	_outputs.push_back(ComputeFlowOutput{
 		name != nullptr ? name : "",
+		type,
 	});
 	MakeDirty();
 

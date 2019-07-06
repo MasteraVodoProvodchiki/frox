@@ -8,17 +8,31 @@ BasicFlowDataImpl::BasicFlowDataImpl()
 BasicFlowDataImpl::~BasicFlowDataImpl()
 {}
 	
+void BasicFlowDataImpl::SetValue(const char* name, Variant value)
+{
+	_valuesByName[name] = value;
+}
+
+Variant BasicFlowDataImpl::GetValue(const char* name) const
+{
+	auto it = _valuesByName.find(name);
+	return it != _valuesByName.end() ? it->second : Variant();
+}
+
+void BasicFlowDataImpl::SetValue(const Guid& guid, Variant value)
+{
+	_valuesByGuid[guid] = value;
+}
+
+Variant BasicFlowDataImpl::GetValue(const Guid& guid) const
+{
+	auto it = _valuesByGuid.find(guid);
+	return it != _valuesByGuid.end() ? it->second : Variant();
+}
+
 void BasicFlowDataImpl::SetFrame(const char* name, ComputeFramePtr frame)
 {
-	auto it = _framesByName.find(name);
-	if (it != _framesByName.end())
-	{
-		it->second = frame;
-	}
-	else
-	{
-		_framesByName.insert(std::make_pair(name, frame));
-	}
+	_framesByName[name] = frame;
 }
 
 ComputeFramePtr BasicFlowDataImpl::GetFrame(const char* name) const
@@ -29,15 +43,7 @@ ComputeFramePtr BasicFlowDataImpl::GetFrame(const char* name) const
 
 void BasicFlowDataImpl::SetFrame(const Guid& guid, ComputeFramePtr frame)
 {
-	auto it = _framesByGuid.find(guid);
-	if (it != _framesByGuid.end())
-	{
-		it->second = frame;
-	}
-	else
-	{
-		_framesByGuid.insert(std::make_pair(guid, frame));
-	}
+	_framesByGuid[guid] = frame;
 }
 
 ComputeFramePtr BasicFlowDataImpl::GetFrame(const Guid& guid) const

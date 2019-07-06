@@ -20,7 +20,8 @@ public:
 		return std::make_shared<OutputFrameExpression>(pinId);
 	}
 
-	virtual Type GetType() const override { return ET_Frame; }
+	// Expression overrides
+	virtual Variant GetValue(FlowDataImplPtr data) const override;
 	virtual ComputeFramePtr GetFrame(FlowDataImplPtr data) const override;
 
 private:

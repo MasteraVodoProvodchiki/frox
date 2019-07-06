@@ -1,5 +1,6 @@
 #include "ComputeNodeImpl.h"
 
+#include <algorithm>
 #include <assert.h>
 
 namespace frox {
@@ -23,6 +24,24 @@ void ComputeNodeImpl::AllocateDefaultPins()
 bool ComputeNodeImpl::IsValid() const
 {
 	return true;
+}
+
+int32_t ComputeNodeImpl::FindInputByName(const char* pinName) const
+{
+	auto it = std::find_if(_inputs.begin(), _inputs.end(), [pinName](InputPin* pin) {
+		return pin->Name == pinName;
+	});
+
+	return it != _inputs.end() ? int32_t(it - _inputs.begin()) : -1;
+}
+
+int32_t ComputeNodeImpl::FindOutputByName(const char* pinName) const
+{
+	auto it = std::find_if(_outputs.begin(), _outputs.end(), [pinName](OutputPin* pin) {
+		return pin->Name == pinName;
+	});
+
+	return it != _outputs.end() ? int32_t(it - _outputs.begin()) : -1;
 }
 
 ComputeTask* ComputeNodeImpl::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)

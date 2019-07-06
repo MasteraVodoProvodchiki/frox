@@ -32,6 +32,10 @@ public:
 	virtual const char* GetName() const override;
 	virtual void AllocateDefaultPins() override;
 	virtual bool IsValid() const override;
+	virtual int32_t FindInputByName(const char* pinName) const override;
+	virtual int32_t FindOutputByName(const char* pinName) const override;
+
+
 	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData);
 	
 public:

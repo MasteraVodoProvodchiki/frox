@@ -1,3 +1,5 @@
+#pragma once
+
 #if defined _WIN32 || defined _WIN64
 #if defined FROX_LIB 
 #define FROX_API __declspec(dllexport)
@@ -24,5 +26,11 @@ class ComputeFlow;
 
 class FlowData;
 class FlowPerformer;
+
+enum class EPinValueType
+{
+	Frame = 0,
+	Value
+};
 
 } // End frox

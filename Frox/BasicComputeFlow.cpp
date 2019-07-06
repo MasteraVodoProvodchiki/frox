@@ -48,16 +48,16 @@ bool BasicComputeFlow::DisconnectNodes(ComputeNode* outNode, uint32_t outPinId, 
 	return _impl->DisconnectNodes(outNodeImpl, outPinId, inNodeImpl, inPinId);
 }
 
-uint32_t BasicComputeFlow::CreateEntry(const char* name)
+uint32_t BasicComputeFlow::CreateEntry(const char* name, EPinValueType type)
 {
 	assert(_impl);
-	return _impl->CreateEntry(name);
+	return _impl->CreateEntry(name, type);
 }
 
-uint32_t BasicComputeFlow::CreateOutput(const char* name)
+uint32_t BasicComputeFlow::CreateOutput(const char* name, EPinValueType type)
 {
 	assert(_impl);
-	return _impl->CreateOutput(name);
+	return _impl->CreateOutput(name, type);
 }
 
 int32_t BasicComputeFlow::FindEntryByName(const char* name) const

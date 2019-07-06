@@ -18,6 +18,8 @@ public:
 	}
 
 	// FlowData overrides
+	virtual void SetValue(const char* name, Variant value) override;
+	virtual Variant GetValue(const char* name) const override;
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) override;
 	virtual ComputeFramePtr GetFrame(const char* name) const override;
 

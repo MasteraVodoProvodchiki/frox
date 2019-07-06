@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "Variant.h"
 #include "Guid.h"
 
 #include <memory>
@@ -18,6 +19,12 @@ public:
 	{
 		return shared_from_this();
 	}
+
+	virtual void SetValue(const char* name, Variant value) = 0;
+	virtual Variant GetValue(const char* name) const = 0;
+
+	virtual void SetValue(const Guid& guid, Variant value) = 0;
+	virtual Variant GetValue(const Guid& guid) const = 0;
 
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) = 0;
 	virtual ComputeFramePtr GetFrame(const char* name) const = 0;

@@ -325,6 +325,34 @@ bool multiChannelsTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& i
 	);
 }
 
+bool dynamicInputPropsTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height)
+{
+	// Create nodes
+	auto make = flow.CreateNode<MakeFrameComputeNode>("Make");
+	make->SetValue(1);
+	
+	inputData.SetValue("width", width);
+	inputData.SetValue("height", height);
+
+	make->SetType(EComputeFrameType::ECFT_UInt32);
+
+	flow.CreateEntry("width", EPinValueType::Value);
+	flow.CreateEntry("height", EPinValueType::Value);
+
+	flow.ConnectEntry("width", make, "width");
+	flow.ConnectEntry("height", make, "height");
+
+	flow.ConnectOutput(flow.CreateOutput("out"), make);
+
+	return runFlow(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		std::bind(&checkSum<uint32_t>, std::placeholders::_1, width * height * 1)
+	);
+}
+
 int main(int argc, char *argv[])
 {
 	// Init
@@ -343,6 +371,8 @@ int main(int argc, char *argv[])
 	test("ConvertTo Test", std::bind(&convertToTest0, _1, _2, _3, _4, 64, 64));
 	test("Crop Test", std::bind(&cropTest0, _1, _2, _3, _4, 64, 64));
 	test("Multi Channels Test", std::bind(&multiChannelsTest0, _1, _2, _3, _4, 64, 64));
+
+	test("Dynamic Input Props", std::bind(&dynamicInputPropsTest0, _1, _2, _3, _4, 64, 64));
 
 	// Shutdown
 	FroxShutdown(gFrox);

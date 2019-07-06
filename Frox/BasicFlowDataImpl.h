@@ -18,12 +18,19 @@ public:
 	}
 
 	// FlowDataImpl overrides
+	virtual void SetValue(const char* name, Variant value) override;
+	virtual Variant GetValue(const char* name) const override;
+	virtual void SetValue(const Guid& guid, Variant value) override;
+	virtual Variant GetValue(const Guid& guid) const override;
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) override;
 	virtual ComputeFramePtr GetFrame(const char* name) const override;
 	virtual void SetFrame(const Guid& guid, ComputeFramePtr frame) override;
 	virtual ComputeFramePtr GetFrame(const Guid& guid) const override;
 
 private:
+	std::map<std::string, Variant> _valuesByName;
+	std::map<Guid, Variant> _valuesByGuid;
+
 	std::map<std::string, ComputeFramePtr> _framesByName;
 	std::map<Guid, ComputeFramePtr> _framesByGuid;
 };

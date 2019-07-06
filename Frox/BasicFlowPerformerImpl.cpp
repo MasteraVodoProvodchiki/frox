@@ -33,12 +33,24 @@ void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow, FlowDataImplPtr in
 		for (uint32_t index = 0; index < nbEntries; ++index)
 		{
 			const ComputeFlowEntry& entry = entries[index];
-			ComputeFramePtr frame = inputData->GetFrame(entry.Name.data());
-			// Type ??
-			for (const ComputeFlowEntryNode& entryNode : entry.Nodes)
+			switch (entry.Type)
 			{
-				_privateData->SetFrame(entryNode.PinId, frame);
-			}
+			case EPinValueType::Frame: {
+				ComputeFramePtr frame = inputData->GetFrame(entry.Name.data());
+				for (const ComputeFlowEntryNode& entryNode : entry.Nodes)
+				{
+					_privateData->SetFrame(entryNode.PinId, frame);
+				}
+				break;
+			}	
+			case EPinValueType::Value: {
+				Variant value = inputData->GetValue(entry.Name.data());
+				for (const ComputeFlowEntryNode& entryNode : entry.Nodes)
+				{
+					_privateData->SetValue(entryNode.PinId, value);
+				}
+			}		
+			}	
 		}
 	}
 
@@ -112,10 +124,23 @@ void BasicFlowPerformerImpl::Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outp
 		for (uint32_t index = 0; index < nbOutputs; ++index)
 		{
 			const ComputeFlowOutput& output = outputs[index];
-			for (const ComputeFlowEntryNode& outputNode : output.Nodes)
+			switch (output.Type)
 			{
-				ComputeFramePtr frame = _privateData->GetFrame(outputNode.PinId);
-				outputData->SetFrame(output.Name.c_str(), frame);
+			case EPinValueType::Frame: {
+				for (const ComputeFlowEntryNode& outputNode : output.Nodes)
+				{
+					ComputeFramePtr frame = _privateData->GetFrame(outputNode.PinId);
+					outputData->SetFrame(output.Name.c_str(), frame);
+				}
+				break;
+			}
+			case EPinValueType::Value: {
+				for (const ComputeFlowEntryNode& outputNode : output.Nodes)
+				{
+					Variant value = _privateData->GetValue(outputNode.PinId);
+					outputData->SetValue(output.Name.c_str(), value);
+				}
+			}
 			}
 		}
 	}

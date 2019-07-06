@@ -21,6 +21,7 @@ struct ComputeFlowEntryNode
 struct ComputeFlowEntry
 {
 	std::string Name;
+	EPinValueType Type;
 	std::vector<ComputeFlowEntryNode> Nodes;
 };
 
@@ -28,6 +29,7 @@ struct ComputeFlowEntry
 struct ComputeFlowOutput
 {
 	std::string Name;
+	EPinValueType Type;
 	std::vector<ComputeFlowEntryNode> Nodes;
 };
 
@@ -54,8 +56,8 @@ public:
 	virtual bool DisconnectNodes(ComputeNodeImpl* outNode, uint32_t outPinId, ComputeNodeImpl* inNode, uint32_t inPinId) = 0;
 
 	// Input/Output
-	virtual uint32_t CreateEntry(const char* name = nullptr) = 0;
-	virtual uint32_t CreateOutput(const char* name = nullptr) = 0;
+	virtual uint32_t CreateEntry(const char* name, EPinValueType type = EPinValueType::Frame) = 0;
+	virtual uint32_t CreateOutput(const char* name, EPinValueType type = EPinValueType::Frame) = 0;
 
 	/**
 	 * @brief 
