@@ -23,19 +23,10 @@ public:
 
 	FROX_API void SetRect(Rect rect);
 
-protected:
-	// ComputeNodeImpl overrides
-	// virtual void OnPostInit() override;
-
 private:
 	TExpressionInput<ComputeFramePtr> _input;
-	TOutputFrame<ComputeFramePtr> _output;
-
-	// uint32_t _input;
-	// uint32_t _output;
-
 	TExpressionInput<Rect> _rect;
-	// Rect _rect;
+	TOutputFrame<ComputeFramePtr> _output;
 };
 
 } // End frox

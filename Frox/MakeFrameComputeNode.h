@@ -26,22 +26,11 @@ public:
 	FROX_API void SetChannels(uint32_t channels);
 
 protected:
-	// ComputeNodeImpl overrides
-	// virtual void OnPostInit() override;
-
-protected:
 	TExpressionInput<uint32_t> _width;
 	TExpressionInput<uint32_t> _height;
-	TExpressionInput<uint32_t> _channels;
-
-	// uint32_t _width;
-	// uint32_t _height;
 	EComputeFrameType _type;
-	// uint32_t _channels;
-
-	
+	TExpressionInput<uint32_t> _channels;
 	TOutputFrame<ComputeFramePtr> _output;
-	// uint32_t _output;
 };
 
 class MakeFrameComputeNode : public MakeFrameBaseComputeNode
@@ -99,14 +88,9 @@ public:
 
 	FROX_API void SetFrame(ComputeFramePtr frame);
 
-protected:
-	// ComputeNodeImpl overrides
-	// virtual void OnPostInit() override;
-
 private:
 	ComputeFramePtr _frame;
-	TOutput<ComputeFramePtr> _output;
-	// uint32_t _output;
+	TOutputFrame<ComputeFramePtr> _output;
 };
 
 

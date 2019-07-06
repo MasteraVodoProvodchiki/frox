@@ -21,16 +21,9 @@ public:
 	virtual bool IsValid() const override;
 	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
-protected:
-	// ComputeNodeImpl overrides
-	// virtual void OnInputChanged(uint32_t inId, ComputeFramePtr frame) override;
-
 private:
 	TExpressionInput<ComputeFramePtr> _input;
 	TOutputFrame<ComputeFramePtr> _output;
-
-	// uint32_t _input;
-	// uint32_t _output;
 };
 
 

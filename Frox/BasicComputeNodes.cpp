@@ -1,5 +1,6 @@
 #include "BasicComputeNodes.h"
 #include "ComputeTask.h"
+#include "ComputeTaskHelper.h"
 #include "Frox.h"
 #include "Utils.h"
 
@@ -69,55 +70,61 @@ void OperationComputeNode::AllocateDefaultPins()
 	RegisterInput(&_left);
 	RegisterInput(&_right);
 	RegisterOutput(&_output);
-	// _left = CreateInput("left");
-	// _right = CreateInput("right");
-	// _output = CreateOutput("output");
 }
 
-/*
-void OperationComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
-{
-	ComputeFramePtr left = GetInput(_left);
-	ComputeFramePtr output = GetOutput(_output);
-	if (left && !output)
-	{
-		output = FroxInstance()->CreateComputeFrame(left->GetSize(), left->GetType());
-		SetOutput(_output, output);
-	}
-}
-*/
 bool OperationComputeNode::IsValid() const
 {
-	/*
-	ComputeFramePtr left = GetInput(_left);
-	ComputeFramePtr right = GetInput(_right);
-	ComputeFramePtr output = GetOutput(_output);
-
-	return
-		left != nullptr &&
-		right != nullptr &&
-		output != nullptr &&
-		left->GetType() == right->GetType() &&
-		left->GetType() == output->GetType();
-		left->GetSize() == right->GetSize() &&
-		left->GetSize() == output->GetSize();
-	*/
 	return true;
 }
 
 ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	// Calculate By Expression
-
 	EType type = _type;
-	// ComputeFramePtr left = inputData->GetFrame(_left); // GetInput(_left);
-	// ComputeFramePtr right = GetInput(_right);
-	// ComputeFramePtr output = GetOutput(_output);
 	auto left = _left.GetValue(inputData);
 	auto right = _right.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 
-	return ComputeTaskUtils::Make([type, left, right, output]() {
+	return ComputeTaskHelper::UnPackProps(left, right)
+		// .Validate
+		// .UnPackOutputs
+		// .Invoke
+		.MakeTask(
+			[](ComputeFramePtr left, ComputeFramePtr right) {
+				return
+					left != nullptr &&
+					right != nullptr &&
+					left->GetType() == right->GetType() &&
+					left->GetSize() == right->GetSize();
+			},
+			[type, output](ComputeFramePtr left, ComputeFramePtr right) {
+				output.SetValue(
+					left->GetSize(),
+					left->GetType(),
+					[type, left, right](ComputeFramePtr output) {
+						switch (type)
+						{
+						case OperationComputeNode::ET_Add:
+							utils::Foreach(left, right, output, utils::AddOperation());
+							break;
+						case OperationComputeNode::ET_Sub:
+							utils::Foreach(left, right, output, utils::SubOperation());
+							break;
+						case OperationComputeNode::ET_Mul:
+							utils::Foreach(left, right, output, utils::MulOperation());
+							break;
+						case OperationComputeNode::ET_Div:
+							utils::Foreach(left, right, output, utils::DivOperation());
+							break;
+						default:
+							break;
+						}
+					}
+				);
+			}
+		);
+
+	/*
+	return ComputeTaskHelper::Make([type, left, right, output]() {
 		ComputeFramePtr leftFrame = *left;
 		ComputeFramePtr rightFrame = *right;
 		// Check
@@ -147,6 +154,7 @@ ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, 
 		);
 		
 	});
+	*/
 }
 
 FROX_COMPUTENODE_IMPL(AddComputeNode)

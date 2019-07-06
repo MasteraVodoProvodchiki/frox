@@ -1,5 +1,6 @@
 #include "SubFlowComputeNode.h"
 #include "ComputeTask.h"
+#include "ComputeTaskHelper.h"
 #include "Frox.h"
 #include "Utils.h"
 #include "BasicComputeFlow.h"
@@ -36,9 +37,6 @@ void SubFlowComputeNode::AllocateDefaultPins()
 		for (uint32_t index=0; index < nbEntries; ++index)
 		{
 			const ComputeFlowEntry& entry = entries[index];
-			// uint32_t inPinId = CreateInput(entry.Name.data());
-			// inPinIds.push_back(inPinId);
-
 			auto pin = new ExpressionInput(entry.Name.data());
 			_inPins.push_back(pin);	
 		}
@@ -49,19 +47,11 @@ void SubFlowComputeNode::AllocateDefaultPins()
 		for (uint32_t index = 0; index < nbOutputs; ++index)
 		{
 			const ComputeFlowOutput& output = outputs[index];
-			// uint32_t outPinId = CreateOutput(output.Name.data());
-			// outPinIds.push_back(outPinId);
-
 			auto pin = new OutputPin(output.Name.data());
 			_outPins.push_back(pin);
 		}
 	}
 }
-
-/*
-void SubFlowComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
-{}
-*/
 
 bool SubFlowComputeNode::IsValid() const
 {
@@ -72,7 +62,7 @@ ComputeTask* SubFlowComputeNode::CreateComputeTask(FlowDataImplPtr inputData, Fl
 {
 	ComputeFlow* subFlow = _subFlow;
 
-	return ComputeTaskUtils::Make([]() {
+	return ComputeTaskHelper::Make([]() {
 		// ??
 	});
 }

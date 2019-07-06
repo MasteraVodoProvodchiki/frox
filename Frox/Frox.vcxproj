@@ -136,6 +136,7 @@
     <ClInclude Include="ComputeNodePin.h" />
     <ClInclude Include="ComputeNodeImpl.h" />
     <ClInclude Include="ComputeTask.h" />
+    <ClInclude Include="ComputeTaskHelper.h" />
     <ClInclude Include="ComputeThread.h" />
     <ClInclude Include="ConvertToComputeNode.h" />
     <ClInclude Include="CropComputeNode.h" />

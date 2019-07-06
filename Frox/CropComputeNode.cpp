@@ -1,5 +1,6 @@
 #include "CropComputeNode.h"
 #include "ComputeTask.h"
+#include "ComputeTaskHelper.h"
 #include "Frox.h"
 #include "Utils.h"
 
@@ -34,11 +35,10 @@ FROX_COMPUTENODE_IMPL(CropComputeNode)
 
 CropComputeNode::CropComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
-	// , _input(0)
-	// , _output(0)
 	, _input("input")
+	, _rect("rect", Rect{ -1, -1, -1, -1 })
 	, _output("output")
-	, _rect("rect", Rect{-1, -1, -1, -1})
+	
 {}
 
 CropComputeNode::~CropComputeNode()
@@ -46,59 +46,51 @@ CropComputeNode::~CropComputeNode()
 
 void CropComputeNode::AllocateDefaultPins()
 {
-	// _input = CreateInput("input");
-	// _output = CreateOutput("output");
 	RegisterInput(&_input);
 	RegisterInput(&_rect);
 	RegisterOutput(&_output);
 }
 
-/*
-void CropComputeNode::OnPostInit()
-{
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-	if (input && !output)
-	{
-		Size inputSize = input->GetSize();
-
-		// min W/H
-		int32_t width = std::min(_rect.Width, int32_t(inputSize.Width) - _rect.X);
-		int32_t height = std::min(_rect.Heihgt, int32_t(inputSize.Height) - _rect.Y);
-		
-		Size outputSize = Size{uint32_t(width), uint32_t(height)};
-		ComputeFramePtr output = FroxInstance()->CreateComputeFrame(outputSize, input->GetType());
-		SetOutput(_output, output);
-	}
-}
-*/
-
 bool CropComputeNode::IsValid() const
 {
-	/*
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-
-	return
-		input != nullptr &&
-		output != nullptr &&
-		input->GetType() == output->GetType() &&
-		_rect.IsValid() &&
-		input->IsValid();
-	*/
 	return true;
 }
 
 ComputeTask* CropComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	// ComputeFramePtr input = GetInput(_input);
-	// ComputeFramePtr output = GetOutput(_output);
-	// Rect rect = _rect;
 	auto input = _input.GetValue(inputData);
 	auto rect = _rect.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 
-	return ComputeTaskUtils::Make([input, output, rect]() {
+	return
+		ComputeTaskHelper::UnPackProps(input, rect)
+		// .Validate
+		// .UnPackOutputs
+		// .Invoke
+		.MakeTask(
+			[](ComputeFramePtr input, Rect rect) {
+				return input != nullptr && input->IsValid() && rect.IsValid();
+			},
+			[output](ComputeFramePtr input, Rect rect) {
+				Size inputSize = input->GetSize();
+
+				// min W/H
+				int32_t width = std::min(rect.Width, int32_t(inputSize.Width) - rect.X);
+				int32_t height = std::min(rect.Heihgt, int32_t(inputSize.Height) - rect.Y);
+
+				Size outputSize = Size{ uint32_t(width), uint32_t(height) };
+
+				output.SetValue(
+					outputSize,
+					input->GetType(),
+					[input, rect](ComputeFramePtr output) {
+						functions::Crop(input, output, rect);
+					}
+				);	
+			}
+		);
+	/*
+	return ComputeTaskHelper::Make([input, output, rect]() {
 		ComputeFramePtr inputFrame = *input;
 		Rect rectValue = *rect;
 
@@ -118,6 +110,7 @@ ComputeTask* CropComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowD
 			}
 		);		
 	});
+	*/
 }
 
 void CropComputeNode::SetRect(Rect rect)

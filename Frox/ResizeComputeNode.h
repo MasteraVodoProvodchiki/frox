@@ -24,14 +24,7 @@ public:
 
 	FROX_API void SetSize(Size rect);
 
-protected:
-	// ComputeNodeImpl overrides
-	// virtual void OnPostInit() override;
-
 private:
-	// uint32_t _input;
-	// uint32_t _output;
-
 	TExpressionInput<ComputeFramePtr> _input;
 	TExpressionInput<Size> _size;
 	TOutputFrame<ComputeFramePtr> _output;

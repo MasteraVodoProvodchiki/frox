@@ -65,18 +65,16 @@ struct TLazyFrame
 		, Id(other.Id)
 	{}
 
-	/*
-	void SetValue(ComputeFramePtr value)
+	void SetValue(ComputeFramePtr value) const
 	{
 		Data->SetFrame(Id, value);
 	}
-	*/
 
 	template<typename CallbackT>
 	void SetValue(const Size& size, ComputeFrameType type, CallbackT callback) const
 	{
 		ComputeFramePtr frame = Data->GetFrame(Id);
-		if (!frame)
+		if (!frame || frame->GetSize() != size || frame->GetType() != type)
 		{
 			frame = FroxInstance()->CreateComputeFrame(size, type);
 		}

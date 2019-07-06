@@ -25,22 +25,12 @@ public:
 	FROX_API void SetAlpha(double alpha);
 	FROX_API void SetBeta(double beta);
 
-protected:
-	// ComputeNodeImpl overrides
-	// virtual void OnPostInit() override;
-
 private:
 	TExpressionInput<ComputeFramePtr> _input;
-	TOutputFrame<ComputeFramePtr> _output;
-
-	// uint32_t _input;
-	// uint32_t _output;
-
 	EComputeFrameType _type;
-	// double _alpha;
-	// double _beta;
 	TExpressionInput<double> _alpha;
 	TExpressionInput<double> _beta;
+	TOutputFrame<ComputeFramePtr> _output;
 };
 
 } // End frox

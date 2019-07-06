@@ -101,6 +101,11 @@ struct Size
 	uint32_t Width;
 	uint32_t Height;
 
+	bool IsValid() const
+	{
+		return Width > 0 && Height > 0;
+	}
+
 	friend bool operator == (const Size& left, const Size& right)
 	{
 		return left.Width == right.Width && left.Height == right.Height;

@@ -1,5 +1,6 @@
 #include "AvgComputeNode.h"
 #include "ComputeTask.h"
+#include "ComputeTaskHelper.h"
 #include "Frox.h"
 #include "Utils.h"
 
@@ -78,8 +79,6 @@ void Avg(ComputeFramePtr input, ComputeFramePtr output)
 
 AvgComputeNode::AvgComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
-	// , _input(0)
-	// , _output(0)
 	, _input("input")
 	, _output("output")
 {}
@@ -91,59 +90,36 @@ void AvgComputeNode::AllocateDefaultPins()
 {
 	RegisterInput(&_input);
 	RegisterOutput(&_output);
-	// _input = CreateInput("input");
-	// _output = CreateOutput("output");
 }
-
-/*
-void AvgComputeNode::OnInputChanged(uint32_t inId, ComputeFramePtr frame)
-{
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-	if (input && !output)
-	{
-		output = FroxInstance()->CreateComputeFrame(Size{1 ,1}, input->GetType());
-		SetOutput(_output, output);
-	}
-}
-*/
 
 bool AvgComputeNode::IsValid() const
 {
-	/*
-	ComputeFramePtr input = GetInput(_input);
-	ComputeFramePtr output = GetOutput(_output);
-
-	return
-		input != nullptr &&
-		output != nullptr &&
-		input->GetType() == output->GetType();
-		output->GetSize() == Size{1, 1};
-	*/
 	return true;
 }
 
 ComputeTask* AvgComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
-	// ComputeFramePtr input = GetInput(_input);
-	// ComputeFramePtr output = GetOutput(_output);
-
 	auto input = _input.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 
-	return ComputeTaskUtils::Make([input, output]() {
-		
-		ComputeFramePtr inputFrame = *input;
-		// Check
-
-		output.SetValue(
-			Size{ 1 ,1 },
-			inputFrame->GetType(),
-			[inputFrame](ComputeFramePtr outputFrame) {
-				functions::Avg(inputFrame, outputFrame);
+	return ComputeTaskHelper::UnPackProps(input)
+		// .Validate
+		// .UnPackOutputs
+		// .Invoke
+		.MakeTask(
+			[](ComputeFramePtr input) {
+				return input != nullptr && input->IsValid();
+			},
+			[output](ComputeFramePtr input) {
+				output.SetValue(
+					Size{ 1 ,1 },
+					input->GetType(),
+					[input](ComputeFramePtr output) {
+						functions::Avg(input, output);
+					}
+				);
 			}
 		);
-	});
 }
 
 } // End frox
