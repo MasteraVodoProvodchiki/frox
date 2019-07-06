@@ -51,7 +51,10 @@ std::vector<Pin*> FilterNextPins(OutputPin* pin, const std::vector<BasicComputeF
 
 	for (auto& connection : connections)
 	{
-		out.push_back(connection.InputPin);
+		if (connection.OutputPin == pin)
+		{
+			out.push_back(connection.InputPin);
+		}	
 	}
 
 	return out;

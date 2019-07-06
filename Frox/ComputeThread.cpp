@@ -1,9 +1,11 @@
 #include "ComputeThread.h"
 #include "ComputeTask.h"
+#include "Log.h"
 
 #include <thread>
 #include <chrono>
 #include <assert.h>
+
 
 namespace frox {
 
@@ -26,6 +28,11 @@ void ComputeThread::Run()
 			if (task->IsValid())
 			{
 				task->Perform();
+			}
+			else
+			{
+				std::string message = "Invalid Task";
+				Log::Error(message.c_str(), "ComputeThread");
 			}
 			
 			task->Complete();
