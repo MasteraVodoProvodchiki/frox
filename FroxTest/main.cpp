@@ -11,6 +11,7 @@
 #include <MakeFrameComputeNode.h>
 #include <ConvertToComputeNode.h>
 #include <CropComputeNode.h>
+#include <FrameInfoComputeNode.h>
 
 #include <iostream>
 #include <stdio.h>
@@ -288,10 +289,11 @@ bool cropTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData,
 	make->SetValue(1);
 
 	auto crop = flow.CreateNode<CropComputeNode>("Crop");
-	int32_t cropWidth = width / 2;
-	int32_t cropHeight = height / 2;
+	uint32_t cropWidth = width / 2;
+	uint32_t cropHeight = height / 2;
 
-	crop->SetRect(Rect{ 4, 4, cropWidth, cropHeight });
+	crop->SetOffset(Point{ 4, 4 });
+	crop->SetSize(Size{ cropWidth, cropHeight });
 
 	flow.ConnectNodes(make, crop);
 	flow.ConnectOutput(flow.CreateOutput("out"), crop);
@@ -353,6 +355,42 @@ bool dynamicInputPropsTest0(ComputeFlow& flow, FlowPerformer& performer, FlowDat
 	);
 }
 
+
+bool frameSizeTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height)
+{
+	// Create nodes
+	auto make0 = flow.CreateNode<MakeFrameComputeNode>("Make");
+	make0->SetValue(1);
+	make0->SetWidth(width);
+	make0->SetHeight(height);
+	make0->SetType(EComputeFrameType::ECFT_UInt8);
+
+	auto frameSize = flow.CreateNode<FrameSizeComputeNode>("FrameSize");
+	flow.ConnectNodes(make0, frameSize);
+
+
+	auto makeBig = flow.CreateNode<MakeFrameComputeNode>("Make");
+	makeBig->SetValue(1);
+	makeBig->SetWidth(width * 2);
+	makeBig->SetHeight(height * 2);
+	makeBig->SetType(EComputeFrameType::ECFT_UInt32);
+
+	auto crop = flow.CreateNode<CropComputeNode>("Crop");
+	
+	flow.ConnectNodes(makeBig, crop);
+	flow.ConnectNodes(frameSize, crop, crop->FindInputByName("size"));
+
+	flow.ConnectOutput(flow.CreateOutput("out"), crop);
+
+	return runFlow(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		std::bind(&checkSum<uint32_t>, std::placeholders::_1, width * height * 1)
+	);
+}
+
 int main(int argc, char *argv[])
 {
 	// Init
@@ -365,15 +403,16 @@ int main(int argc, char *argv[])
 	test("Make Uint32", makeTestUInt32);
 	test("Make Float", makeTestFloat);
 
-	test("Simple Test", std::bind(&simpleTest, _1, _2, _3, _4));
-	test("Multi Test", std::bind(&multiTest, _1, _2, _3, _4, 64, 64));
-	test("Noise Test", std::bind(&noiseTest0, _1, _2, _3, _4, 64, 64));
-	test("ConvertTo Test", std::bind(&convertToTest0, _1, _2, _3, _4, 64, 64));
-	test("Crop Test", std::bind(&cropTest0, _1, _2, _3, _4, 64, 64));
-	test("Multi Channels Test", std::bind(&multiChannelsTest0, _1, _2, _3, _4, 64, 64));
+	test("Simple", std::bind(&simpleTest, _1, _2, _3, _4));
+	test("Multi", std::bind(&multiTest, _1, _2, _3, _4, 64, 64));
+	test("Noise", std::bind(&noiseTest0, _1, _2, _3, _4, 64, 64));
+	test("ConvertTo", std::bind(&convertToTest0, _1, _2, _3, _4, 64, 64));
+	test("Crop", std::bind(&cropTest0, _1, _2, _3, _4, 64, 64));
+	test("Multi Channels", std::bind(&multiChannelsTest0, _1, _2, _3, _4, 64, 64));
 
 	test("Dynamic Input Props", std::bind(&dynamicInputPropsTest0, _1, _2, _3, _4, 64, 64));
-
+	test("Frame Size", std::bind(&frameSizeTest0, _1, _2, _3, _4, 64, 64));
+	
 	// Shutdown
 	FroxShutdown(gFrox);
 

@@ -22,13 +22,13 @@ struct TLazyValue
 		, Id(other.Id)
 	{}
 
-	void SetValue(T value)
+	void SetValue(T value) const
 	{
 		Data->SetValue(Id, value);
 	}
 
 	template<typename CallbackT, typename ...ArgsT>
-	inline void SetValue(CallbackT callback, ArgsT... args)
+	inline void SetValue(CallbackT callback, ArgsT... args) const
 	{
 		callback(Id, Data, args...);
 	}

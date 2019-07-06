@@ -21,11 +21,13 @@ public:
 	virtual bool IsValid() const override;
 	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
-	FROX_API void SetRect(Rect rect);
+	FROX_API void SetOffset(Point offset);
+	FROX_API void SetSize(Size size);
 
 private:
 	TExpressionInput<ComputeFramePtr> _input;
-	TExpressionInput<Rect> _rect;
+	TExpressionInput<Point> _offset;
+	TExpressionInput<Size> _size;
 	TOutputFrame<ComputeFramePtr> _output;
 };
 

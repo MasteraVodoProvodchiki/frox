@@ -159,6 +159,9 @@
     <ClInclude Include="ComputeTaskHelper.h">
       <Filter>Private</Filter>
     </ClInclude>
+    <ClInclude Include="FrameInfoComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="ExpressionInput.cpp">
       <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameInfoComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

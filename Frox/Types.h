@@ -96,6 +96,12 @@ struct float4
 	}
 };
 
+struct Point
+{
+	int32_t X;
+	int32_t Y;
+};
+
 struct Size
 {
 	uint32_t Width;
@@ -119,18 +125,24 @@ struct Size
 
 struct Rect
 {
-	int32_t X, Y, Width, Heihgt;
+	int32_t X, Y, Width, Height;
+
+	Rect()
+		: X(-1), Y(-1), Width(-1), Height(-1)
+	{}
+
+	Rect(int32_t x, int32_t y, int32_t width, int32_t height)
+		: X(x), Y(y), Width(width), Height(height)
+	{}
+
+	Rect(const Point& offset, const Size& size)
+		: X(offset.X), Y(offset.Y), Width(int32_t(size.Width)), Height(int32_t(size.Height))
+	{}
 
 	bool IsValid() const
 	{
-		return X >= 0 && Y >= 0 && Width > 0 && Heihgt > 0;
+		return X >= 0 && Y >= 0 && Width > 0 && Height > 0;
 	}
-};
-
-struct Point
-{
-	int32_t X;
-	int32_t Y;
 };
 
 } // End frox
