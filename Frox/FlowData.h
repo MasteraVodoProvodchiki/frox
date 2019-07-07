@@ -16,6 +16,13 @@ public:
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) = 0;
 	virtual ComputeFramePtr GetFrame(const char* name) const = 0;
 
+	template<typename T>
+	T GetValue(const char* name) const
+	{
+		Variant value = this->GetValue(name);
+		return value.To<T>();
+	}
+
 	// Set scalars as frame
 	void SetInputScalar(const char* name, uint8_t value);
 	void SetInputScalar(const char* name, uint16_t value);
