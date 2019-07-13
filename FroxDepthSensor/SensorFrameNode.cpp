@@ -10,6 +10,8 @@ namespace frox {
 
 FROX_COMPUTENODE_IMPL(SensorFrameNode)
 FROX_COMPUTENODE_IMPL(SensorDepthFrameNode)
+FROX_COMPUTENODE_IMPL(SensorColorFrameNode)
+FROX_COMPUTENODE_IMPL(SensorInfraredFrameNode)
 
 SensorFrameNode::SensorFrameNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)

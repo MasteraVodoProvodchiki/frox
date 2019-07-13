@@ -9,5 +9,4 @@ IDepthSensorModule& IDepthSensorModule::Get()
 	return depthSensorModule;
 }
 
-
 } // End frox.

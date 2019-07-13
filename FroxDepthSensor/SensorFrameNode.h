@@ -55,7 +55,7 @@ public:
 
 class SensorColorFrameNode : public SensorFrameNode
 {
-	FROX_COMPUTENODE(SensorDepthFrameNode, "sensorcolorframe")
+	FROX_COMPUTENODE(SensorColorFrameNode, "sensorcolorframe")
 	using Super = SensorFrameNode;
 
 public:
