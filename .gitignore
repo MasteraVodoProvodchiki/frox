@@ -63,3 +63,7 @@ DerivedData/
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
+*.tlog
+*.exp
+*.iobj
+*.ipdb
