@@ -20,8 +20,8 @@ class ComputeNodeImpl
 	using Super = ComputeNode;
 
 public:
-	ComputeNodeImpl(const ComputeNodeInitializer& initializer);
-	virtual ~ComputeNodeImpl() override;
+	FROX_API ComputeNodeImpl(const ComputeNodeInitializer& initializer);
+	FROX_API virtual ~ComputeNodeImpl() override;
 	
 	std::shared_ptr<ComputeNodeImpl> getptr()
 	{
@@ -29,27 +29,26 @@ public:
 	}
 
 	// ComputeNode overrides
-	virtual const char* GetName() const override;
-	virtual void AllocateDefaultPins() override;
-	virtual bool IsValid() const override;
-	virtual int32_t FindInputByName(const char* pinName) const override;
-	virtual int32_t FindOutputByName(const char* pinName) const override;
+	FROX_API virtual const char* GetName() const override;
+	FROX_API virtual void AllocateDefaultPins() override;
+	FROX_API virtual bool IsValid() const override;
+	FROX_API virtual int32_t FindInputByName(const char* pinName) const override;
+	FROX_API virtual int32_t FindOutputByName(const char* pinName) const override;
 
-
-	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData);
+	FROX_API virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData);
 	
 public:
-	InputPin* GetInputPin(uint32_t inId = 0) const;
-	OutputPin* GetOutputPin(uint32_t outId = 0) const;
+	FROX_API InputPin* GetInputPin(uint32_t inId = 0) const;
+	FROX_API OutputPin* GetOutputPin(uint32_t outId = 0) const;
 
 	const std::vector<InputPin*>& GetInputsPins() const { return _inputs; }
 	const std::vector<OutputPin*>& GetOutputPins() const { return _outputs; }
 
 protected:
-	void ReallocatePins();
+	FROX_API void ReallocatePins();
 
-	void RegisterInput(InputPin* input);
-	void RegisterOutput(OutputPin* output);
+	FROX_API void RegisterInput(InputPin* input);
+	FROX_API void RegisterOutput(OutputPin* output);
 
 private:
 	std::string _name;
