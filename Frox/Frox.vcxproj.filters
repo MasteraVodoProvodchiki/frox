@@ -272,5 +272,8 @@
     <ClCompile Include="FrameInfoComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Private\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

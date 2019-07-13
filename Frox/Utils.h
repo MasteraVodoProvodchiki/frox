@@ -186,5 +186,7 @@ void Fill(ComputeFramePtr frame, CallbackT callback)
 	}
 }
 
+FROX_API void Copy(ComputeFramePtr src, ComputeFramePtr dst);
+
 } // End utils
 } // End frox
