@@ -20,12 +20,6 @@ void RealSenseModule::ShutdownModule()
 	ReleaseContext();
 }
 
-RealSenseModule& RealSenseModule::Get()
-{
-	static RealSenseModule realSenseModule;
-	return realSenseModule;
-}
-
 void RealSenseModule::InitContext()
 {
 	rs2::error_ref e;

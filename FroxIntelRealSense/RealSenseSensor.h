@@ -8,9 +8,8 @@ namespace frox {
 using RealSenseSensorPtr = std::shared_ptr<class RealSenseSensor>;
 class RealSenseSensor : std::enable_shared_from_this<RealSenseSensor>
 {
+public:
 	RealSenseSensor(struct rs2_sensor* rsSensor);
-
-public:	
 	virtual ~RealSenseSensor();
 
 	static RealSenseSensorPtr Create(struct rs2_sensor* rsSensor)

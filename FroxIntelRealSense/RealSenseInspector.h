@@ -9,12 +9,17 @@ namespace frox {
 
 class RealSenseDevice;
 
+using RealSenseInspectorPtr = std::shared_ptr<class RealSenseInspector>;
 class RealSenseInspector : public SensorInspector
 {
+public:
 	RealSenseInspector(RealSenseDevice* device);
-
-public:	
 	virtual ~RealSenseInspector();
+
+	static RealSenseInspectorPtr Create(RealSenseDevice* device)
+	{
+		return std::make_shared<RealSenseInspector>(device);
+	}
 
 	// FDepthSensor overrides
 	virtual bool Start();
