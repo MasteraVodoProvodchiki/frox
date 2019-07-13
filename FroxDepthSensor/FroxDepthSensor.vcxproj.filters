@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Public">
+      <UniqueIdentifier>{d471ee94-5f97-4479-ba5a-065447327458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private">
+      <UniqueIdentifier>{1c06084a-69c3-4330-b40d-c24ddac193ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\MOC">
+      <UniqueIdentifier>{5f427ad5-2cc9-4a70-8e6d-e841edfea4fe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DepthSensorModule.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="SensorInspector.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthSensorModuleImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="MOCSensorInspector.h">
+      <Filter>Private\MOC</Filter>
+    </ClInclude>
+    <ClInclude Include="SensorFrameNode.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DepthSensorModule.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthSensorModuleImpl.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="MOCSensorInspector.cpp">
+      <Filter>Private\MOC</Filter>
+    </ClCompile>
+    <ClCompile Include="SensorFrameNode.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
