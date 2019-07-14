@@ -137,6 +137,10 @@
   <ItemGroup>
     <ClInclude Include="DepthSensorModule.h" />
     <ClInclude Include="DepthSensorModuleImpl.h" />
+    <ClInclude Include="MOCSensorDevice.h" />
+    <ClInclude Include="MOCSensorDeviceManager.h" />
+    <ClInclude Include="SensorDevice.h" />
+    <ClInclude Include="SensorDeviceManager.h" />
     <ClInclude Include="SensorFrameNode.h" />
     <ClInclude Include="MOCSensorInspector.h" />
     <ClInclude Include="SensorInspector.h" />
@@ -145,6 +149,10 @@
   <ItemGroup>
     <ClCompile Include="DepthSensorModule.cpp" />
     <ClCompile Include="DepthSensorModuleImpl.cpp" />
+    <ClCompile Include="MOCSensorDevice.cpp" />
+    <ClCompile Include="MOCSensorDeviceManager.cpp" />
+    <ClCompile Include="SensorDevice.cpp" />
+    <ClCompile Include="SensorDeviceManager.cpp" />
     <ClCompile Include="SensorFrameNode.cpp" />
     <ClCompile Include="MOCSensorInspector.cpp" />
   </ItemGroup>

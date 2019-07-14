@@ -11,3 +11,5 @@
 #else
 #define FROXDS_API
 #endif
+
+#include <memory>

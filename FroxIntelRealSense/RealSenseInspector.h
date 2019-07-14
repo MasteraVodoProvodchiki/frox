@@ -2,23 +2,22 @@
 
 #include <SensorInspector.h>
 
+#include "RealSenseDevice.h"
 #include "RealSenseNative.h"
 #include "RealSenseTypes.h"
 
 namespace frox {
 
-class RealSenseDevice;
-
 using RealSenseInspectorPtr = std::shared_ptr<class RealSenseInspector>;
 class RealSenseInspector : public SensorInspector
 {
 public:
-	RealSenseInspector(RealSenseDevice* device);
+	RealSenseInspector(RealSenseDevicePtr device, EInspectorType type);
 	virtual ~RealSenseInspector();
 
-	static RealSenseInspectorPtr Create(RealSenseDevice* device)
+	static RealSenseInspectorPtr Create(RealSenseDevicePtr device, EInspectorType type)
 	{
-		return std::make_shared<RealSenseInspector>(device);
+		return std::make_shared<RealSenseInspector>(device, type);
 	}
 
 	// FDepthSensor overrides
@@ -61,9 +60,11 @@ private:
 	void ProcessFrameset(rs2::frameset* frameset) const;
 	void ReadDepth(rs2::frameset* frameset) const;
 	void ReadColor(rs2::frameset* frameset) const;
+	void ReadInfrared(rs2::frameset* frameset) const;
 
 protected:
-	RealSenseDevice* _device; // use weak_ptr
+	RealSenseDevicePtr _device; // use weak_ptr
+	EInspectorType _type;
 
 	// Depth reader
 	std::unique_ptr<class rs2::pipeline> _rsPipeline;
@@ -73,10 +74,7 @@ protected:
 	std::unique_ptr<class rs2::pointcloud> _rsPointCloud;
 	std::unique_ptr<class rs2::points> _rsPoints;
 
-	//
 	ComputeFramePtr _frame;
-	Size _resoluation;
-	uint32_t _pixelSize;
 
 private:
 	RealSenseStreamProfile _currenProfile;

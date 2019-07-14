@@ -1,4 +1,6 @@
 #include "SensorFrameNode.h"
+#include "DepthSensorModule.h"
+#include "SensorDevice.h"
 
 #include <ComputeTask.h>
 #include <ComputeTaskHelper.h>
@@ -12,6 +14,27 @@ FROX_COMPUTENODE_IMPL(SensorFrameNode)
 FROX_COMPUTENODE_IMPL(SensorDepthFrameNode)
 FROX_COMPUTENODE_IMPL(SensorColorFrameNode)
 FROX_COMPUTENODE_IMPL(SensorInfraredFrameNode)
+
+namespace utils {
+
+EInspectorType SensorFrameTypeToInspectorType(ESensorFrameType type)
+{
+	switch (type)
+	{
+	case ESensorFrameType::Depth:
+		return EInspectorType::Depth;
+	case ESensorFrameType::Color:
+		return EInspectorType::Color;
+	case ESensorFrameType::Infrared:
+		return EInspectorType::Infrared;
+	default:
+		assert(false);
+	}
+
+	return EInspectorType::Depth;
+}
+
+} // End utils
 
 SensorFrameNode::SensorFrameNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
@@ -34,7 +57,21 @@ bool SensorFrameNode::IsValid() const
 
 ComputeTask* SensorFrameNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// TODO. Save in PrivateData
+	if (!_sensorInspector)
+	{
+		SensorDevice* device = !_sensorSerial.empty() ?
+			IDepthSensorModule::Get().FindDevice(_sensorSerial.data()) :
+			IDepthSensorModule::Get().GetDefaultDevice();
+
+		if (device != nullptr)
+		{
+			_sensorInspector = device->CreateInpector(utils::SensorFrameTypeToInspectorType(_sensorFrameType));
+		}		
+	}
+
 	auto sensorInspector = _sensorInspector; // How by _sensorSerial and _sensorFrameType ?
+
 	auto output = _output.GetValue(outputData);
 	return
 		ComputeTaskHelper::UnPackProps(sensorInspector)

@@ -5,7 +5,7 @@
 namespace frox {
 
 using SensorInspectorPtr = std::shared_ptr<class SensorInspector>;
-class SensorInspector : std::enable_shared_from_this<SensorInspector>
+class SensorInspector : public std::enable_shared_from_this<SensorInspector>
 {
 public:
 	virtual bool IsValid() const = 0;

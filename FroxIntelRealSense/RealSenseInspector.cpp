@@ -3,16 +3,20 @@
 #include "RealSenseModule.h"
 
 #include <Log.h>
+#include <Frox.h>
 
 namespace frox {
 
-RealSenseInspector::RealSenseInspector(RealSenseDevice* device)
+RealSenseInspector::RealSenseInspector(RealSenseDevicePtr device, EInspectorType type)
 	: _device(device)
+	, _type(type)
 	, _bStartedFlag(false)
 {}
 
 RealSenseInspector::~RealSenseInspector()
-{}
+{
+	Stop();
+}
 
 bool RealSenseInspector::Start()
 {
@@ -23,51 +27,58 @@ bool RealSenseInspector::Start()
 			throw std::runtime_error("Already started");
 		}
 
-		rs2::context_ref rsContext(RealSenseModule::Get().GetHandle());
+		rs2::context_ref rsContext(IRealSenseModule::Get().GetHandle());
 		rs2::config rsConfig;
 
 		rsConfig.enable_device(_device->GetSerial());
 
-		/*
-		// Depth
-		RealSenseStreamMode depthConfig;
-		EnsureProfileSupported(ERealSenseStreamType::STREAM_DEPTH, ERealSenseFormatType::FORMAT_Z16, depthConfig);
-		FindProfile(ERealSenseStreamType::STREAM_DEPTH, ERealSenseFormatType::FORMAT_Z16, depthConfig, _currenProfile);
+		ERealSenseStreamType type;
+		ERealSenseFormatType format;
+		rs2_stream rs2StreamType;
+		rs2_format rs2Format;
+		EComputeFrameType frameType;
+		uint32_t frameChannels;
 
-		rsConfig.enable_stream(RS2_STREAM_DEPTH, depthConfig.Width, depthConfig.Height, RS2_FORMAT_Z16, depthConfig.Rate);
-		// RsAlign.Reset(new rs2::align(RS2_STREAM_COLOR));
-		_depthResoluation = Vector2i(depthConfig.Width, depthConfig.Height);
-		_depthPixelSize = sizeof(ushort);
+		switch (_type)
+		{
+		case EInspectorType::Depth:
+			type = ERealSenseStreamType::STREAM_DEPTH;
+			format = ERealSenseFormatType::FORMAT_Z16;
+			rs2StreamType = RS2_STREAM_DEPTH;
+			rs2Format = RS2_FORMAT_Z16;
+			frameType = EComputeFrameType::ECFT_UInt16;
+			frameChannels = 1;
+			break;
+		case EInspectorType::Color:
+			type = ERealSenseStreamType::STREAM_COLOR;
+			format = ERealSenseFormatType::FORMAT_RGBA8;
+			rs2StreamType = RS2_STREAM_COLOR;
+			rs2Format = RS2_FORMAT_RGBA8;
+			frameChannels = 4;
+			break;
+		case EInspectorType::Infrared:
+			type = ERealSenseStreamType::STREAM_INFRARED;
+			format = ERealSenseFormatType::FORMAT_Y8;
+			rs2StreamType = RS2_STREAM_INFRARED;
+			rs2Format = RS2_FORMAT_Y8;
+			frameChannels = 1;
+			break;
+		default:
+			throw std::runtime_error("Unkown type");
+		}
 
-		_depthFrame = new Frame("Sensor0Depth");
-		_depthFrame->Create(_depthResoluation.x, _depthResoluation.y, DataType<ushort>::type);
+		RealSenseStreamMode config;
+		EnsureProfileSupported(type, format, config);
+		FindProfile(type, format, config, _currenProfile);
+
+		rsConfig.enable_stream(rs2StreamType, config.Width, config.Height, rs2Format, config.Rate);
+
+		_frame = FroxInstance()->CreateComputeFrame(Size{ uint32_t(config.Width), uint32_t(config.Height) }, ComputeFrameType{ frameType, frameChannels });
+
+		// _rsPointCloud.reset(new rs2::pointcloud());
+		// _rsPoints.reset(new rs2::points());
 
 
-		// Color
-		FRealSenseStreamMode colorConfig;
-		EnsureProfileSupported(ERealSenseStreamType::STREAM_COLOR, ERealSenseFormatType::FORMAT_RGBA8, colorConfig);
-		FindProfile(ERealSenseStreamType::STREAM_COLOR, ERealSenseFormatType::FORMAT_RGBA8, colorConfig, _colorProfile);
-
-		rsConfig.enable_stream(RS2_STREAM_COLOR, colorConfig.Width, colorConfig.Height, RS2_FORMAT_RGBA8, colorConfig.Rate);
-
-		_colorResoluation = Vector2i(colorConfig.Width, colorConfig.Height);
-
-		_colorFrame = new Frame("Sensor0Color");
-		_colorFrame->Create(_colorResoluation.x, _colorResoluation.y, CV_8UC4);
-		// _colorYuvData = Mat(ColorConfigHeight + ColorConfigHeight / 2, ColorConfigWidth, CV_8UC1);
-
-		// _colorMapToCamera.resize(ColorConfigHeight * ColorConfigHeight);
-
-
-		// Infrared
-		// rsConfig.enable_stream(RS2_STREAM_INFRARED, InfraredConfig.Width, InfraredConfig.Height, RS2_FORMAT_Y8, InfraredConfig.Rate);
-		*/
-		//
-		_rsPointCloud.reset(new rs2::pointcloud());
-		_rsPoints.reset(new rs2::points());
-
-
-		//
 		_rsPipeline.reset(new rs2::pipeline());
 		rs2::pipeline_profile rsProfile = _rsPipeline->start(rsConfig);
 
@@ -76,17 +87,19 @@ bool RealSenseInspector::Start()
 	catch (const rs2::error& ex)
 	{
 		Log::Error(
-			"RealSenseSensor::Start exception : {0}(FUNC {1}; ARGS {2}; TYPE {3}",
-			ex.what(),
-			ex.get_failed_function(),
-			ex.get_failed_args(),
-			ex.get_type()
+			"RealSenseSensor::Start exception : {0}(FUNC {1}; ARGS {2}; TYPE {3}"
+			//,
+			//ex.what(),
+			//ex.get_failed_function(),
+			//ex.get_failed_args(),
+			//ex.get_type()
 		);
 		_bStartedFlag = false;
 	}
 	catch (const std::exception& ex)
 	{
-		Log::Error("RealSenseSensor::Start exception : {0}", ex.what());
+		Log::Error("RealSenseSensor::Start exception : {0}");
+		// Log::Error("RealSenseSensor::Start exception : {0}", ex.what());
 		_bStartedFlag = false;
 	}
 
@@ -190,8 +203,20 @@ void RealSenseInspector::EnsureProfileSupported(ERealSenseStreamType streamType,
 
 void RealSenseInspector::ProcessFrameset(rs2::frameset* frameset) const
 {
-	ReadDepth(frameset);
-	ReadColor(frameset);
+	switch (_type)
+	{
+	case EInspectorType::Depth:
+		ReadDepth(frameset);
+		break;
+	case EInspectorType::Color:
+		ReadColor(frameset);
+		break;
+	case EInspectorType::Infrared:
+		ReadInfrared(frameset);
+		break;
+	default:
+		break;
+	}
 }
 
 void RealSenseInspector::ReadDepth(rs2::frameset* frameset) const
@@ -199,32 +224,28 @@ void RealSenseInspector::ReadDepth(rs2::frameset* frameset) const
 	rs2::depth_frame depthFrame = frameset->get_depth_frame();
 	//(bAlignDepthToColor && RsAlign.Get()) ? RsAlign->process(*Frameset).get_depth_frame() : Frameset->get_depth_frame();
 
-	/*
 	// Get info
 	const auto fw = depthFrame.get_width();
 	const auto fh = depthFrame.get_height();
 	const auto fbpp = depthFrame.get_bytes_per_pixel();
 	const auto fs = depthFrame.get_stride_in_bytes();
 
-	if (_depthResoluation.X != fw || _depthResoluation.Y != fh || sizeof(ushort) != fbpp)
-	{
-		Log::Error("Invalid video_frame: {0} Width={1} Height={2} Bpp={3}", "DepthFrame", fw, fh, fbpp);
-		return;
-	}
+	Size size = _frame->GetSize();
+	// assert(size == Size{ fw, fh});
 
+	uint32_t elementSize = _frame->GetElementSize();
+	assert(elementSize == fbpp);
 
-	// Copy
-	FrameGuard guard(_depthFrame);
-	auto dst = guard.AsByte();
 	const uint8_t* src = (const uint8_t*)depthFrame.get_data();
 
 	for (int y = 0; y < fh; ++y)
 	{
+		void* dst = _frame->GetRowData(y);
 		memcpy(dst, src, fw * fbpp);
-		dst += (fw * fbpp);
+		// dst += (fw * fbpp);
 		src += fs;
 	}
-
+	/*
 	if (_rsPointCloud.get())
 	{
 		*_rsPoints = _rsPointCloud->calculate(depthFrame);
@@ -236,33 +257,56 @@ void RealSenseInspector::ReadColor(rs2::frameset* frameset) const
 {
 	rs2::video_frame colorFrame = frameset->get_color_frame();
 
-	/*
 	const auto fw = colorFrame.get_width();
 	const auto fh = colorFrame.get_height();
 	const auto fbpp = colorFrame.get_bytes_per_pixel();
 	const auto fs = colorFrame.get_stride_in_bytes();
 
-	if (_colorResoluation.X != fw || _colorResoluation.Y != fh) // || sizeof() != fbpp)
-	{
-		Log::Error("Invalid video_frame: {0} Width={1} Height={2} Bpp={3}", "DepthFrame", fw, fh, fbpp);
-		return;
-	}
-
-
 	// Copy
-	FrameGuard guard(_colorFrame);
-	auto dst = guard.AsByte();
+	Size size = _frame->GetSize();
+	// assert(size == Size{ fw, fh});
+
+	uint32_t elementSize = _frame->GetElementSize();
+	// assert(elementSize == fbpp);
+
 	const uint8_t* src = (const uint8_t*)colorFrame.get_data();
 
 	for (int y = 0; y < fh; ++y)
 	{
+		void* dst = _frame->GetRowData(y);
 		memcpy(dst, src, fw * fbpp);
-		dst += (fw * fbpp);
+		// dst += (fw * fbpp);
 		src += fs;
 	}
 
 	// RsPointCloud->map_to(ColorFrame);
-	*/
+}
+
+void RealSenseInspector::ReadInfrared(rs2::frameset* frameset) const
+{
+	rs2::video_frame infraredFrame = frameset->get_infrared_frame();
+
+	const auto fw = infraredFrame.get_width();
+	const auto fh = infraredFrame.get_height();
+	const auto fbpp = infraredFrame.get_bytes_per_pixel();
+	const auto fs = infraredFrame.get_stride_in_bytes();
+
+	// Copy
+	Size size = _frame->GetSize();
+	// assert(size == Size{ fw, fh});
+
+	uint32_t elementSize = _frame->GetElementSize();
+	// assert(elementSize == fbpp);
+
+	const uint8_t* src = (const uint8_t*)infraredFrame.get_data();
+
+	for (int y = 0; y < fh; ++y)
+	{
+		void* dst = _frame->GetRowData(y);
+		memcpy(dst, src, fw * fbpp);
+		// dst += (fw * fbpp);
+		src += fs;
+	}
 }
 
 /*

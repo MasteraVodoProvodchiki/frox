@@ -1,4 +1,5 @@
 #include "RealSenseDevice.h"
+#include "RealSenseInspector.h"
 #include <librealsense2/rs_advanced_mode.hpp>
 
 namespace frox {
@@ -9,11 +10,20 @@ RealSenseDevice::RealSenseDevice(rs2_device* rsDevice)
 
 RealSenseDevice::~RealSenseDevice()
 {
+	_sensors.clear();
+
 	// close the Kinect Sensor
 	if (_rsDevice != nullptr)
 	{
 		rs2_delete_device(_rsDevice);
 	}
+}
+
+SensorInspectorPtr RealSenseDevice::CreateInpector(EInspectorType type)
+{
+	auto inspector = RealSenseInspector::Create(this->GetPtr(), type);
+	inspector->Start();
+	return inspector;
 }
 
 void RealSenseDevice::QueryData()

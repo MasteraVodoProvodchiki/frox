@@ -24,6 +24,9 @@
     <ClCompile Include="RealSenseModuleImpl.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="RealSenseDeviceManager.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shared.h">
@@ -48,6 +51,9 @@
       <Filter>Private</Filter>
     </ClInclude>
     <ClInclude Include="RealSenseModule.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="RealSenseDeviceManager.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

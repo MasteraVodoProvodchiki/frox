@@ -10,6 +10,9 @@
     <Filter Include="Private\MOC">
       <UniqueIdentifier>{5f427ad5-2cc9-4a70-8e6d-e841edfea4fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Public\MOC">
+      <UniqueIdentifier>{80782f7a-5b4e-4e16-89ee-effc14be2003}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DepthSensorModule.h">
@@ -24,11 +27,23 @@
     <ClInclude Include="DepthSensorModuleImpl.h">
       <Filter>Private</Filter>
     </ClInclude>
-    <ClInclude Include="MOCSensorInspector.h">
-      <Filter>Private\MOC</Filter>
-    </ClInclude>
     <ClInclude Include="SensorFrameNode.h">
       <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="SensorDevice.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="SensorDeviceManager.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="MOCSensorInspector.h">
+      <Filter>Public\MOC</Filter>
+    </ClInclude>
+    <ClInclude Include="MOCSensorDeviceManager.h">
+      <Filter>Public\MOC</Filter>
+    </ClInclude>
+    <ClInclude Include="MOCSensorDevice.h">
+      <Filter>Public\MOC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +58,18 @@
     </ClCompile>
     <ClCompile Include="SensorFrameNode.cpp">
       <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="SensorDevice.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="MOCSensorDevice.cpp">
+      <Filter>Private\MOC</Filter>
+    </ClCompile>
+    <ClCompile Include="SensorDeviceManager.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="MOCSensorDeviceManager.cpp">
+      <Filter>Private\MOC</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

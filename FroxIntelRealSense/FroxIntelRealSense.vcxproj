@@ -88,6 +88,8 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -99,6 +101,10 @@
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FROXIRS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -109,6 +115,10 @@
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FROXIRS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -124,10 +134,13 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="RealSenseDevice.cpp" />
+    <ClCompile Include="RealSenseDeviceManager.cpp" />
     <ClCompile Include="RealSenseInspector.cpp" />
     <ClCompile Include="RealSenseModule.cpp" />
     <ClCompile Include="RealSenseModuleImpl.cpp" />
@@ -135,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RealSenseDevice.h" />
+    <ClInclude Include="RealSenseDeviceManager.h" />
     <ClInclude Include="RealSenseInspector.h" />
     <ClInclude Include="RealSenseModule.h" />
     <ClInclude Include="RealSenseModuleImpl.h" />
