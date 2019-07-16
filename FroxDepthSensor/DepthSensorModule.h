@@ -9,6 +9,9 @@ class IDepthSensorModule
 public:
 	FROXDS_API static IDepthSensorModule& Get();
 
+	virtual void InitialiseModule() = 0;
+	virtual void ShutdownModule() = 0;
+
 	virtual void RegisterDeviceManager(class SensorDeviceManager* deviceManager) = 0;
 	virtual void UnRegisterDeviceManager(class SensorDeviceManager* deviceManager) = 0;
 	virtual uint32_t GetNumDevices() const = 0;

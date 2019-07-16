@@ -8,6 +8,12 @@ namespace frox {
 DepthSensorModule::DepthSensorModule()
 {}
 
+void DepthSensorModule::InitialiseModule()
+{}
+
+void DepthSensorModule::ShutdownModule()
+{}
+
 void DepthSensorModule::RegisterDeviceManager(SensorDeviceManager* deviceManager)
 {
 	_managers.push_back(deviceManager);

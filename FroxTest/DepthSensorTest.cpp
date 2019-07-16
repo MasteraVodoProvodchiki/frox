@@ -73,9 +73,11 @@ bool sensorRealSenseTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData&
 
 void Tests::DepthSensorTest()
 {
-	IDepthSensorModule::Get();
+	IDepthSensorModule::Get().InitialiseModule();
 
 	using namespace std::placeholders;
 	test("SensorFrame", std::bind(&sensorFrameTest0, _1, _2, _3, _4));
 	test("RealSense", std::bind(&sensorRealSenseTest0, _1, _2, _3, _4));
+
+	IDepthSensorModule::Get().ShutdownModule();
 }

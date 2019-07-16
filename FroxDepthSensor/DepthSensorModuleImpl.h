@@ -12,6 +12,8 @@ public:
 	DepthSensorModule();
 
 	// IDepthSensorModule overrides
+	virtual void InitialiseModule() override;
+	virtual void ShutdownModule() override;
 	virtual void RegisterDeviceManager(SensorDeviceManager* deviceManager) override;
 	virtual void UnRegisterDeviceManager(SensorDeviceManager* deviceManager) override;
 	virtual uint32_t GetNumDevices() const override;
