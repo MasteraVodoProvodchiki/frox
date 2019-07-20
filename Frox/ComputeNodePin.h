@@ -57,8 +57,8 @@ struct Pin
 	std::string Name;
 	Guid Id;
 
-	Pin(const char* name);
-	virtual ~Pin();
+	FROX_API Pin(const char* name);
+	FROX_API virtual ~Pin();
 
 	virtual void ConnectFrom(Pin* pin) = 0;
 	virtual void ConnectFrom(Guid id) = 0;
