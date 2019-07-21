@@ -162,6 +162,12 @@
     <ClInclude Include="FrameInfoComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="OpenCV.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenCVComputeFrameImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -274,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Private\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenCVComputeFrameImpl.cpp">
+      <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
