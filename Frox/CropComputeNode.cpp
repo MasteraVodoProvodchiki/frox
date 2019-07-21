@@ -4,6 +4,10 @@
 #include "Frox.h"
 #include "Utils.h"
 
+#ifndef WITHOUT_OPENCV
+#include "OpenCVComputeFrameImpl.h"
+#endif
+
 #include <assert.h>
 #include <algorithm>
 
@@ -11,6 +15,22 @@ namespace frox {
 
 namespace functions {
 
+#ifndef WITHOUT_OPENCV
+void Crop(ComputeFramePtr input, ComputeFramePtr output, Rect rect)
+{
+	assert(input->GetType() == output->GetType());
+	assert(output->IsOpencv());
+
+	// Get cv::Mat
+	OpenCVComputeFrameImpl* cvInput = reinterpret_cast<OpenCVComputeFrameImpl*>(input.get());
+	OpenCVComputeFrameImpl* cvOuput = reinterpret_cast<OpenCVComputeFrameImpl*>(output.get());
+	cv::Mat inputMat = cvInput->GetMat();
+	cv::Mat outputMat = cvOuput->GetMat();
+
+	// Crop
+	inputMat(cv::Rect(rect.X, rect.Y, rect.Width, rect.Height)).copyTo(outputMat);
+}
+#else
 void Crop(ComputeFramePtr input, ComputeFramePtr output, Rect rect)
 {
 	uint32_t inColumn = rect.X;
@@ -28,6 +48,7 @@ void Crop(ComputeFramePtr input, ComputeFramePtr output, Rect rect)
 		memcpy(dstRowData, srcRowData + inColumn * elementSize, width * elementSize);
 	}
 }
+#endif // WITHOUT_OPENCV
 
 } // End functins
 
@@ -39,7 +60,6 @@ CropComputeNode::CropComputeNode(const ComputeNodeInitializer& initializer)
 	, _offset("offset", Point{ 0, 0 })
 	, _size("size", Size{ 0, 0 })
 	, _output("output")
-	
 {}
 
 CropComputeNode::~CropComputeNode()
@@ -60,11 +80,13 @@ bool CropComputeNode::IsValid() const
 
 ComputeTask* CropComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Preapre inputs/output
 	auto input = _input.GetValue(inputData);
 	auto offset = _offset.GetValue(inputData);
 	auto size = _size.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 
+	// Make task
 	return
 		ComputeTaskHelper::UnPackProps(input, offset, size)
 		// .Validate
@@ -93,28 +115,6 @@ ComputeTask* CropComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowD
 				);	
 			}
 		);
-	/*
-	return ComputeTaskHelper::Make([input, output, rect]() {
-		ComputeFramePtr inputFrame = *input;
-		Rect rectValue = *rect;
-
-		Size inputSize = inputFrame->GetSize();
-
-		// min W/H
-		int32_t width = std::min(rectValue.Width, int32_t(inputSize.Width) - rectValue.X);
-		int32_t height = std::min(rectValue.Heihgt, int32_t(inputSize.Height) - rectValue.Y);
-
-		Size outputSize = Size{ uint32_t(width), uint32_t(height) };
-
-		output.SetValue(
-			outputSize,
-			inputFrame->GetType(),
-			[inputFrame, rectValue](ComputeFramePtr outputFrame) {
-				functions::Crop(inputFrame, outputFrame, rectValue);
-			}
-		);		
-	});
-	*/
 }
 
 void CropComputeNode::SetOffset(Point offset)
