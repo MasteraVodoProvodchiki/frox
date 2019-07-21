@@ -6,6 +6,7 @@
 #include <MakeFrameComputeNode.h>
 #include <ConvertToComputeNode.h>
 #include <CropComputeNode.h>
+#include <ResizeComputeNode.h>
 #include <FrameInfoComputeNode.h>
 
 using namespace frox;
@@ -50,6 +51,7 @@ bool simpleTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData
 	inputData.SetInputScalar("B", 2.f);
 	inputData.SetInputScalar("C", 3.f);
 
+	// Connect
 	auto A = flow.CreateEntry("A");
 	auto B = flow.CreateEntry("B");
 	auto C = flow.CreateEntry("C");
@@ -58,6 +60,7 @@ bool simpleTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData
 	flow.ConnectEntry(C, mul, 1);
 	flow.ConnectOutput(flow.CreateOutput("out"), mul);
 
+	// Run
 	return runFlow(
 		flow,
 		performer,
@@ -69,16 +72,17 @@ bool simpleTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData
 
 bool multiTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height)
 {
+	// Create nodes
 	auto avg = flow.CreateNode<AvgComputeNode>("Avg");
 	auto add = flow.CreateNode<AddComputeNode>("Add");
 	auto make = flow.CreateNode<MakeFrameComputeNode>("Make");
-	// Create nodes
-	
+
 	make->SetWidth(width);
 	make->SetHeight(height);
 	make->SetType(EComputeFrameType::ECFT_Float);
 	make->SetValue(1.f);
 
+	// Connect
 	flow.ConnectNodes(make, add, 0);
 	flow.ConnectNodes(make, add, 1);
 	flow.ConnectNodes(add, avg, 0);
@@ -96,6 +100,7 @@ bool multiTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData,
 	add->SetInput(1, B);
 	*/
 	
+	// Run
 	return runFlow(
 		flow,
 		performer,
@@ -113,9 +118,10 @@ bool noiseTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData
 	make->SetHeight(height);
 	make->SetType(EComputeFrameType::ECFT_Float);
 
+	// Connect
 	flow.ConnectOutput(flow.CreateOutput("out"), make);
 
-
+	// RUn
 	return runFlow(
 		flow,
 		performer,
@@ -138,9 +144,11 @@ bool convertToTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& input
 	convertTo->SetAlpha(80.0);
 	convertTo->SetBeta(20.0);
 
+	// Connect
 	flow.ConnectNodes(make, convertTo);
 	flow.ConnectOutput(flow.CreateOutput("out"), convertTo);
 
+	// Run
 	return runFlow(
 		flow,
 		performer,
@@ -168,15 +176,48 @@ bool cropTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData,
 	crop->SetOffset(Point{ 4, 4 });
 	crop->SetSize(Size{ cropWidth, cropHeight });
 
+	// Connect
 	flow.ConnectNodes(make, crop);
 	flow.ConnectOutput(flow.CreateOutput("out"), crop);
 
+	// Run
 	return runFlow(
 		flow,
 		performer,
 		inputData,
 		ouputData,
 		std::bind(&checkSum<uint32_t>, std::placeholders::_1, cropWidth * cropHeight * 1)
+	);
+}
+
+bool resizeTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height)
+{
+	assert(width >= 16 && height >= 16);
+
+	// Create nodes
+	auto make = flow.CreateNode<MakeFrameComputeNode>("Make");
+	make->SetWidth(width);
+	make->SetHeight(height);
+	make->SetType(EComputeFrameType::ECFT_UInt16);
+	make->SetValue(1);
+
+	auto resize = flow.CreateNode<ResizeComputeNode>("Resize");
+	uint32_t resizeWidth = width / 2;
+	uint32_t resizeHeight = height / 2;
+
+	resize->SetSize(Size{ resizeWidth, resizeHeight });
+
+	// Connect
+	flow.ConnectNodes(make, resize);
+	flow.ConnectOutput(flow.CreateOutput("out"), resize);
+
+	// Run
+	return runFlow(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		std::bind(&checkSum<uint16_t>, std::placeholders::_1, resizeWidth * resizeHeight * 1)
 	);
 }
 
@@ -211,6 +252,7 @@ bool dynamicInputPropsTest0(ComputeFlow& flow, FlowPerformer& performer, FlowDat
 
 	make->SetType(EComputeFrameType::ECFT_UInt32);
 
+	// Connect
 	flow.CreateEntry("width", EPinValueType::Value);
 	flow.CreateEntry("height", EPinValueType::Value);
 
@@ -219,6 +261,7 @@ bool dynamicInputPropsTest0(ComputeFlow& flow, FlowPerformer& performer, FlowDat
 
 	flow.ConnectOutput(flow.CreateOutput("out"), make);
 
+	// Run
 	return runFlow(
 		flow,
 		performer,
@@ -250,11 +293,13 @@ bool frameSizeTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& input
 
 	auto crop = flow.CreateNode<CropComputeNode>("Crop");
 	
+	// Connect
 	flow.ConnectNodes(makeBig, crop);
 	flow.ConnectNodes(frameSize, crop, crop->FindInputByName("size"));
 
 	flow.ConnectOutput(flow.CreateOutput("out"), crop);
 
+	// Run
 	return runFlow(
 		flow,
 		performer,
@@ -274,11 +319,13 @@ void Tests::MainTest()
 	test("Make Uint32", makeTestUInt32);
 	test("Make Float", makeTestFloat);
 
+	// Add Test for each type and multi channels
 	test("Simple", std::bind(&simpleTest, _1, _2, _3, _4));
 	test("Multi", std::bind(&multiTest, _1, _2, _3, _4, 64, 64));
 	test("Noise", std::bind(&noiseTest0, _1, _2, _3, _4, 64, 64));
 	test("ConvertTo", std::bind(&convertToTest0, _1, _2, _3, _4, 64, 64));
 	test("Crop", std::bind(&cropTest0, _1, _2, _3, _4, 64, 64));
+	test("Resize", std::bind(&resizeTest0, _1, _2, _3, _4, 64, 64));
 	test("Multi Channels", std::bind(&multiChannelsTest0, _1, _2, _3, _4, 64, 64));
 
 	test("Dynamic Input Props", std::bind(&dynamicInputPropsTest0, _1, _2, _3, _4, 64, 64));
