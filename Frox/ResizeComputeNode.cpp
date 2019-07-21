@@ -4,6 +4,10 @@
 #include "Frox.h"
 #include "Utils.h"
 
+#ifndef WITHOUT_OPENCV
+#include "OpenCVComputeFrameImpl.h"
+#endif
+
 #include <assert.h>
 #include <algorithm>
 
@@ -11,9 +15,46 @@ namespace frox {
 
 namespace functions {
 
+#ifndef WITHOUT_OPENCV
 void Resize(ComputeFramePtr input, ComputeFramePtr output)
 {
+	assert(input->IsOpencv() && output->IsOpencv());
+	assert(input->GetType() == output->GetType());
+
+	// Get cv::Mat
+	OpenCVComputeFrameImpl* cvInput = reinterpret_cast<OpenCVComputeFrameImpl*>(input.get());
+	OpenCVComputeFrameImpl* cvOuput = reinterpret_cast<OpenCVComputeFrameImpl*>(output.get());
+
+	cv::Mat inputMat = cvInput->GetMat();
+	cv::Mat outputMat = cvOuput->GetMat();
+
+	// Convert
+	// TODO. Add fx/fy and interpolation
+	EComputeFrameType type = input->GetType().Type;
+	switch (type)
+	{
+	case ECFT_Bool:
+	case ECFT_UInt8:
+	case ECFT_UInt16:
+	case ECFT_Float:
+		cv::resize(inputMat, outputMat, outputMat.size());
+		break;
+	case ECFT_UInt32:
+		cv::resize(inputMat, outputMat, outputMat.size(), 0, 0, cv::INTER_LINEAR_EXACT);
+		break;
+	default:
+		assert(false);
+		break;
+	}
+	
 }
+#else
+void Resize(ComputeFramePtr input, ComputeFramePtr output)
+{
+	// TODO. Add solution without opencv
+	assert(false);
+}
+#endif // WITHOUT_OPENCV
 
 } // End functions
 
@@ -43,10 +84,12 @@ bool ResizeComputeNode::IsValid() const
 
 ComputeTask* ResizeComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Prepare inputs/output
 	auto input = _input.GetValue(inputData);
 	auto size = _size.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 
+	// Make task
 	return
 		ComputeTaskHelper::UnPackProps(input, size)
 		// .Validate
@@ -58,7 +101,7 @@ ComputeTask* ResizeComputeNode::CreateComputeTask(FlowDataImplPtr inputData, Flo
 			},
 			[output](ComputeFramePtr input, Size size) {
 				output.SetValue(
-					input->GetSize(),
+					size,
 					input->GetType(),
 					[input](ComputeFramePtr output) {
 						functions::Resize(input, output);
@@ -66,21 +109,6 @@ ComputeTask* ResizeComputeNode::CreateComputeTask(FlowDataImplPtr inputData, Flo
 				);
 			}
 		);
-	/*
-	return ComputeTaskHelper::Make([input, output, size]() {
-		ComputeFramePtr inputFrame = *input;
-		Size sizeValue = *size;
-
-		output.SetValue(
-			sizeValue,
-			inputFrame->GetType(),
-			[inputFrame](ComputeFramePtr outputFrame) {
-				functions::Resize(inputFrame, outputFrame);
-			}
-		);	
-		
-	});
-	*/
 }
 
 void ResizeComputeNode::SetSize(Size size)
