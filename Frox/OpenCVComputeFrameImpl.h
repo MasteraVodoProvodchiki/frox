@@ -20,6 +20,7 @@ public:
 	}
 
 	// ComputeFrame overrides
+	virtual EClass GetClassType() const override;
 	virtual ComputeFrameType GetType() const override;
 	virtual uint32_t GetChannels() const override;
 	virtual uint32_t GetElementSize() const override;
@@ -31,6 +32,12 @@ public:
 	virtual void* GetData() override;
 	virtual void* GetRowData(uint32_t row) override;
 	virtual void* At(uint32_t row, uint32_t column) override;
+
+	// Inlines
+	cv::Mat GetMat() const
+	{
+		return _data;
+	}
 
 private:
 	ComputeFrameType _type;

@@ -48,6 +48,11 @@ OpenCVComputeFrameImpl::OpenCVComputeFrameImpl(Size size, ComputeFrameType typeD
 OpenCVComputeFrameImpl::~OpenCVComputeFrameImpl()
 {}
 
+ComputeFrame::EClass OpenCVComputeFrameImpl::GetClassType() const
+{
+	return Opencv;
+}
+
 ComputeFrameType OpenCVComputeFrameImpl::GetType() const
 {
 	return _type;
