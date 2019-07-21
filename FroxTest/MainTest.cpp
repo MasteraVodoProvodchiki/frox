@@ -36,6 +36,52 @@ auto makeTestUInt16 = std::bind(&makeTest<uint16_t>, std::placeholders::_1, std:
 auto makeTestUInt32 = std::bind(&makeTest<uint32_t>, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, 64, 64, EComputeFrameType::ECFT_UInt32, 126000);
 auto makeTestFloat = std::bind(&makeTest<float>, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, 64, 64, EComputeFrameType::ECFT_Float, 0.5f);
 
+bool binaryOperationTest(
+	ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData,
+	uint32_t width, uint32_t height, EComputeFrameType type,
+	OperationComputeNode::EType operationType, Variant v0, Variant v1, uint32_t result
+)
+{
+	// Create nodes	
+	inputData.SetFrame("A", makeFrame(width, height, type, v0));
+	inputData.SetFrame("B", makeFrame(width, height, type, v1));
+	OperationComputeNode* opNode = nullptr;
+	switch (operationType)
+	{
+	case OperationComputeNode::ET_Add:
+		opNode = flow.CreateNode<AddComputeNode>("Add");
+		break;
+	case OperationComputeNode::ET_Sub:
+		opNode = flow.CreateNode<SubComputeNode>("Sub");
+		break;
+	case OperationComputeNode::ET_Mul:
+		opNode = flow.CreateNode<MulComputeNode>("Mul");
+		break;
+	case OperationComputeNode::ET_Div:
+		opNode = flow.CreateNode<DivComputeNode>("Div");
+		break;
+	default:
+		assert(false);
+		break;
+	}
+
+	// Connect
+	auto A = flow.CreateEntry("A");
+	auto B = flow.CreateEntry("B");
+	flow.ConnectEntry(A, opNode, 0);
+	flow.ConnectEntry(B, opNode, 1);
+	flow.ConnectOutput(flow.CreateOutput("out"), opNode);
+
+	// Run
+	return runFlow(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		std::bind(&checkSumOne, std::placeholders::_1, width * height * result)
+	);
+}
+
 bool simpleTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData)
 {
 	// Create nodes
@@ -110,13 +156,13 @@ bool multiTest(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData,
 	);
 }
 
-bool noiseTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height)
+bool noiseTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height, EComputeFrameType type)
 {
 	// Create nodes
 	auto make = flow.CreateNode<MakeNoiseFrameComputeNode>("Make");
 	make->SetWidth(width);
 	make->SetHeight(height);
-	make->SetType(EComputeFrameType::ECFT_Float);
+	make->SetType(type);
 
 	// Connect
 	flow.ConnectOutput(flow.CreateOutput("out"), make);
@@ -127,7 +173,7 @@ bool noiseTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData
 		performer,
 		inputData,
 		ouputData,
-		std::bind(&checkRange<float>, std::placeholders::_1, 0.f, 1.f)
+		std::bind(&checkRangeAuto, std::placeholders::_1)
 	);
 }
 
@@ -158,7 +204,7 @@ bool convertToTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& input
 	);
 }
 
-bool cropTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height)
+bool cropTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData, uint32_t width, uint32_t height, EComputeFrameType type)
 {
 	assert(width >= 16 && height >= 16);
 
@@ -166,7 +212,7 @@ bool cropTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData,
 	auto make = flow.CreateNode<MakeFrameComputeNode>("Make");
 	make->SetWidth(width);
 	make->SetHeight(height);
-	make->SetType(EComputeFrameType::ECFT_UInt32);
+	make->SetType(type);
 	make->SetValue(1);
 
 	auto crop = flow.CreateNode<CropComputeNode>("Crop");
@@ -186,7 +232,7 @@ bool cropTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData,
 		performer,
 		inputData,
 		ouputData,
-		std::bind(&checkSum<uint32_t>, std::placeholders::_1, cropWidth * cropHeight * 1)
+		std::bind(&checkSumOne, std::placeholders::_1, cropWidth * cropHeight)
 	);
 }
 
@@ -217,7 +263,7 @@ bool resizeTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputDat
 		performer,
 		inputData,
 		ouputData,
-		std::bind(&checkSum<uint16_t>, std::placeholders::_1, resizeWidth * resizeHeight * 1)
+		std::bind(&checkSum<uint16_t, uint32_t>, std::placeholders::_1, resizeWidth * resizeHeight * 1)
 	);
 }
 
@@ -267,7 +313,7 @@ bool dynamicInputPropsTest0(ComputeFlow& flow, FlowPerformer& performer, FlowDat
 		performer,
 		inputData,
 		ouputData,
-		std::bind(&checkSum<uint32_t>, std::placeholders::_1, width * height * 1)
+		std::bind(&checkSum<uint32_t, uint32_t>, std::placeholders::_1, width * height * 1)
 	);
 }
 
@@ -305,10 +351,22 @@ bool frameSizeTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& input
 		performer,
 		inputData,
 		ouputData,
-		std::bind(&checkSum<uint32_t>, std::placeholders::_1, width * height * 1)
+		std::bind(&checkSum<uint32_t, uint32_t>, std::placeholders::_1, width * height * 1)
 	);
 }
 
+template<typename FunctionT>
+void testEachType(const char* name, FunctionT func)
+{
+	using namespace std::placeholders;
+
+	// type=1 - Ignore type none
+	for (uint8_t typeIndex = 1; typeIndex < ECFT_NumTypes; ++typeIndex)
+	{
+		EComputeFrameType type = EComputeFrameType(typeIndex);
+		test(name, std::bind(func, _1, _2, _3, _4, type));
+	}
+}
 
 void Tests::MainTest()
 {
@@ -320,11 +378,16 @@ void Tests::MainTest()
 	test("Make Float", makeTestFloat);
 
 	// Add Test for each type and multi channels
+	testEachType("Add", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Add, 1, 1, 2));
+	testEachType("Sub", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Sub, 2, 1, 1));
+	// testEachType("Mul", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Mul, 2, 2, 4));
+	testEachType("Div", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Div, 4, 2, 2));
+
 	test("Simple", std::bind(&simpleTest, _1, _2, _3, _4));
 	test("Multi", std::bind(&multiTest, _1, _2, _3, _4, 64, 64));
-	test("Noise", std::bind(&noiseTest0, _1, _2, _3, _4, 64, 64));
+	testEachType("Noise", std::bind(&noiseTest0, _1, _2, _3, _4, 64, 64, _5));
 	test("ConvertTo", std::bind(&convertToTest0, _1, _2, _3, _4, 64, 64));
-	test("Crop", std::bind(&cropTest0, _1, _2, _3, _4, 64, 64));
+	testEachType("Crop", std::bind(&cropTest0, _1, _2, _3, _4, 64, 64, _5));
 	test("Resize", std::bind(&resizeTest0, _1, _2, _3, _4, 64, 64));
 	test("Multi Channels", std::bind(&multiChannelsTest0, _1, _2, _3, _4, 64, 64));
 

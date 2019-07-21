@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shared.h"
+#include "ConsoleTextColor.h"
 
 #include <Utils.h>
 #include <Types.h>
@@ -8,6 +9,8 @@
 #include <ComputeFlow.h>
 #include <FlowPerformer.h>
 #include <FlowData.h>
+
+#include <chrono>
 
 template<typename FunctionT>
 void test(const char* name, FunctionT func)
@@ -25,14 +28,24 @@ void test(const char* name, FunctionT func)
 
 	std::cout << name << ": ";
 
+	// Time
+	auto startTime = std::chrono::high_resolution_clock::now();
+
+	// Test
 	bool result = func(*flow, *performer, *inputData, *ouputData);
+
+	auto finisTime = std::chrono::high_resolution_clock::now();
+	auto timeMks = std::chrono::duration_cast<std::chrono::microseconds>(finisTime - startTime).count();
+
 	if(!result)
 	{
-		std::cout << ": invalid" << std::endl;
+		ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundRed);
+		std::cout << ": test failed(" << timeMks << "mks)" << std::endl;
 	}
 	else
 	{
-		std::cout << ": success" << std::endl;
+		ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundGreen);
+		std::cout << ": test passed(" << timeMks << "mks)" << std::endl;
 	}
 
 	// Destroy Flow
@@ -100,10 +113,12 @@ bool checkRange(frox::ComputeFramePtr frame, T lo, T hi)
 	return min >= lo && max <= hi;
 }
 
-template<typename T>
-bool checkSum(frox::ComputeFramePtr frame, T expected)
+bool checkRangeAuto(frox::ComputeFramePtr frame);
+
+template<typename T, typename SumT>
+bool checkSum(frox::ComputeFramePtr frame, SumT expected)
 {
-	T sum = T(0);
+	SumT sum = SumT(0);
 	frox::utils::Foreach<T>(frame, [&sum](T value) {
 		sum += value;
 	});
@@ -114,3 +129,7 @@ bool checkSum(frox::ComputeFramePtr frame, T expected)
 
 	return equalValue(sum, expected);
 }
+
+bool checkSumOne(frox::ComputeFramePtr frame, uint32_t nbElements);
+
+frox::ComputeFramePtr makeFrame(uint32_t width, uint32_t height, frox::EComputeFrameType type, frox::Variant);
