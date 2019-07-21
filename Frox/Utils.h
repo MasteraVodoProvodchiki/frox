@@ -176,12 +176,17 @@ template <typename TypeT, typename CallbackT>
 void Fill(ComputeFramePtr frame, CallbackT callback)
 {
 	Size size = frame->GetSize();
+	uint32_t nbChannels = frame->GetChannels();
 	for (uint32_t row = 0; row < size.Height; ++row)
 	{
 		TypeT* values = frame->GetRowData<TypeT>(row);
 		for (uint32_t column = 0; column < size.Width; ++column)
 		{
-			values[column] = callback(values[column]);
+			uint32_t index = column * nbChannels;
+			for (uint32_t channel = 0; channel < nbChannels; ++channel)
+			{	
+				values[index + channel] = callback(values[column + channel]);
+			}
 		}
 	}
 }
