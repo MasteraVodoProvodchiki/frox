@@ -147,11 +147,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsoleTextColor.cpp" />
     <ClCompile Include="DepthSensorTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsoleTextColor.h" />
     <ClInclude Include="Shared.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Tests.h" />
