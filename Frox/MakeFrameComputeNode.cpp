@@ -4,6 +4,10 @@
 #include "Frox.h"
 #include "Utils.h"
 
+#ifndef WITHOUT_OPENCV
+#include "OpenCVComputeFrameImpl.h"
+#endif
+
 #include <assert.h>
 
 namespace frox {
@@ -50,10 +54,52 @@ struct RandomValue
 
 namespace functions {
 
+#ifndef WITHOUT_OPENCV
+void Fill(ComputeFramePtr output, Variant value)
+{
+	assert( output->IsOpencv());
+
+	// Get cv::Mat
+	OpenCVComputeFrameImpl* cvOuput = reinterpret_cast<OpenCVComputeFrameImpl*>(output.get());
+	cv::Mat outputMat = cvOuput->GetMat();
+
+	// Set
+	ComputeFrameType type = output->GetType();
+	switch (type.Type)
+	{
+	case ECFT_Bool: {
+		bool boolValue = value.To<bool>();
+		outputMat.setTo(cv::Scalar(boolValue, boolValue, boolValue, boolValue));
+		break;
+	}
+	case ECFT_UInt8: {
+		uint8_t intValue = value.To<uint8_t>();
+		outputMat.setTo(cv::Scalar(intValue, intValue, intValue, intValue));
+		break;
+	}
+	case ECFT_UInt16: {
+		uint16_t intValue = value.To<uint16_t>();
+		outputMat.setTo(cv::Scalar(intValue, intValue, intValue, intValue));
+		break;
+	}
+	case ECFT_UInt32: {
+		uint32_t intValue = value.To<uint32_t>();
+		outputMat.setTo(cv::Scalar(intValue, intValue, intValue, intValue));
+		break;
+	}
+	case ECFT_Float: {
+		float floatValue = value.To<float>();
+		outputMat.setTo(cv::Scalar(floatValue, floatValue, floatValue, floatValue));
+		break;
+	}
+	default:
+		break;
+	}
+}
+#else
 void Fill(ComputeFramePtr output, Variant value)
 {
 	ComputeFrameType type = output->GetType();
-	Size size = output->GetSize();
 	switch (type.Type)
 	{
 	case ECFT_Bool: {
@@ -85,12 +131,12 @@ void Fill(ComputeFramePtr output, Variant value)
 		break;
 	}
 }
+#endif // End WITHOUT_OPENCV
 
 template <typename CallbackT>
 void Fill(ComputeFramePtr output, CallbackT callback)
 {
 	ComputeFrameType type = output->GetType();
-	Size size = output->GetSize();
 	switch (type.Type)
 	{
 	case ECFT_Bool: {
@@ -116,6 +162,48 @@ void Fill(ComputeFramePtr output, CallbackT callback)
 	default:
 		break;
 	}
+}
+
+void FillRandom(ComputeFramePtr output)
+{
+#ifndef WITHOUT_OPENCV
+	assert(output->IsOpencv());
+
+	// Get cv::Mat
+	OpenCVComputeFrameImpl* cvOuput = reinterpret_cast<OpenCVComputeFrameImpl*>(output.get());
+
+	cv::Mat outputMat = cvOuput->GetMat();
+
+	ComputeFrameType type = output->GetType();
+	switch (type.Type)
+	{
+	case ECFT_Bool: {
+		cv::randu(outputMat, cv::Scalar(0), cv::Scalar(1 + 1));
+		break;
+	}
+	case ECFT_UInt8: {
+		cv::randu(outputMat, cv::Scalar(0), cv::Scalar(uint32_t(std::numeric_limits<uint8_t>::max()) + 1));
+		break;
+	}
+	case ECFT_UInt16: {
+		cv::randu(outputMat, cv::Scalar(0), cv::Scalar(uint32_t(std::numeric_limits<uint16_t>::max()) + 1));
+		break;
+	}
+	case ECFT_UInt32: {
+		cv::randu(outputMat, cv::Scalar(0), cv::Scalar(std::numeric_limits<uint32_t>::max()));
+		break;
+	}
+	case ECFT_Float: {
+		cv::randu(outputMat, cv::Scalar(0.f), cv::Scalar(1.f));
+		break;
+	}
+	default:
+		assert(false);
+		break;
+	}
+#else
+	functions::Fill(output, utils::RandomValue());
+#endif
 }
 
 } // End functions
@@ -178,6 +266,7 @@ bool MakeFrameComputeNode::IsValid() const
 
 ComputeTask* MakeFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Prepare inputs/ouput
 	Variant value = _value;
 
 	auto width = _width.GetValue(inputData);
@@ -186,6 +275,7 @@ ComputeTask* MakeFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, 
 	auto channels = _channels.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 	
+	// Make task
 	return
 		ComputeTaskHelper::UnPackProps(width, height, type, channels)
 		// .Validate
@@ -208,22 +298,6 @@ ComputeTask* MakeFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, 
 				);
 			}
 		);
-
-	/*
-	return ComputeTaskHelper::Make([width, height, type, channels, value, output]() {
-		uint32_t widthValue = *width;
-		uint32_t heightValue = *height;
-		uint32_t channelsValue = *channels;
-
-		output.SetValue(
-			Size{ widthValue, heightValue },
-			ComputeFrameType{ type, channelsValue },
-			[value](ComputeFramePtr output) {
-				functions::Fill(output, value);
-			}
-		);
-	});
-	*/
 }
 
 void MakeFrameComputeNode::SetValue(Variant value)
@@ -246,12 +320,14 @@ MakeNoiseFrameComputeNode::MakeNoiseFrameComputeNode(const ComputeNodeInitialize
 
 ComputeTask* MakeNoiseFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Prepare inputs/output
 	auto width = _width.GetValue(inputData);
 	auto height = _height.GetValue(inputData);
 	auto type = _type;
 	auto channels = _channels.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 	
+	// Make task
 	return
 		ComputeTaskHelper::UnPackProps(width, height, type, channels)
 		// .Validate
@@ -269,28 +345,11 @@ ComputeTask* MakeNoiseFrameComputeNode::CreateComputeTask(FlowDataImplPtr inputD
 					Size{ width, height },
 					ComputeFrameType{ type, channels },
 					[](ComputeFramePtr output) {
-						functions::Fill(output, utils::RandomValue());
+						functions::FillRandom(output);
 					}
 				);
 			}
 		);
-
-	/*
-	return ComputeTaskHelper::Make([width, height, type, channels, output]() {
-		uint32_t widthValue = *width;
-		uint32_t heightValue = *height;
-		uint32_t channelsValue = *channels;
-
-		output.SetValue(
-			Size{ widthValue, heightValue },
-			ComputeFrameType{ type, channelsValue },
-			[](ComputeFramePtr output) {
-				functions::Fill(output, utils::RandomValue());
-			}
-		);	
-		
-	});
-	*/
 }
 
 /// UEImageReaderComputeNode
