@@ -380,7 +380,7 @@ void Tests::MainTest()
 	// Add Test for each type and multi channels
 	testEachType("Add", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Add, 1, 1, 2));
 	testEachType("Sub", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Sub, 2, 1, 1));
-	// testEachType("Mul", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Mul, 2, 2, 4));
+	testEachType("Mul", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Mul, 2, 2, 4));
 	testEachType("Div", std::bind(&binaryOperationTest, _1, _2, _3, _4, 64, 64, _5, OperationComputeNode::ET_Div, 4, 2, 2));
 
 	test("Simple", std::bind(&simpleTest, _1, _2, _3, _4));

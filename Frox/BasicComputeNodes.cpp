@@ -84,7 +84,7 @@ void InvokeBinaryOperation(ComputeFramePtr left, ComputeFramePtr right, ComputeF
 		outputMat = leftMat - rightMat;
 		break;
 	case OperationComputeNode::ET_Mul:
-		outputMat = leftMat * rightMat;
+		outputMat = leftMat.mul(rightMat);
 		break;
 	case OperationComputeNode::ET_Div:
 		outputMat = leftMat / rightMat;
