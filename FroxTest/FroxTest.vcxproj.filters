@@ -44,10 +44,10 @@
     <ClInclude Include="ConsoleTextColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestProps.h">
+    <ClInclude Include="kari.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="kari.hpp">
+    <ClInclude Include="TestGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

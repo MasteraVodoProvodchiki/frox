@@ -7,7 +7,7 @@
 struct TestContext
 {
 	template<typename FuncT>
-	bool operator ()(FuncT f) const
+	bool operator ()(const char* name, FuncT f) const
 	{
 		return f;
 	}
@@ -28,39 +28,49 @@ struct TTestContext
 	}
 
 	template<typename FuncT, typename FirstT>
-	bool CallFunction(FuncT f, FirstT first) const
+	bool CallFunction(const char* name, FuncT f, FirstT first) const
 	{
-		return first(f, TestContext());
+		return first(name, f, TestContext());
 	}
 
 	template<typename FuncT, typename FirstT, typename ...ArgsT>
-	bool CallFunction(FuncT f, FirstT first, ArgsT... args) const
+	bool CallFunction(const char* name, FuncT f, FirstT first, ArgsT... args) const
 	{
 		TTestContext<ArgsT...> context(args...);
-		return first(f, context);
+		return first(name, f, context);
 	}
 
 	template<typename FuncT, std::size_t... Idx>
-	bool CallTuple(FuncT f, const std::tuple<ArgsT...>& t, std::index_sequence<Idx...>) const
+	bool CallTuple(const char* name, FuncT f, const std::tuple<ArgsT...>& t, std::index_sequence<Idx...>) const
 	{
-		return CallFunction(f, std::get<Idx>(t)...);
+		return CallFunction(name, f, std::get<Idx>(t)...);
 	}
 
 	template<typename FuncT>
-	bool operator ()(FuncT f) const
+	bool operator ()(const char* name, FuncT f) const
 	{
-		return CallTuple(f, _args, std::index_sequence_for<ArgsT...>{});
+		return CallTuple(name, f, _args, std::index_sequence_for<ArgsT...>{});
 	}
 };
 
 template<typename FuncT, typename ...ArgsT>
-void generationTest(FuncT func, ArgsT... args)
+void generationTest(const char* name, FuncT func, ArgsT... args)
 {
 	auto curryFunc = kari::curry(func);
 
 	TTestContext<ArgsT...> context(args...);
-	context(curryFunc);
+	context(name, curryFunc);
 }
+
+
+template<class _Ret, class _Fx, class ..._Types, typename ...ArgsT>
+void generationTest(const char* name, std::_Binder<_Ret, _Fx, _Types...> binder, ArgsT... args)
+{
+	std::function<bool(_Fx)> func = binder;
+	generationTest(name, func, args...);
+}
+
+
 
 /*
 template<int> // begin with 0 here!
