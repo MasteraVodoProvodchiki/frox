@@ -10,8 +10,13 @@
 
 using namespace frox;
 
-bool sensorFrameTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData)
+bool sensorFrameTest0(FlowContext context)
 {
+	ComputeFlow& flow = context.Flow;
+	FlowPerformer& performer = context.Performer;
+	FlowData& inputData = context.InputData;
+	FlowData& ouputData = context.OuputData;
+
 	// Add MOC
 	auto mocDeviceManager = IDepthSensorModule::Get().CreateDeviceManager<MOCSensorDeviceManager>();
 	auto mocDevice = mocDeviceManager->CreateDevice();
@@ -39,8 +44,13 @@ bool sensorFrameTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inp
 	return result;
 }
 
-bool sensorRealSenseTest0(ComputeFlow& flow, FlowPerformer& performer, FlowData& inputData, FlowData& ouputData)
+bool sensorRealSenseTest0(FlowContext context)
 {
+	ComputeFlow& flow = context.Flow;
+	FlowPerformer& performer = context.Performer;
+	FlowData& inputData = context.InputData;
+	FlowData& ouputData = context.OuputData;
+
 	// Add RealSense
 	IRealSenseModule::Get().InitialiseModule();
 	if (IDepthSensorModule::Get().GetNumDevices() == 0)
@@ -76,8 +86,8 @@ void Tests::DepthSensorTest()
 	IDepthSensorModule::Get().InitialiseModule();
 
 	using namespace std::placeholders;
-	test("SensorFrame", std::bind(&sensorFrameTest0, _1, _2, _3, _4));
-	test("RealSense", std::bind(&sensorRealSenseTest0, _1, _2, _3, _4));
+	test("SensorFrame", std::bind(&sensorFrameTest0, _1));
+	test("RealSense", std::bind(&sensorRealSenseTest0, _1));
 
 	IDepthSensorModule::Get().ShutdownModule();
 }

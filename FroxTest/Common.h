@@ -12,8 +12,65 @@
 
 #include <chrono>
 
-template<typename FunctionT>
-void test(const char* name, FunctionT func)
+struct FlowContext
+{
+	frox::ComputeFlow& Flow;
+	frox::FlowPerformer& Performer;
+	frox::FlowData& InputData;
+	frox::FlowData& OuputData;
+};
+
+struct BasicFlowContext
+{
+	template<typename FuncT, typename ContextT>
+	bool operator () (const char* name, FuncT func, ContextT context)
+	{
+		using namespace frox;
+
+		auto gFrox = FroxInstance();
+		assert(gFrox != nullptr);
+
+		// Create Flow
+		ComputeFlow* flow = gFrox->CreateComputeFlow();
+		FlowPerformer* performer = gFrox->CreateFlowPerformer();
+		FlowData* inputData = gFrox->CreateFlowData();
+		FlowData* ouputData = gFrox->CreateFlowData();
+
+		std::cout << name << ": ";
+
+		// Time
+		auto startTime = std::chrono::high_resolution_clock::now();
+
+		// Test
+		FlowContext flowContext{ *flow, *performer, *inputData, *ouputData };
+		bool result = context(name, func(flowContext));
+
+		auto finisTime = std::chrono::high_resolution_clock::now();
+		auto timeMks = std::chrono::duration_cast<std::chrono::microseconds>(finisTime - startTime).count();
+
+		if (!result)
+		{
+			ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundRed);
+			std::cout << ": test failed(" << timeMks << "mks)" << std::endl;
+		}
+		else
+		{
+			ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundGreen);
+			std::cout << ": test passed(" << timeMks << "mks)" << std::endl;
+		}
+
+		// Destroy Flow
+		gFrox->DestroyFlowData(ouputData);
+		gFrox->DestroyFlowData(inputData);
+		gFrox->DestroyFlowPerformer(performer);
+		gFrox->DestroyComputeFlow(flow);
+
+		return result;
+	}
+};
+
+template<typename FunctionT, typename ...ArgsT>
+void test(const char* name, FunctionT func, ArgsT... args)
 {
 	using namespace frox;
 
@@ -32,7 +89,8 @@ void test(const char* name, FunctionT func)
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 	// Test
-	bool result = func(*flow, *performer, *inputData, *ouputData);
+	FlowContext context{ *flow, *performer, *inputData, *ouputData };
+	bool result = func(context, args...);
 
 	auto finisTime = std::chrono::high_resolution_clock::now();
 	auto timeMks = std::chrono::duration_cast<std::chrono::microseconds>(finisTime - startTime).count();
