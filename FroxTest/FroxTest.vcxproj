@@ -81,6 +81,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -97,6 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -115,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -135,6 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -155,8 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleTextColor.h" />
+    <ClInclude Include="kari.hpp" />
     <ClInclude Include="Shared.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="TestProps.h" />
     <ClInclude Include="Tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
