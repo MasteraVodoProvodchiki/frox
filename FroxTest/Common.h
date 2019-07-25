@@ -190,4 +190,4 @@ bool checkSum(frox::ComputeFramePtr frame, SumT expected)
 
 bool checkSumOne(frox::ComputeFramePtr frame, uint32_t nbElements);
 
-frox::ComputeFramePtr makeFrame(uint32_t width, uint32_t height, frox::EComputeFrameType type, frox::Variant);
+frox::ComputeFramePtr makeFrame(frox::Size size, frox::EComputeFrameType type, frox::Variant);

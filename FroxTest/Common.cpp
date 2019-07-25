@@ -47,39 +47,39 @@ bool checkSumOne(ComputeFramePtr frame, uint32_t nbElements)
 }
 
 template<typename T>
-ComputeFramePtr makeFrame(uint32_t width, uint32_t height, EComputeFrameType type, T value)
+ComputeFramePtr makeFrame(Size size, EComputeFrameType type, T value)
 {
 	auto gFrox = FroxInstance();
 	assert(gFrox != nullptr);
 
 	// TODO. std::vector<bool> doesn't contain method data
-	T* values = new T[width * height];
-	for (uint32_t i = 0; i < width * height; ++i)
+	T* values = new T[size.Width * size.Height];
+	for (uint32_t i = 0; i < size.Width * size.Height; ++i)
 	{
 		values[i] = value;
 	}
 
-	auto frame = gFrox->CreateComputeFrame(Size{ width, height }, type, values);
+	auto frame = gFrox->CreateComputeFrame(size, type, values);
 
 	delete[] values;
 
 	return frame;
 }
 
-ComputeFramePtr makeFrame(uint32_t width, uint32_t height, EComputeFrameType type, Variant value)
+ComputeFramePtr makeFrame(Size size, EComputeFrameType type, Variant value)
 {
 	switch (type)
 	{
 	case ECFT_Bool:
-		return makeFrame<bool>(width, height, type, value.To<bool>());
+		return makeFrame<bool>(size, type, value.To<bool>());
 	case ECFT_UInt8:
-		return makeFrame<uint8_t>(width, height, type, value.To<uint8_t>());
+		return makeFrame<uint8_t>(size, type, value.To<uint8_t>());
 	case ECFT_UInt16:
-		return makeFrame<uint16_t>(width, height, type, value.To<uint16_t>());
+		return makeFrame<uint16_t>(size, type, value.To<uint16_t>());
 	case ECFT_UInt32:
-		return makeFrame<uint32_t>(width, height, type, value.To<uint32_t>());
+		return makeFrame<uint32_t>(size, type, value.To<uint32_t>());
 	case ECFT_Float:
-		return makeFrame<float>(width, height, type, value.To<float>());
+		return makeFrame<float>(size, type, value.To<float>());
 	default:
 		return nullptr;
 	}
