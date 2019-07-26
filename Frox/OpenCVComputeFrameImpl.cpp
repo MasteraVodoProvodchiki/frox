@@ -93,7 +93,7 @@ const void* OpenCVComputeFrameImpl::GetRowData(uint32_t row) const
 	assert(row < size.height);
 	assert(_data.isContinuous());
 
-	return reinterpret_cast<uint8_t*>(_data.data) + (row * size.height) * GetElementSize();
+	return reinterpret_cast<uint8_t*>(_data.data) + (row * size.width) * GetElementSize();
 }
 
 const void* OpenCVComputeFrameImpl::At(uint32_t row, uint32_t column) const
@@ -116,7 +116,7 @@ void* OpenCVComputeFrameImpl::GetRowData(uint32_t row)
 	assert(row < size.height);
 	assert(_data.isContinuous());
 
-	return reinterpret_cast<uint8_t*>(_data.data) + (row * size.height) * GetElementSize();
+	return reinterpret_cast<uint8_t*>(_data.data) + (row * size.width) * GetElementSize();
 }
 
 void* OpenCVComputeFrameImpl::At(uint32_t row, uint32_t column)
