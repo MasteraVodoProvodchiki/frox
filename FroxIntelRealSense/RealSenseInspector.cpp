@@ -54,6 +54,7 @@ bool RealSenseInspector::Start()
 			format = ERealSenseFormatType::FORMAT_RGBA8;
 			rs2StreamType = RS2_STREAM_COLOR;
 			rs2Format = RS2_FORMAT_RGBA8;
+			frameType = EComputeFrameType::ECFT_UInt8;
 			frameChannels = 4;
 			break;
 		case EInspectorType::Infrared:
@@ -61,6 +62,7 @@ bool RealSenseInspector::Start()
 			format = ERealSenseFormatType::FORMAT_Y8;
 			rs2StreamType = RS2_STREAM_INFRARED;
 			rs2Format = RS2_FORMAT_Y8;
+			frameType = EComputeFrameType::ECFT_UInt8;
 			frameChannels = 1;
 			break;
 		default:

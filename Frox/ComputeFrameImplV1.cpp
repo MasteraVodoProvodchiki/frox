@@ -71,6 +71,11 @@ ComputeFrameImplV1::~ComputeFrameImplV1()
 	}
 }
 
+ComputeFrame::EClass ComputeFrameImplV1::GetClassType() const
+{
+	return Other;
+}
+
 ComputeFrameType ComputeFrameImplV1::GetType() const
 {
 	return ComputeFrameType{ _data.Type, _data.Channels };

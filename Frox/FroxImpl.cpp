@@ -4,7 +4,11 @@
 #include "BasicFlowPerformer.h"
 #include "BasicFlowData.h"
 
+#ifndef WITHOUT_OPENCV
+#include "OpenCVComputeFrameImpl.h"
+#else
 #include "ComputeFrameImplV1.h"
+#endif
 
 #include <algorithm>
 #include <assert.h>
@@ -79,7 +83,11 @@ ComputeFramePtr FroxImpl::CreateComputeFrame(Size size, ComputeFrameType type, c
 	assert(size.Width > 0 && size.Height > 0);
 	assert(type.Type != EComputeFrameType::ECFT_None && type.Channels > 0);
 
+#ifndef WITHOUT_OPENCV
+	return OpenCVComputeFrameImpl::Create(size, type, data);
+#else
 	return ComputeFrameImplV1::Create(size, type, data);
+#endif
 }
 
 void FroxImpl::DestroyComputeFrame(ComputeFramePtr computeFrame)

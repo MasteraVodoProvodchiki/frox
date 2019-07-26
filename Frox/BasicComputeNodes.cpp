@@ -4,6 +4,10 @@
 #include "Frox.h"
 #include "Utils.h"
 
+#ifndef WITHOUT_OPENCV
+#include "OpenCVComputeFrameImpl.h"
+#endif
+
 #include <assert.h>
 
 namespace frox {
@@ -54,6 +58,65 @@ struct DivOperation
 
 } // End utils
 
+namespace functions {
+#ifndef WITHOUT_OPENCV
+void InvokeBinaryOperation(ComputeFramePtr left, ComputeFramePtr right, ComputeFramePtr output, OperationComputeNode::EType type)
+{
+	assert(left->GetType() == output->GetType());
+	assert(right->GetType() == output->GetType());
+	assert(left->IsOpencv() && right->IsOpencv() && output->IsOpencv());
+
+	// Get cv::Mat
+	OpenCVComputeFrameImpl* cvLeft = reinterpret_cast<OpenCVComputeFrameImpl*>(left.get());
+	OpenCVComputeFrameImpl* cvRight = reinterpret_cast<OpenCVComputeFrameImpl*>(right.get());
+	OpenCVComputeFrameImpl* cvOutput = reinterpret_cast<OpenCVComputeFrameImpl*>(output.get());
+	cv::Mat leftMat = cvLeft->GetMat();
+	cv::Mat rightMat = cvRight->GetMat();
+	cv::Mat outputMat = cvOutput->GetMat();
+
+	// operation
+	switch (type)
+	{
+	case OperationComputeNode::ET_Add:
+		outputMat = leftMat + rightMat;
+		break;
+	case OperationComputeNode::ET_Sub:
+		outputMat = leftMat - rightMat;
+		break;
+	case OperationComputeNode::ET_Mul:
+		outputMat = leftMat.mul(rightMat);
+		break;
+	case OperationComputeNode::ET_Div:
+		outputMat = leftMat / rightMat;
+		break;
+	default:
+		break;
+	}
+}
+#else
+void InvokeBinaryOperation(ComputeFramePtr left, ComputeFramePtr right, ComputeFramePtr output, OperationComputeNode::EType type)
+{
+	switch (type)
+	{
+	case OperationComputeNode::ET_Add:
+		utils::Foreach(left, right, output, utils::AddOperation());
+		break;
+	case OperationComputeNode::ET_Sub:
+		utils::Foreach(left, right, output, utils::SubOperation());
+		break;
+	case OperationComputeNode::ET_Mul:
+		utils::Foreach(left, right, output, utils::MulOperation());
+		break;
+	case OperationComputeNode::ET_Div:
+		utils::Foreach(left, right, output, utils::DivOperation());
+		break;
+	default:
+		break;
+	}
+}
+#endif // WITHOUT_OPENCV
+} // End functins
+
 OperationComputeNode::OperationComputeNode(const ComputeNodeInitializer& initializer, EType type)
 	: Super(initializer)
 	, _type(type)
@@ -79,11 +142,13 @@ bool OperationComputeNode::IsValid() const
 
 ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Prepare inputs
 	EType type = _type;
 	auto left = _left.GetValue(inputData);
 	auto right = _right.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 
+	// Make frame
 	return ComputeTaskHelper::UnPackProps(left, right)
 		// .Validate
 		// .UnPackOutputs
@@ -93,6 +158,7 @@ ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, 
 				return
 					left != nullptr &&
 					right != nullptr &&
+					left->GetType().Type != EComputeFrameType::ECFT_Bool &&
 					left->GetType() == right->GetType() &&
 					left->GetSize() == right->GetSize();
 			},
@@ -101,60 +167,11 @@ ComputeTask* OperationComputeNode::CreateComputeTask(FlowDataImplPtr inputData, 
 					left->GetSize(),
 					left->GetType(),
 					[type, left, right](ComputeFramePtr output) {
-						switch (type)
-						{
-						case OperationComputeNode::ET_Add:
-							utils::Foreach(left, right, output, utils::AddOperation());
-							break;
-						case OperationComputeNode::ET_Sub:
-							utils::Foreach(left, right, output, utils::SubOperation());
-							break;
-						case OperationComputeNode::ET_Mul:
-							utils::Foreach(left, right, output, utils::MulOperation());
-							break;
-						case OperationComputeNode::ET_Div:
-							utils::Foreach(left, right, output, utils::DivOperation());
-							break;
-						default:
-							break;
-						}
+						functions::InvokeBinaryOperation(left, right, output, type);
 					}
 				);
 			}
 		);
-
-	/*
-	return ComputeTaskHelper::Make([type, left, right, output]() {
-		ComputeFramePtr leftFrame = *left;
-		ComputeFramePtr rightFrame = *right;
-		// Check
-
-		output.SetValue(
-			leftFrame->GetSize(),
-			leftFrame->GetType(),
-			[type, leftFrame, rightFrame](ComputeFramePtr outputFrame) {
-				switch (type)
-				{
-				case OperationComputeNode::ET_Add:
-					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::AddOperation());
-					break;
-				case OperationComputeNode::ET_Sub:
-					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::SubOperation());
-					break;
-				case OperationComputeNode::ET_Mul:
-					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::MulOperation());
-					break;
-				case OperationComputeNode::ET_Div:
-					utils::Foreach(leftFrame, rightFrame, outputFrame, utils::DivOperation());
-					break;
-				default:
-					break;
-				}
-			}
-		);
-		
-	});
-	*/
 }
 
 FROX_COMPUTENODE_IMPL(AddComputeNode)

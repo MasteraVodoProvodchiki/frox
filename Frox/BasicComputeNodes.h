@@ -12,13 +12,14 @@ class OperationComputeNode : public ComputeNodeImpl
 {
 	using Super = ComputeNodeImpl;
 
-protected:
+public:
 	enum EType
 	{
 		ET_Add = 0,
 		ET_Sub,
 		ET_Mul,
-		ET_Div
+		ET_Div,
+		ET_NumTypes = 4
 	};
 
 public:

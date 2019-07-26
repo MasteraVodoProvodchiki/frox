@@ -4,6 +4,10 @@
 #include "Frox.h"
 #include "Utils.h"
 
+#ifndef WITHOUT_OPENCV
+#include "OpenCVComputeFrameImpl.h"
+#endif
+
 #include <assert.h>
 
 namespace frox {
@@ -12,7 +16,20 @@ FROX_COMPUTENODE_IMPL(AvgComputeNode)
 
 namespace functions {
 
-void Avg(ComputeFramePtr input, ComputeFramePtr output)
+#ifndef WITHOUT_OPENCV
+template<typename T>
+T Mean(ComputeFramePtr frame)
+{
+	assert(frame->IsOpencv());
+
+	OpenCVComputeFrameImpl* cvFrame = reinterpret_cast<OpenCVComputeFrameImpl*>(frame.get());
+	cv::Scalar value = cv::mean(cvFrame->GetMat());
+
+	return T(value.val[0]);
+}
+#else
+template<typename T>
+T Mean(ComputeFramePtr input)
 {
 	ComputeFrameType type = input->GetType();
 	Size size = input->GetSize();
@@ -27,47 +44,74 @@ void Avg(ComputeFramePtr input, ComputeFramePtr output)
 		});
 		uint8_t avg = uint8_t(sum / nbElemenents);
 
-		output->At<bool>(0, 0) = avg > 127;
-		break;
+		return T(avg > 127);
 	}
 	case ECFT_UInt8: {
 		uint32_t sum = 0;
 		utils::Foreach<uint8_t>(input, [&sum](uint8_t value) {
 			sum += value;
 		});
-		uint8_t avg = uint8_t(sum / nbElemenents);
-
-		output->At<uint8_t>(0, 0) = avg;
-		break;
+		return T(sum / nbElemenents);
 	}
 	case ECFT_UInt16: {
 		uint32_t sum = 0;
 		utils::Foreach<uint16_t>(input, [&sum](uint16_t value) {
 			sum += value;
 		});
-		uint16_t avg = uint16_t(sum / nbElemenents);
-
-		output->At<uint16_t>(0, 0) = avg;
-		break;
+		return T(sum / nbElemenents);
 	}
 	case ECFT_UInt32: {
 		uint64_t sum = 0;
 		utils::Foreach<uint32_t>(input, [&sum](uint32_t value) {
 			sum += value;
 		});
-		uint32_t avg = uint32_t(sum / nbElemenents);
-
-		output->At<uint32_t>(0, 0) = avg;
-		break;
+		return T(sum / nbElemenents);
 	}
 	case ECFT_Float: {
 		double sum = 0;
 		utils::Foreach<float>(input, [&sum](float value) {
 			sum += value;
 		});
-		float avg = float(sum / double(nbElemenents));
+		return T(sum / double(nbElemenents));
+	}
+	default:
+		assert(false);
+		break;
+	}
 
-		output->At<float>(0, 0) = avg;
+	return 0;
+}
+#endif // WITHOUT_OPENCV
+
+void Avg(ComputeFramePtr input, ComputeFramePtr output)
+{
+	ComputeFrameType inputType = input->GetType();
+	ComputeFrameType outputType = output->GetType();
+	assert(inputType == outputType);
+
+	Size size = input->GetSize();
+	uint32_t nbElemenents = size.Width * size.Height;
+
+	switch (inputType.Type)
+	{
+	case ECFT_Bool: {
+		output->At<bool>(0, 0) = Mean<bool>(input);
+		break;
+	}
+	case ECFT_UInt8: {
+		output->At<uint8_t>(0, 0) = Mean<uint8_t>(input);
+		break;
+	}
+	case ECFT_UInt16: {
+		output->At<uint16_t>(0, 0) = Mean<uint16_t>(input);
+		break;
+	}
+	case ECFT_UInt32: {
+		output->At<uint32_t>(0, 0) = Mean<uint32_t>(input);
+		break;
+	}
+	case ECFT_Float: {
+		output->At<float>(0, 0) = Mean<float>(input);
 		break;
 	}
 	default:
@@ -99,9 +143,11 @@ bool AvgComputeNode::IsValid() const
 
 ComputeTask* AvgComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Prepare input/ouput
 	auto input = _input.GetValue(inputData);
 	auto output = _output.GetValue(outputData);
 
+	// Make task
 	return ComputeTaskHelper::UnPackProps(input)
 		// .Validate
 		// .UnPackOutputs

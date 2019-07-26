@@ -1,46 +1,22 @@
 #pragma once
 
 #include "ComputeFrame.h"
+#include "OpenCV.h"
 
 namespace frox {
 
-struct MatData
-{
-	union
-	{
-		bool Bool;
-		uint8_t Uint8;
-		uint16_t Uint16;
-		uint32_t Uint32;
-		float Scalar;
-		void* Data = nullptr;
-		size_t Mem;
-	};
-
-	uint32_t Width = 0;
-	uint32_t Height = 0;
-	EComputeFrameType Type = ECFT_None;
-	uint32_t Channels = 0;
-	bool Valid = false;
-
-	bool IsOptimized() const
-	{
-		return Width == 1 && Height == 1 && Channels == 1;
-	}
-};
-
 /**
- * SImple ComputeFrame with MatData
+ * OpenCV ComputeFrame with cv::Mat
  */
-class ComputeFrameImplV1 : public ComputeFrame
+class OpenCVComputeFrameImpl : public ComputeFrame
 {
 public:
-	ComputeFrameImplV1(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr);
-	virtual ~ComputeFrameImplV1() override;
+	OpenCVComputeFrameImpl(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr);
+	virtual ~OpenCVComputeFrameImpl() override;
 
 	static ComputeFramePtr Create(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr)
 	{
-		return std::make_shared<ComputeFrameImplV1>(size, type, data);
+		return std::make_shared<OpenCVComputeFrameImpl>(size, type, data);
 	}
 
 	// ComputeFrame overrides
@@ -57,8 +33,15 @@ public:
 	virtual void* GetRowData(uint32_t row) override;
 	virtual void* At(uint32_t row, uint32_t column) override;
 
+	// Inlines
+	cv::Mat GetMat() const
+	{
+		return _data;
+	}
+
 private:
-	MatData _data;
+	ComputeFrameType _type;
+	cv::Mat _data;
 };
 
 } // End frox

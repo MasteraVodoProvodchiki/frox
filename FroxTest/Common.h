@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shared.h"
+#include "ConsoleTextColor.h"
 
 #include <Utils.h>
 #include <Types.h>
@@ -9,8 +10,67 @@
 #include <FlowPerformer.h>
 #include <FlowData.h>
 
-template<typename FunctionT>
-void test(const char* name, FunctionT func)
+#include <chrono>
+
+struct FlowContext
+{
+	frox::ComputeFlow& Flow;
+	frox::FlowPerformer& Performer;
+	frox::FlowData& InputData;
+	frox::FlowData& OuputData;
+};
+
+struct BasicFlowContext
+{
+	template<typename FuncT, typename ContextT>
+	bool operator () (const char* name, FuncT func, ContextT context)
+	{
+		using namespace frox;
+
+		auto gFrox = FroxInstance();
+		assert(gFrox != nullptr);
+
+		// Create Flow
+		ComputeFlow* flow = gFrox->CreateComputeFlow();
+		FlowPerformer* performer = gFrox->CreateFlowPerformer();
+		FlowData* inputData = gFrox->CreateFlowData();
+		FlowData* ouputData = gFrox->CreateFlowData();
+
+		std::cout << name << ": ";
+
+		// Time
+		auto startTime = std::chrono::high_resolution_clock::now();
+
+		// Test
+		FlowContext flowContext{ *flow, *performer, *inputData, *ouputData };
+		bool result = context(name, func(flowContext));
+
+		auto finisTime = std::chrono::high_resolution_clock::now();
+		auto timeMks = std::chrono::duration_cast<std::chrono::microseconds>(finisTime - startTime).count();
+
+		if (!result)
+		{
+			ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundRed);
+			std::cout << ": test failed(" << timeMks << "mks)" << std::endl;
+		}
+		else
+		{
+			ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundGreen);
+			std::cout << ": test passed(" << timeMks << "mks)" << std::endl;
+		}
+
+		// Destroy Flow
+		gFrox->DestroyFlowData(ouputData);
+		gFrox->DestroyFlowData(inputData);
+		gFrox->DestroyFlowPerformer(performer);
+		gFrox->DestroyComputeFlow(flow);
+
+		return result;
+	}
+};
+
+template<typename FunctionT, typename ...ArgsT>
+void test(const char* name, FunctionT func, ArgsT... args)
 {
 	using namespace frox;
 
@@ -25,14 +85,25 @@ void test(const char* name, FunctionT func)
 
 	std::cout << name << ": ";
 
-	bool result = func(*flow, *performer, *inputData, *ouputData);
+	// Time
+	auto startTime = std::chrono::high_resolution_clock::now();
+
+	// Test
+	FlowContext context{ *flow, *performer, *inputData, *ouputData };
+	bool result = func(context, args...);
+
+	auto finisTime = std::chrono::high_resolution_clock::now();
+	auto timeMks = std::chrono::duration_cast<std::chrono::microseconds>(finisTime - startTime).count();
+
 	if(!result)
 	{
-		std::cout << ": invalid" << std::endl;
+		ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundRed);
+		std::cout << ": test failed(" << timeMks << "mks)" << std::endl;
 	}
 	else
 	{
-		std::cout << ": success" << std::endl;
+		ConsoleTextColor consoleColor(ConsoleTextColor::ForeGroundGreen);
+		std::cout << ": test passed(" << timeMks << "mks)" << std::endl;
 	}
 
 	// Destroy Flow
@@ -100,10 +171,12 @@ bool checkRange(frox::ComputeFramePtr frame, T lo, T hi)
 	return min >= lo && max <= hi;
 }
 
-template<typename T>
-bool checkSum(frox::ComputeFramePtr frame, T expected)
+bool checkRangeAuto(frox::ComputeFramePtr frame);
+
+template<typename T, typename SumT>
+bool checkSum(frox::ComputeFramePtr frame, SumT expected)
 {
-	T sum = T(0);
+	SumT sum = SumT(0);
 	frox::utils::Foreach<T>(frame, [&sum](T value) {
 		sum += value;
 	});
@@ -114,3 +187,7 @@ bool checkSum(frox::ComputeFramePtr frame, T expected)
 
 	return equalValue(sum, expected);
 }
+
+bool checkSumOne(frox::ComputeFramePtr frame, uint32_t nbElements);
+
+frox::ComputeFramePtr makeFrame(frox::Size size, frox::EComputeFrameType type, frox::Variant);

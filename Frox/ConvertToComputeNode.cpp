@@ -5,10 +5,15 @@
 #include "Frox.h"
 #include "Utils.h"
 
+#ifndef WITHOUT_OPENCV
+#include "OpenCVComputeFrameImpl.h"
+#endif
+
 #include <assert.h>
 
 namespace frox {
 
+#ifdef WITHOUT_OPENCV
 namespace utils {
 
 struct ConvertToOperation
@@ -41,13 +46,31 @@ struct ConvertToOperation
 };
 
 } // End utils
+#endif
 
 namespace functions {
 
+#ifndef WITHOUT_OPENCV
+void ConvertTo(ComputeFramePtr input, ComputeFramePtr output, double alpha, double beta)
+{
+	assert(input->IsOpencv() && output->IsOpencv());
+
+	// Get cv::Mat
+	OpenCVComputeFrameImpl* cvInput = reinterpret_cast<OpenCVComputeFrameImpl*>(input.get());
+	OpenCVComputeFrameImpl* cvOuput = reinterpret_cast<OpenCVComputeFrameImpl*>(output.get());
+
+	cv::Mat inputMat = cvInput->GetMat();
+	cv::Mat outputMat = cvOuput->GetMat();
+
+	// Convert
+	inputMat.convertTo(outputMat, outputMat.type(), alpha, beta);
+}
+#else
 void ConvertTo(ComputeFramePtr input, ComputeFramePtr output, double alpha, double beta)
 {
 	utils::Foreach(input, output, utils::ConvertToOperation(alpha, beta));
 }
+#endif // WITHOUT_OPENCV
 
 } // End functions
 
@@ -78,13 +101,14 @@ bool ConvertToComputeNode::IsValid() const
 
 ComputeTask* ConvertToComputeNode::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
+	// Prepare inputs/output
 	auto input = _input.GetValue(inputData);
 	auto alpha = _alpha.GetValue(inputData);
 	auto beta = _beta.GetValue(inputData);
 	auto type = _type;
-
 	auto output = _output.GetValue(outputData);
 	
+	// Make task
 	return
 		ComputeTaskHelper::UnPackProps(input, type, alpha, beta)
 		// .Validate

@@ -11,11 +11,12 @@ namespace frox {
 enum EComputeFrameType
 {
 	ECFT_None = 0,
-	ECFT_Bool,
-	ECFT_UInt8,
-	ECFT_UInt16,
-	ECFT_UInt32,
-	ECFT_Float
+	ECFT_Bool = 1,
+	ECFT_UInt8 = 2,
+	ECFT_UInt16 = 3,
+	ECFT_UInt32 = 4,
+	ECFT_Float = 5,
+	ECFT_NumTypes = 6
 };
 
 struct ComputeFrameType
@@ -43,8 +44,16 @@ uint32_t FrameTypeToSize(EComputeFrameType type);
 class ComputeFrame
 {
 public:
+	enum EClass
+	{
+		Other = 0,
+		Opencv
+	};
+
+public:
 	virtual ~ComputeFrame() {}
 
+	virtual EClass GetClassType() const = 0;
 	virtual ComputeFrameType GetType() const = 0;
 	virtual uint32_t GetChannels() const = 0;
 	virtual uint32_t GetElementSize() const = 0;
@@ -58,6 +67,11 @@ public:
 	virtual void* At(uint32_t row, uint32_t column) = 0;
 
 	// Inlines
+	bool IsOpencv() const
+	{
+		return this->GetClassType() == Opencv;
+	}
+
 	template <typename T>
 	const T* GetData() const;
 
