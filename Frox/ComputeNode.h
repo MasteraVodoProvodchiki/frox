@@ -26,11 +26,6 @@ public:
 
 	virtual int32_t FindInputByName(const char* pinName) const = 0;
 	virtual int32_t FindOutputByName(const char* pinName) const = 0;
-
-	// void SetInputScalar(uint32_t inId, uint8_t value);
-	// void SetInputScalar(uint32_t inId, uint16_t value);
-	// void SetInputScalar(uint32_t inId, uint32_t value);
-	// void SetInputScalar(uint32_t inId, float value);
 };
 
 } // End frox
