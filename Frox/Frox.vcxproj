@@ -151,6 +151,7 @@
     <ClInclude Include="BasicFlowPerformer.h" />
     <ClInclude Include="BasicFlowPerformerImpl.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="ComputeDataFactory.h" />
     <ClInclude Include="ComputeFlow.h" />
     <ClInclude Include="BasicComputeFlowImpl.h" />
     <ClInclude Include="ComputeFlowImpl.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="ComputeThread.h" />
     <ClInclude Include="ConvertToComputeNode.h" />
     <ClInclude Include="CropComputeNode.h" />
+    <ClInclude Include="ComputeData.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionInput.h" />
     <ClInclude Include="FlowData.h" />
@@ -198,6 +200,8 @@
     <ClCompile Include="BasicFlowData.cpp" />
     <ClCompile Include="BasicFlowPerformer.cpp" />
     <ClCompile Include="BasicFlowPerformerImpl.cpp" />
+    <ClCompile Include="ComputeData.cpp" />
+    <ClCompile Include="ComputeDataFactory.cpp" />
     <ClCompile Include="ComputeFlow.cpp" />
     <ClCompile Include="BasicComputeFlowImpl.cpp" />
     <ClCompile Include="ComputeFlowImpl.cpp" />

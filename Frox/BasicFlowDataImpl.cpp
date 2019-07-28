@@ -52,4 +52,26 @@ ComputeFramePtr BasicFlowDataImpl::GetFrame(const Guid& guid) const
 	return it != _framesByGuid.end() ? it->second : nullptr;
 }
 
+void BasicFlowDataImpl::SetData(const char* name, ComputeDataPtr data)
+{
+	_datasByName[name] = data;
+}
+
+ComputeDataPtr BasicFlowDataImpl::GetData(const char* name) const
+{
+	auto it = _datasByName.find(name);
+	return it != _datasByName.end() ? it->second : nullptr;
+}
+
+void BasicFlowDataImpl::SetData(const Guid& guid, ComputeDataPtr data)
+{
+	_datasByGuid[guid] = data;
+}
+
+ComputeDataPtr BasicFlowDataImpl::GetData(const Guid& guid) const
+{
+	auto it = _datasByGuid.find(guid);
+	return it != _datasByGuid.end() ? it->second : nullptr;
+}
+
 } // End frox

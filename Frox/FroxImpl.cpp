@@ -10,6 +10,8 @@
 #include "ComputeFrameImplV1.h"
 #endif
 
+#include "ComputeDataFactory.h"
+
 #include <algorithm>
 #include <assert.h>
 
@@ -92,5 +94,11 @@ ComputeFramePtr FroxImpl::CreateComputeFrame(Size size, ComputeFrameType type, c
 
 void FroxImpl::DestroyComputeFrame(ComputeFramePtr computeFrame)
 {}
+
+ComputeDataPtr FroxImpl::CreateComputeData(const char* type)
+{
+	ComputeDataInitializer initializer;
+	return ComputeDataPtr(ComputeDataFactory::Create(type, initializer));
+}
 
 } // End frox
