@@ -166,6 +166,7 @@
     <ClInclude Include="ConvertToComputeNode.h" />
     <ClInclude Include="CropComputeNode.h" />
     <ClInclude Include="ComputeData.h" />
+    <ClInclude Include="CustomTaskComputeNode.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionInput.h" />
     <ClInclude Include="FindContoursComputeNode.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="ComputeThread.cpp" />
     <ClCompile Include="ConvertToComputeNode.cpp" />
     <ClCompile Include="CropComputeNode.cpp" />
+    <ClCompile Include="CustomTaskComputeNode.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="ExpressionInput.cpp" />
     <ClCompile Include="FindContoursComputeNode.cpp" />
