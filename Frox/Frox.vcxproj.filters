@@ -13,9 +13,6 @@
     <Filter Include="Private\Utils">
       <UniqueIdentifier>{d2d2de6d-6842-4e81-aac2-589b2210111a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Expressions">
-      <UniqueIdentifier>{ed91c9c6-fefe-432d-81c8-53ff85e630d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Private\Basic">
       <UniqueIdentifier>{a3164571-54c8-43ae-8d63-649bbb7f7f0d}</UniqueIdentifier>
     </Filter>
@@ -24,6 +21,24 @@
     </Filter>
     <Filter Include="Private\Base">
       <UniqueIdentifier>{565cadca-428a-4cbf-a332-10edaf5beed7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Node">
+      <UniqueIdentifier>{0f1792d2-f4a7-4ce5-8660-de307abae049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Data">
+      <UniqueIdentifier>{3bd7fdc6-e76b-4960-bfcf-daf03d8dd2c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Node">
+      <UniqueIdentifier>{907ca147-dbfa-4462-91cd-d79f6c983abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Data">
+      <UniqueIdentifier>{3ed7e80c-4092-43ec-8a8f-0e8001666845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Node\Expressions">
+      <UniqueIdentifier>{ed91c9c6-fefe-432d-81c8-53ff85e630d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Common">
+      <UniqueIdentifier>{6cbe965e-4e91-4523-8b1d-13bf0395db92}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,34 +51,13 @@
     <ClInclude Include="ComputeFlow.h">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="ComputeNode.h">
-      <Filter>Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ComputeNodeFactory.h">
-      <Filter>Public</Filter>
-    </ClInclude>
     <ClInclude Include="ComputeTask.h">
       <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="BasicComputeNodes.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="ComputeFrame.h">
-      <Filter>Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Allocator.h">
-      <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="ComputeFrameImplV1.h">
-      <Filter>Private</Filter>
-    </ClInclude>
     <ClInclude Include="FroxImpl.h">
-      <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="ComputeNodeImpl.h">
       <Filter>Private</Filter>
     </ClInclude>
     <ClInclude Include="Runnable.h">
@@ -75,9 +69,6 @@
     <ClInclude Include="ComputeThread.h">
       <Filter>Private</Filter>
     </ClInclude>
-    <ClInclude Include="ComputeNodePin.h">
-      <Filter>Private</Filter>
-    </ClInclude>
     <ClInclude Include="AvgComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
@@ -86,9 +77,6 @@
     </ClInclude>
     <ClInclude Include="MakeFrameComputeNode.h">
       <Filter>Public\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="Variant.h">
-      <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="SubFlowComputeNode.h">
       <Filter>Public\Nodes</Filter>
@@ -99,23 +87,14 @@
     <ClInclude Include="CropComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ExpressionInput.h">
-      <Filter>Private</Filter>
-    </ClInclude>
     <ClInclude Include="FrameSizeExpression.h">
-      <Filter>Private\Expressions</Filter>
-    </ClInclude>
-    <ClInclude Include="Expression.h">
-      <Filter>Private</Filter>
+      <Filter>Private\Node\Expressions</Filter>
     </ClInclude>
     <ClInclude Include="ResizeComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
     <ClInclude Include="OutputFrameExpression.h">
-      <Filter>Private\Expressions</Filter>
+      <Filter>Private\Node\Expressions</Filter>
     </ClInclude>
     <ClInclude Include="FlowPerformer.h">
       <Filter>Public</Filter>
@@ -125,9 +104,6 @@
     </ClInclude>
     <ClInclude Include="BasicFlowPerformer.h">
       <Filter>Private\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowData.h">
-      <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="BasicFlowData.h">
       <Filter>Private\Basic</Filter>
@@ -150,23 +126,74 @@
     <ClInclude Include="FlowDataImpl.h">
       <Filter>Private\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Guid.h">
-      <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Output.h">
-      <Filter>Private</Filter>
-    </ClInclude>
     <ClInclude Include="ComputeTaskHelper.h">
       <Filter>Private</Filter>
     </ClInclude>
     <ClInclude Include="FrameInfoComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="OpenCV.h">
-      <Filter>Private</Filter>
+    <ClInclude Include="CustomTaskComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="FindContoursComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeNode.h">
+      <Filter>Public\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeNodeFactory.h">
+      <Filter>Public\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeData.h">
+      <Filter>Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeDataFactory.h">
+      <Filter>Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeNodePin.h">
+      <Filter>Private\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeNodeImpl.h">
+      <Filter>Private\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFrameImplV1.h">
+      <Filter>Private\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionInput.h">
+      <Filter>Private\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Expression.h">
+      <Filter>Private\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
+      <Filter>Private\Node</Filter>
     </ClInclude>
     <ClInclude Include="OpenCVComputeFrameImpl.h">
-      <Filter>Private</Filter>
+      <Filter>Private\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeFrame.h">
+      <Filter>Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowData.h">
+      <Filter>Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Variant.h">
+      <Filter>Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Private\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenCV.h">
+      <Filter>Private\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Guid.h">
+      <Filter>Private\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocator.h">
+      <Filter>Private\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,37 +203,16 @@
     <ClCompile Include="ComputeFlow.cpp">
       <Filter>Public</Filter>
     </ClCompile>
-    <ClCompile Include="ComputeNode.cpp">
-      <Filter>Public</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputeNodeFactory.cpp">
-      <Filter>Public</Filter>
-    </ClCompile>
     <ClCompile Include="BasicComputeNodes.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="ComputeFrame.cpp">
-      <Filter>Public</Filter>
-    </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputeFrameImplV1.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
     <ClCompile Include="FroxImpl.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputeNodeImpl.cpp">
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="Thread.cpp">
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="ComputeThread.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputeNodePin.cpp">
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="AvgComputeNode.cpp">
@@ -225,16 +231,13 @@
       <Filter>Public\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="FrameSizeExpression.cpp">
-      <Filter>Private\Expressions</Filter>
-    </ClCompile>
-    <ClCompile Include="Expression.cpp">
-      <Filter>Private</Filter>
+      <Filter>Private\Node\Expressions</Filter>
     </ClCompile>
     <ClCompile Include="ResizeComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="OutputFrameExpression.cpp">
-      <Filter>Private\Expressions</Filter>
+      <Filter>Private\Node\Expressions</Filter>
     </ClCompile>
     <ClCompile Include="FlowPerformer.cpp">
       <Filter>Public</Filter>
@@ -244,9 +247,6 @@
     </ClCompile>
     <ClCompile Include="BasicFlowPerformer.cpp">
       <Filter>Private\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowData.cpp">
-      <Filter>Public</Filter>
     </ClCompile>
     <ClCompile Include="BasicFlowData.cpp">
       <Filter>Private\Basic</Filter>
@@ -269,20 +269,59 @@
     <ClCompile Include="FlowDataImpl.cpp">
       <Filter>Private\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Guid.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ExpressionInput.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
     <ClCompile Include="FrameInfoComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Private\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="CustomTaskComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="FindContoursComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNode.cpp">
+      <Filter>Public\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNodeFactory.cpp">
+      <Filter>Public\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeData.cpp">
+      <Filter>Public\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeDataFactory.cpp">
+      <Filter>Public\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNodeImpl.cpp">
+      <Filter>Private\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeNodePin.cpp">
+      <Filter>Private\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFrameImplV1.cpp">
+      <Filter>Private\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionInput.cpp">
+      <Filter>Private\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Expression.cpp">
+      <Filter>Private\Node</Filter>
+    </ClCompile>
     <ClCompile Include="OpenCVComputeFrameImpl.cpp">
-      <Filter>Private</Filter>
+      <Filter>Private\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeFrame.cpp">
+      <Filter>Public\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowData.cpp">
+      <Filter>Public\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Private\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Guid.cpp">
+      <Filter>Private\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
