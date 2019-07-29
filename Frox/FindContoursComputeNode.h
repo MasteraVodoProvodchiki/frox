@@ -7,10 +7,6 @@
 #include "ComputeDataFactory.h"
 #include "ExpressionInput.h"
 
-#ifndef WITHOUT_OPENCV
-#include "OpenCV.h"
-#endif
-
 namespace frox {
 
 // Data
@@ -23,9 +19,7 @@ public:
 		: ComputeData(initializer)
 	{}
 
-#ifndef WITHOUT_OPENCV
-	std::vector<std::vector<cv::Point>> Contours;
-#endif
+	std::vector<std::vector<Point>> Contours;
 };
 
 class HierarchyComputeData : public ComputeData
@@ -37,9 +31,7 @@ public:
 		: ComputeData(initializer)
 	{}
 
-#ifndef WITHOUT_OPENCV
-	std::vector<cv::Vec4i> Hierarchy;
-#endif
+	std::vector<uint4> Hierarchy;
 };
 // End Data
 
