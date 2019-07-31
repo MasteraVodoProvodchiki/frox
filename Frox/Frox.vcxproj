@@ -150,6 +150,7 @@
     <ClInclude Include="BasicFlowData.h" />
     <ClInclude Include="BasicFlowPerformer.h" />
     <ClInclude Include="BasicFlowPerformerImpl.h" />
+    <ClInclude Include="CenterOfContourComputeNode.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ComputeDataFactory.h" />
     <ClInclude Include="ComputeFlow.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="BasicFlowData.cpp" />
     <ClCompile Include="BasicFlowPerformer.cpp" />
     <ClCompile Include="BasicFlowPerformerImpl.cpp" />
+    <ClCompile Include="CenterOfContourComputeNode.cpp" />
     <ClCompile Include="ComputeData.cpp" />
     <ClCompile Include="ComputeDataFactory.cpp" />
     <ClCompile Include="ComputeFlow.cpp" />

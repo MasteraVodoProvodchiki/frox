@@ -195,6 +195,9 @@
     <ClInclude Include="Allocator.h">
       <Filter>Private\Common</Filter>
     </ClInclude>
+    <ClInclude Include="CenterOfContourComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -322,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="Guid.cpp">
       <Filter>Private\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="CenterOfContourComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
