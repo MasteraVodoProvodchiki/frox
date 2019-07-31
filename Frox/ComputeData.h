@@ -17,6 +17,10 @@ public:
 	virtual ~ComputeData() {}
 
 	virtual const char* GetType() const = 0;
+	virtual bool IsValid() const
+	{
+		return true;
+	}
 
 	template<typename T>
 	bool IsA() const

@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "ComputeData.h"
 #include "Variant.h"
 #include "FlowDataImpl.h"
 
@@ -35,6 +36,11 @@ public:
 		return nullptr;
 	}
 
+	virtual ComputeDataPtr GetData(FlowDataImplPtr data) const
+	{
+		return nullptr;
+	}
+
 	virtual Variant GetValue(FlowDataImplPtr data) const
 	{
 		return Variant();
@@ -52,6 +58,12 @@ template<>
 inline ComputeFramePtr Expression::GetValue<ComputeFramePtr>(FlowDataImplPtr data) const
 {
 	return this->GetFrame(data);
+}
+
+template<>
+inline ComputeDataPtr Expression::GetValue<ComputeDataPtr>(FlowDataImplPtr data) const
+{
+	return this->GetData(data);
 }
 
 using ExpressionPtr = std::shared_ptr<Expression>;
