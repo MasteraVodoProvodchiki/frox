@@ -4,6 +4,7 @@
 
 #include <MakeFrameComputeNode.h>
 #include <FindContoursComputeNode.h>
+#include <CenterOfContourComputeNode.h>
 
 using namespace frox;
 
@@ -20,8 +21,8 @@ ComputeFramePtr makeCircle(Size size)
 		for (uint32_t y = 0; y < size.Height; ++y)
 		{
 			float d = std::sqrtf(
-				std::powf(x - (size.Width / 2), 2.f) + 
-				std::powf(y - (size.Height / 2), 2.f)
+				std::powf(int(x) - int(size.Width / 2), 2.f) +
+				std::powf(int(y) - int(size.Height / 2), 2.f)
 			);
 			values[y * size.Width + x] = d < radius ? 255 : 0;
 		}
@@ -63,9 +64,56 @@ bool findContoursTest(FlowContext context)
 		ouputData,
 		[](FlowData& ouputData) {
 			ComputeDataPtr computeData = ouputData.GetData("contours");
-			ContoursComputeData* contoursComputeData = computeData->As<ContoursComputeData>();
+			if (!computeData)
+			{
+				return false;
+			}
 
+			ContoursComputeData* contoursComputeData = computeData->As<ContoursComputeData>();
 			return contoursComputeData->Contours.size() == 1;
+		}
+	);
+}
+
+bool centerOfContoursTest(FlowContext context)
+{
+	ComputeFlow& flow = context.Flow;
+	FlowPerformer& performer = context.Performer;
+	FlowData& inputData = context.InputData;
+	FlowData& ouputData = context.OuputData;
+
+	// Create nodes
+	Size frameSize = Size{ 64, 64 };
+	auto inputFrame = makeCircle(frameSize);
+
+	auto findContours = flow.CreateNode<FindContoursComputeNode>("FindContours");
+	auto centerOfContours = flow.CreateNode<CenterOfContourComputeNode>("CenterOfContours");
+
+	// Set inputs
+	inputData.SetFrame("testframe", inputFrame);
+
+	// Connect
+	flow.ConnectEntry(flow.CreateEntry("testframe"), findContours);
+	flow.ConnectNodes(findContours, centerOfContours);
+	flow.ConnectOutput(flow.CreateOutput("out", EPinValueType::Data), centerOfContours);
+
+	// Run
+	return runFlowBase(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		[frameSize](FlowData& ouputData) {
+			ComputeDataPtr computeData = ouputData.GetData("out");
+			if (!computeData)
+			{
+				return false;
+			}
+
+			CenterOfContourComputeData* centerOfContourData = computeData->As<CenterOfContourComputeData>();
+			return
+				centerOfContourData->Points.size() == 1 &&
+				centerOfContourData->Points.front() == frox::Point{ int(frameSize.Width / 2), int(frameSize.Height / 2)};
 		}
 	);
 }
@@ -75,4 +123,5 @@ void Tests::ComputeDataTest()
 	// Test
 	using namespace std::placeholders;
 	test("FindContours", std::bind(&findContoursTest, _1));
+	test("FindContours", std::bind(&centerOfContoursTest, _1));
 }
