@@ -100,6 +100,16 @@ struct Point
 {
 	int32_t X;
 	int32_t Y;
+
+	friend bool operator == (const Point& left, const Point& right)
+	{
+		return left.X == right.X && left.Y == right.Y;
+	}
+
+	friend bool operator != (const Point& left, const Point& right)
+	{
+		return left.X != right.X || left.Y != right.Y;
+	}
 };
 
 struct Size
