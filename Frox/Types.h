@@ -1,8 +1,25 @@
 #pragma once
 
 #include <inttypes.h>
+#include <limits>
+#include <cmath>
 
 namespace frox {
+namespace utils {
+
+template<typename T>
+_inline bool Equal(T left, T right)
+{
+	return left == right;
+}
+
+template<>
+_inline bool Equal<float>(float left, float right)
+{
+	return fabsf(left - right) <= std::numeric_limits<float>::epsilon();
+}
+
+} // End utils
 
 struct int2
 {
@@ -37,11 +54,26 @@ struct uint4
 struct float2
 {
 	float X, Y;
+
+	static bool Equal(const float2& left, const float2& right)
+	{
+		return
+			utils::Equal(left.X, right.X) &&
+			utils::Equal(left.Y, right.Y);
+	}
 };
 
 struct float3
 {
 	float X, Y, Z;
+
+	static bool Equal(const float3& left, const float3& right)
+	{
+		return
+			utils::Equal(left.X, right.X) &&
+			utils::Equal(left.Y, right.Y) &&
+			utils::Equal(left.Z, right.Z);
+	}
 };
 
 struct float4
@@ -51,6 +83,15 @@ struct float4
 	float4(float value)
 		: X(value), Y(value), Z(value), W(value)
 	{}
+
+	static bool Equal(const float4& left, const float4& right)
+	{
+		return
+			utils::Equal(left.X, right.X) &&
+			utils::Equal(left.Y, right.Y) &&
+			utils::Equal(left.Z, right.Z) &&
+			utils::Equal(left.W, right.W);
+	}
 
 	friend bool operator < (const float4& left, const float4& right)
 	{
