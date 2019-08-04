@@ -36,6 +36,15 @@ public:
 // End Data
 
 
+enum class EFindContoursMode
+{
+	External = 0,
+	List = 1,
+	CComp = 2,
+	Tree = 3,
+	FloodFill = 4,
+};
+
 class FindContoursComputeNode : public ComputeNodeImpl
 {
 	FROX_COMPUTENODE(FindContoursComputeNode, "findcontours")
@@ -50,9 +59,12 @@ public:
 	virtual bool IsValid() const override;
 	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
+	FROX_API void SetMode(EFindContoursMode mode);
+
 private:
 	TExpressionInput<ComputeFramePtr> _input;
-	// TODO. Add other inputs
+	EFindContoursMode _mode;
+	// TODO. Add method and offset
 
 	TOutputData<ComputeDataPtr> _contours;
 	TOutputData<ComputeDataPtr> _hierarchy;

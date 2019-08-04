@@ -20,7 +20,26 @@ FROX_COMPUTEDATA_IMPL(HierarchyComputeData)
 namespace functions {
 
 #ifndef WITHOUT_OPENCV
-void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy)
+int FindContoursModeToCvMode(EFindContoursMode mode)
+{
+	switch (mode)
+	{
+	case EFindContoursMode::External:
+		return cv::RETR_EXTERNAL;
+	case EFindContoursMode::List:
+		return cv::RETR_LIST;
+	case EFindContoursMode::CComp:
+		return cv::RETR_CCOMP;
+	case EFindContoursMode::Tree:
+		return cv::RETR_TREE;
+	case EFindContoursMode::FloodFill:
+		return cv::RETR_FLOODFILL;
+	default:
+		assert(false);
+	}
+}
+
+void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy, EFindContoursMode mode)
 {
 	assert(input->IsOpencv());
 
@@ -34,7 +53,14 @@ void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr
 	HierarchyComputeData* hierarchyComputeData = hierarchy->As<HierarchyComputeData>();
 	assert(hierarchyComputeData != nullptr);
 
-	cv::findContours(inputMat, contoursComputeData->Contours, hierarchyComputeData->Hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+	cv::findContours(
+		inputMat,
+		contoursComputeData->Contours,
+		hierarchyComputeData->Hierarchy,
+		FindContoursModeToCvMode(mode),
+		cv::CHAIN_APPROX_SIMPLE,
+		cv::Point(0, 0)
+	);
 }
 #else
 void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy)
@@ -50,6 +76,7 @@ FROX_COMPUTENODE_IMPL(FindContoursComputeNode)
 FindContoursComputeNode::FindContoursComputeNode(const ComputeNodeInitializer& initializer)
 	: Super(initializer)
 	, _input("input")
+	, _mode(EFindContoursMode::External)
 	, _contours("contours")
 	, _hierarchy("hierarchy")
 {}
@@ -73,32 +100,38 @@ ComputeTask* FindContoursComputeNode::CreateComputeTask(FlowDataImplPtr inputDat
 {
 	// Prepare inputs/output
 	auto input = _input.GetValue(inputData);
+	auto mode = _mode;
 	auto contours = _contours.GetValue(inputData);
 	auto hierarchy = _hierarchy.GetValue(outputData);
 
 	// Make task
 	return
-		ComputeTaskHelper::UnPackProps(input)
+		ComputeTaskHelper::UnPackProps(input, mode)
 		// .Validate
 		// .UnPackOutputs
 		// .Invoke
 		.MakeTask(
-			[](ComputeFramePtr input) {
+			[](ComputeFramePtr input, EFindContoursMode mode) {
 				return input != nullptr && input->IsValid();
 			},
-			[contours, hierarchy](ComputeFramePtr input) {
+			[contours, hierarchy](ComputeFramePtr input, EFindContoursMode mode) {
 				// TODO. Add `compose` and fix callback hell
 				contours.SetValue<ContoursComputeData>(
-					[input, hierarchy](ComputeDataPtr contours) {			
+					[input, mode, hierarchy](ComputeDataPtr contours) {
 						hierarchy.SetValue<HierarchyComputeData>(
-							[input, contours](ComputeDataPtr hierarchy) {
-								functions::FindContours(input, contours, hierarchy);
+							[input, mode, contours](ComputeDataPtr hierarchy) {
+								functions::FindContours(input, contours, hierarchy, mode);
 							}
 						);
 					}
 				);
 			}
 		);
+}
+
+void FindContoursComputeNode::SetMode(EFindContoursMode mode)
+{
+	_mode = mode;
 }
 
 } // End frox
