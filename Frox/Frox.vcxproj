@@ -183,6 +183,7 @@
     <ClInclude Include="OpenCVComputeFrameImpl.h" />
     <ClInclude Include="Output.h" />
     <ClInclude Include="OutputFrameExpression.h" />
+    <ClInclude Include="RadiusOfContourComputeNode.h" />
     <ClInclude Include="ResizeComputeNode.h" />
     <ClInclude Include="SubFlowComputeNode.h" />
     <ClInclude Include="Types.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="MakeFrameComputeNode.cpp" />
     <ClCompile Include="OpenCVComputeFrameImpl.cpp" />
     <ClCompile Include="OutputFrameExpression.cpp" />
+    <ClCompile Include="RadiusOfContourComputeNode.cpp" />
     <ClCompile Include="ResizeComputeNode.cpp" />
     <ClCompile Include="SubFlowComputeNode.cpp" />
     <ClCompile Include="Thread.cpp" />

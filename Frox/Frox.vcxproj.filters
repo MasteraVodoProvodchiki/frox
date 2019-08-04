@@ -198,6 +198,9 @@
     <ClInclude Include="CenterOfContourComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="RadiusOfContourComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -327,6 +330,9 @@
       <Filter>Private\Common</Filter>
     </ClCompile>
     <ClCompile Include="CenterOfContourComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="RadiusOfContourComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
