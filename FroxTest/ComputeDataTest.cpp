@@ -5,17 +5,18 @@
 #include <MakeFrameComputeNode.h>
 #include <FindContoursComputeNode.h>
 #include <CenterOfContourComputeNode.h>
+#include <RadiusOfContourComputeNode.h>
 
 using namespace frox;
 
-ComputeFramePtr makeCircle(Size size)
+ComputeFramePtr makeCircle(Size size = Size{ 64, 64 }, uint32_t radius = 24)
 {
 	auto gFrox = FroxInstance();
 	assert(gFrox != nullptr);
 
 	// TODO. std::vector<bool> doesn't contain method data
 	uint8_t* values = new uint8_t[size.Width * size.Height];
-	float radius = float(size.Width - size.Width / 4) * 0.5f;
+	float radiusf = float(radius);
 	for (uint32_t x = 0; x < size.Width; ++x)
 	{
 		for (uint32_t y = 0; y < size.Height; ++y)
@@ -24,7 +25,7 @@ ComputeFramePtr makeCircle(Size size)
 				std::powf(int(x) - int(size.Width / 2), 2.f) +
 				std::powf(int(y) - int(size.Height / 2), 2.f)
 			);
-			values[y * size.Width + x] = d < radius ? 255 : 0;
+			values[y * size.Width + x] = d < radiusf ? 255 : 0;
 		}
 	}
 
@@ -44,7 +45,7 @@ bool findContoursTest(FlowContext context)
 	FlowData& ouputData = context.OuputData;
 
 	// Create nodes
-	auto inputFrame = makeCircle(Size{64, 64});
+	auto inputFrame = makeCircle(Size{64, 64}, 24);
 
 	auto findContours = flow.CreateNode<FindContoursComputeNode>("FindContours");
 
@@ -75,7 +76,7 @@ bool findContoursTest(FlowContext context)
 	);
 }
 
-bool centerOfContoursTest(FlowContext context)
+bool centerOfContourTest(FlowContext context)
 {
 	ComputeFlow& flow = context.Flow;
 	FlowPerformer& performer = context.Performer;
@@ -84,7 +85,7 @@ bool centerOfContoursTest(FlowContext context)
 
 	// Create nodes
 	Size frameSize = Size{ 64, 64 };
-	auto inputFrame = makeCircle(frameSize);
+	auto inputFrame = makeCircle(frameSize, 24);
 
 	auto findContours = flow.CreateNode<FindContoursComputeNode>("FindContours");
 	auto centerOfContours = flow.CreateNode<CenterOfContourComputeNode>("CenterOfContours");
@@ -118,10 +119,56 @@ bool centerOfContoursTest(FlowContext context)
 	);
 }
 
+bool radiusOfContourTest(FlowContext context)
+{
+	ComputeFlow& flow = context.Flow;
+	FlowPerformer& performer = context.Performer;
+	FlowData& inputData = context.InputData;
+	FlowData& ouputData = context.OuputData;
+
+	// Create nodes
+	Size frameSize = Size{ 64, 64 };
+	uint32_t radius = 24;
+	auto inputFrame = makeCircle(frameSize, radius);
+
+	auto findContours = flow.CreateNode<FindContoursComputeNode>("FindContours");
+	auto radiusOfContours = flow.CreateNode<RadiusOfContourComputeNode>("RadiusOfContours");
+
+	// Set inputs
+	inputData.SetFrame("testframe", inputFrame);
+
+	// Connect
+	flow.ConnectEntry(flow.CreateEntry("testframe"), findContours);
+	flow.ConnectNodes(findContours, radiusOfContours);
+	flow.ConnectOutput(flow.CreateOutput("out", EPinValueType::Data), radiusOfContours);
+
+	// Run
+	return runFlowBase(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		[frameSize, radius](FlowData& ouputData) {
+			ComputeDataPtr computeData = ouputData.GetData("out");
+			if (!computeData)
+			{
+				return false;
+			}
+
+			RadiusOfContourComputeData* radiusOfContourData = computeData->As<RadiusOfContourComputeData>();
+			return
+				radiusOfContourData->Values.size() == 1 &&
+				float2::Equal(radiusOfContourData->Values.front().Center, float2{ float(frameSize.Width / 2), float(frameSize.Height / 2) }) &&
+				utils::Equal(std::round(radiusOfContourData->Values.front().Radius), float(radius));
+		}
+	);
+}
+
 void Tests::ComputeDataTest()
 {
 	// Test
 	using namespace std::placeholders;
 	test("FindContours", std::bind(&findContoursTest, _1));
-	test("FindContours", std::bind(&centerOfContoursTest, _1));
+	test("CenterOfContour", std::bind(&centerOfContourTest, _1));
+	test("RadiusOfContour", std::bind(&radiusOfContourTest, _1));
 }
