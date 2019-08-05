@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "ComputeData.h"
 #include "Variant.h"
 #include "Guid.h"
 
@@ -31,6 +32,12 @@ public:
 
 	virtual void SetFrame(const Guid& guid, ComputeFramePtr frame) = 0;
 	virtual ComputeFramePtr GetFrame(const Guid& guid) const = 0;
+
+	virtual void SetData(const char* name, ComputeDataPtr data) = 0;
+	virtual ComputeDataPtr GetData(const char* name) const = 0;
+
+	virtual void SetData(const Guid& guid, ComputeDataPtr data) = 0;
+	virtual ComputeDataPtr GetData(const Guid& guid) const = 0;
 };
 
 } // End frox

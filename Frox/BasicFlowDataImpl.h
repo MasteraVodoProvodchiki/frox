@@ -26,6 +26,10 @@ public:
 	virtual ComputeFramePtr GetFrame(const char* name) const override;
 	virtual void SetFrame(const Guid& guid, ComputeFramePtr frame) override;
 	virtual ComputeFramePtr GetFrame(const Guid& guid) const override;
+	virtual void SetData(const char* name, ComputeDataPtr data) override;
+	virtual ComputeDataPtr GetData(const char* name) const override;
+	virtual void SetData(const Guid& guid, ComputeDataPtr data) override;
+	virtual ComputeDataPtr GetData(const Guid& guid) const override;
 
 private:
 	std::map<std::string, Variant> _valuesByName;
@@ -33,6 +37,9 @@ private:
 
 	std::map<std::string, ComputeFramePtr> _framesByName;
 	std::map<Guid, ComputeFramePtr> _framesByGuid;
+
+	std::map<std::string, ComputeDataPtr> _datasByName;
+	std::map<Guid, ComputeDataPtr> _datasByGuid;
 };
 
 } // End frox

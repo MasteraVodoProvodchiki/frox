@@ -23,6 +23,7 @@ public:
 	// Expression overrides
 	virtual Variant GetValue(FlowDataImplPtr data) const override;
 	virtual ComputeFramePtr GetFrame(FlowDataImplPtr data) const override;
+	virtual ComputeDataPtr GetData(FlowDataImplPtr data) const override;
 
 private:
 	Guid _pinId;

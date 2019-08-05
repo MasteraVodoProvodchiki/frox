@@ -45,7 +45,7 @@ public:
 private: \
 	static const TFactoryRegistrar<classname> creator##classname; \
 public: \
-	virtual const char* GetNodeType() { return GetNodeTypeStatic(); } \
+	virtual const char* GetNodeType() const { return GetNodeTypeStatic(); } \
 	static const char* GetNodeTypeStatic() { return textName; } \
 private:
 

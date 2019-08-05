@@ -30,7 +30,8 @@ class FlowPerformer;
 enum class EPinValueType
 {
 	Frame = 0,
-	Value
+	Value,
+	Data
 };
 
 } // End frox

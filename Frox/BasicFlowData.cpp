@@ -36,4 +36,16 @@ ComputeFramePtr BasicFlowData::GetFrame(const char* name) const
 	return _impl->GetFrame(name);
 }
 
+void BasicFlowData::SetData(const char* name, ComputeDataPtr data)
+{
+	assert(_impl);
+	return _impl->SetData(name, data);
+}
+
+ComputeDataPtr BasicFlowData::GetData(const char* name) const
+{
+	assert(_impl);
+	return _impl->GetData(name);
+}
+
 } // End frox

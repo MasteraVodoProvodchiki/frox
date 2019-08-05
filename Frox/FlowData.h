@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "ComputeData.h"
 #include "Variant.h"
 
 namespace frox {
@@ -15,6 +16,8 @@ public:
 	virtual Variant GetValue(const char* name) const = 0;
 	virtual void SetFrame(const char* name, ComputeFramePtr frame) = 0;
 	virtual ComputeFramePtr GetFrame(const char* name) const = 0;
+	virtual void SetData(const char* name, ComputeDataPtr data) = 0;
+	virtual ComputeDataPtr GetData(const char* name) const = 0;
 
 	template<typename T>
 	T GetValue(const char* name) const

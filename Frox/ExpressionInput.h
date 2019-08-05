@@ -91,4 +91,9 @@ inline bool TExpressionInput<ComputeFramePtr>::IsValid() const
 	return Expr ? Expr->IsValid() : DefaultValue != nullptr;
 }
 
+inline bool TExpressionInput<ComputeDataPtr>::IsValid() const
+{
+	return Expr ? Expr->IsValid() : DefaultValue != nullptr;
+}
+
 } // End frox

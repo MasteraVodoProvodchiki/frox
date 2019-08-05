@@ -114,22 +114,36 @@ void test(const char* name, FunctionT func, ArgsT... args)
 }
 
 template<typename FunctionT>
-bool runFlow(frox::ComputeFlow& flow, frox::FlowPerformer& performer, frox::FlowData& inputData, frox::FlowData& ouputData, FunctionT tester)
+bool runFlowBase(frox::ComputeFlow& flow, frox::FlowPerformer& performer, frox::FlowData& inputData, frox::FlowData& ouputData, FunctionT tester)
 {
-	using namespace frox;
-
 	// Invoke
 	performer.Perform(&flow, &inputData);
 	performer.Fetch(&flow, &ouputData);
 
-	// Check
-	ComputeFramePtr result = ouputData.GetFrame("out");
-	if (!result || !result->IsValid())
-	{
-		return false;
-	}
+	return tester(ouputData);
+}
 
-	return tester(result);
+template<typename FunctionT>
+bool runFlow(frox::ComputeFlow& flow, frox::FlowPerformer& performer, frox::FlowData& inputData, frox::FlowData& ouputData, FunctionT tester)
+{
+	using namespace frox;
+
+	return runFlowBase(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		[tester](frox::FlowData& ouputData) {
+			// Check
+			ComputeFramePtr result = ouputData.GetFrame("out");
+			if (!result || !result->IsValid())
+			{
+				return false;
+			}
+
+			return tester(result);
+		}
+	);
 }
 
 // Equals

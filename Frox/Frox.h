@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "ComputeData.h"
 
 namespace frox {
 
@@ -68,6 +69,14 @@ public:
 	ComputeFramePtr CreateScalar(float value)
 	{
 		return CreateComputeFrame(Size{ 1, 1 }, ComputeFrameType{ ECFT_Float, 1 }, &value);
+	}
+
+	virtual ComputeDataPtr CreateComputeData(const char* type) = 0;
+
+	template<typename ComputeDataT>
+	ComputeDataPtr CreateComputeData()
+	{
+		return this->CreateComputeData(ComputeDataT::GetTypeStatic());
 	}
 };
 

@@ -21,6 +21,7 @@ public:
 	virtual void DestroyFlowPerformer(FlowPerformer* performer) override;
 	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr) override;
 	virtual void DestroyComputeFrame(ComputeFramePtr computeFlow) override;
+	virtual ComputeDataPtr CreateComputeData(const char* type) override;
 
 private:
 	std::vector<ComputeFlow*> _flows;

@@ -4,6 +4,9 @@
 #include "FlowDataImpl.h"
 #include "Frox.h"
 
+#include "ComputeFrame.h"
+#include "ComputeData.h"
+
 namespace frox {
 
 template<typename T> //, typename ...ArgsT>
@@ -109,6 +112,70 @@ struct TOutputFrame : public OutputPin
 	inline TLazyFrame GetValue(FlowDataImplPtr data) const
 	{
 		return TLazyFrame(data, Id);
+	}
+};
+
+// Data
+struct TLazyData
+{
+	FlowDataImplPtr Data;
+	Guid Id;
+
+	TLazyData(FlowDataImplPtr data, Guid Id)
+		: Data(data)
+		, Id(Id)
+	{}
+
+	TLazyData(const TLazyData& other)
+		: Data(other.Data)
+		, Id(other.Id)
+	{}
+
+	void SetValue(ComputeDataPtr value) const
+	{
+		Data->SetData(Id, value);
+	}
+
+	template<typename DataT, typename CallbackT>
+	void SetValue(CallbackT callback) const
+	{
+		ComputeDataPtr data = Data->GetData(Id);
+		if (!data || !data->IsA<DataT>())
+		{
+			data = FroxInstance()->CreateComputeData<DataT>();
+		}
+
+		callback(data);
+
+		Data->SetData(Id, data);
+	}
+};
+
+/*
+namespace utils {
+
+template<typename ...TypesT>
+struct TLazyDataComposer
+{
+	template<typename CallbackT, typename FirstT, typename ...ArgsT>
+	void SetValues(FirstT first, ArgsT... args, CallbackT callback) const
+	{
+	}
+};
+
+} // End utils
+*/
+
+template<typename T>
+struct TOutputData : public OutputPin
+{
+	TOutputData(const char* name)
+		: OutputPin(name)
+	{}
+
+	inline TLazyData GetValue(FlowDataImplPtr data) const
+	{
+		return TLazyData(data, Id);
 	}
 };
 

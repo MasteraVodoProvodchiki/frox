@@ -13,4 +13,9 @@ ComputeFramePtr OutputFrameExpression::GetFrame(FlowDataImplPtr data) const
 	return data->GetFrame(_pinId);
 }
 
+ComputeDataPtr OutputFrameExpression::GetData(FlowDataImplPtr data) const
+{
+	return data->GetData(_pinId);
+}
+
 } // End frox

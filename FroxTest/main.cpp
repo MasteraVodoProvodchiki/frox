@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
 	gFrox = FroxInit();
 
 	Tests::MainTest();
+	Tests::ComputeDataTest();
 	Tests::DepthSensorTest();
 
 	// Shutdown
