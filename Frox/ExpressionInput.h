@@ -19,8 +19,8 @@ struct ExpressionInput : public InputPin
 		, Expr(expr)
 	{}
 
-	virtual void ConnectFrom(Pin* pin) override;
-	virtual void ConnectFrom(Guid id) override;
+	FROX_API virtual void ConnectFrom(Pin* pin) override;
+	FROX_API virtual void ConnectFrom(Guid id) override;
 };
 
 template<typename T>
