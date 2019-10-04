@@ -6,23 +6,23 @@
 
 namespace frox {
 
-using MOCSensorDevicePtr = std::shared_ptr<class MOCSensorDevice>;
-class MOCSensorDevice
+using MockSensorDevicePtr = std::shared_ptr<class MockSensorDevice>;
+class MockSensorDevice
 	: public SensorDevice
-	, public std::enable_shared_from_this<MOCSensorDevice>
+	, public std::enable_shared_from_this<MockSensorDevice>
 {
 public:
-	MOCSensorDevice(const char* name, const char* serial);
-	virtual ~MOCSensorDevice();
+	MockSensorDevice(const char* name, const char* serial);
+	virtual ~MockSensorDevice();
 
-	MOCSensorDevicePtr GetPtr()
+	MockSensorDevicePtr GetPtr()
 	{
 		return shared_from_this();
 	}
 
-	static MOCSensorDevicePtr Create(const char* name, const char* serial)
+	static MockSensorDevicePtr Create(const char* name, const char* serial)
 	{
-		return std::make_shared<MOCSensorDevice>(name, serial);
+		return std::make_shared<MockSensorDevice>(name, serial);
 	}
 
 	// SensorDevice overrides

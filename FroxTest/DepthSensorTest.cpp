@@ -5,7 +5,7 @@
 
 #include <DepthSensorModule.h>
 #include <SensorFrameNode.h>
-#include <MOCSensorDeviceManager.h>
+#include <MockSensorDeviceManager.h>
 #include <RealSenseModule.h>
 
 using namespace frox;
@@ -18,13 +18,13 @@ bool sensorFrameTest0(FlowContext context)
 	FlowData& ouputData = context.OuputData;
 
 	// Add MOC
-	auto mocDeviceManager = IDepthSensorModule::Get().CreateDeviceManager<MOCSensorDeviceManager>();
-	auto mocDevice = mocDeviceManager->CreateDevice();
-	assert(mocDevice);
+	auto mockDeviceManager = IDepthSensorModule::Get().CreateDeviceManager<MockSensorDeviceManager>();
+	auto mockDevice = mockDeviceManager->CreateDevice();
+	assert(mockDevice);
 
 	// Create nodes
 	auto sensorDepthFrame = flow.CreateNode<SensorDepthFrameNode>("SensorDepthFrame");
-	sensorDepthFrame->SetSensorSerial(mocDevice->GetSerial());
+	sensorDepthFrame->SetSensorSerial(mockDevice->GetSerial());
 	flow.ConnectOutput(flow.CreateOutput("out"), sensorDepthFrame);
 
 	// Test
@@ -40,7 +40,7 @@ bool sensorFrameTest0(FlowContext context)
 	);
 
 	// Remove MOC
-	IDepthSensorModule::Get().UnRegisterDeviceManager(mocDeviceManager.get());
+	IDepthSensorModule::Get().UnRegisterDeviceManager(mockDeviceManager.get());
 	return result;
 }
 
