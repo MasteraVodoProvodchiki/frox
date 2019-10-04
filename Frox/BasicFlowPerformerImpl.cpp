@@ -49,6 +49,7 @@ void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow, FlowDataImplPtr in
 				{
 					_privateData->SetValue(entryNode.PinId, value);
 				}
+				break;
 			}	
 			case EPinValueType::Data: {
 				ComputeDataPtr data = inputData->GetData(entry.Name.data());
@@ -56,6 +57,7 @@ void BasicFlowPerformerImpl::Perform(ComputeFlowImplPtr flow, FlowDataImplPtr in
 				{
 					_privateData->SetData(entryNode.PinId, data);
 				}
+				break;
 			}
 			}	
 		}
@@ -147,6 +149,7 @@ void BasicFlowPerformerImpl::Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outp
 					Variant value = _privateData->GetValue(outputNode.PinId);
 					outputData->SetValue(output.Name.c_str(), value);
 				}
+				break;
 			}
 			case EPinValueType::Data: {
 				for (const ComputeFlowEntryNode& outputNode : output.Nodes)
@@ -154,6 +157,7 @@ void BasicFlowPerformerImpl::Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outp
 					ComputeDataPtr data = _privateData->GetData(outputNode.PinId);
 					outputData->SetData(output.Name.c_str(), data);
 				}
+				break;
 			}
 			}
 		}

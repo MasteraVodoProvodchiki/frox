@@ -1,4 +1,4 @@
-#include "MOCSensorInspector.h"
+#include "MockSensorInspector.h"
 
 #include <Frox.h>
 #include <Log.h>
@@ -6,17 +6,17 @@
 
 namespace frox {
 
-MOCSensorInspector::MOCSensorInspector(MOCSensorDevicePtr device, EInspectorType type)
+MockSensorInspector::MockSensorInspector(MockSensorDevicePtr device, EInspectorType type)
 	: _device(device)
 	, _type(type)
 {}
 
-MOCSensorInspector::~MOCSensorInspector()
+MockSensorInspector::~MockSensorInspector()
 {
 	Stop();
 }
 
-bool MOCSensorInspector::Start()
+bool MockSensorInspector::Start()
 {
 	switch (_type)
 	{
@@ -48,17 +48,17 @@ bool MOCSensorInspector::Start()
 	return true;
 }
 
-void MOCSensorInspector::Stop()
+void MockSensorInspector::Stop()
 {
 	_frame = nullptr;
 }
 
-bool MOCSensorInspector::IsValid() const
+bool MockSensorInspector::IsValid() const
 {
 	return _frame != nullptr;
 }
 
-ComputeFramePtr MOCSensorInspector::ReadFrame() const
+ComputeFramePtr MockSensorInspector::ReadFrame() const
 {
 	return _frame;
 }
