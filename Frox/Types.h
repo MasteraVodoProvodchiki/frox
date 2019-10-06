@@ -84,6 +84,10 @@ struct float4
 		: X(value), Y(value), Z(value), W(value)
 	{}
 
+	float4(float x, float y, float z, float w)
+		: X(x), Y(y), Z(z), W(w)
+	{}
+
 	static bool Equal(const float4& left, const float4& right)
 	{
 		return
