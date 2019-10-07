@@ -6,6 +6,7 @@
 #include <AvgComputeNode.h>
 #include <MakeFrameComputeNode.h>
 #include <ConvertToComputeNode.h>
+#include <InRangeComputeNode.h>
 #include <CropComputeNode.h>
 #include <ResizeComputeNode.h>
 #include <FrameInfoComputeNode.h>
@@ -318,6 +319,37 @@ bool convertToTest0(FlowContext context, Size size)
 	);
 }
 
+bool inRangeTest0(FlowContext context, Size size)
+{
+	ComputeFlow& flow = context.Flow;
+	FlowPerformer& performer = context.Performer;
+	FlowData& inputData = context.InputData;
+	FlowData& ouputData = context.OuputData;
+
+	// Create nodes
+	auto make = flow.CreateNode<MakeNoiseFrameComputeNode>("Make");
+	make->SetWidth(size.Width);
+	make->SetHeight(size.Height);
+	make->SetType(EComputeFrameType::ECFT_UInt16);
+
+	auto inRange = flow.CreateNode<InRangeComputeNode>("InRange");
+	inRange->SetLow(10);
+	inRange->SetHigh(20);
+
+	// Connect
+	flow.ConnectNodes(make, inRange);
+	flow.ConnectOutput(flow.CreateOutput("out"), inRange);
+
+	// Run
+	return runFlow(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		std::bind(&checkRange<uint8_t>, std::placeholders::_1, 0, 255)
+	);
+}
+
 bool cropTest0(FlowContext context, Size size, EComputeFrameType type)
 {
 	ComputeFlow& flow = context.Flow;
@@ -563,6 +595,7 @@ void Tests::MainTest()
 	test("Multi", std::bind(&multiTest, _1, Size{ 64, 64 }));
 	testEachType("Noise", std::bind(&noiseTest0, _1, Size{ 64, 64 }, _2));
 	test("ConvertTo", std::bind(&convertToTest0, _1, Size{ 64, 64 }));
+	test("InRange", std::bind(&inRangeTest0, _1, Size{ 64, 64 }));
 	testEachType("Crop", std::bind(&cropTest0, _1, Size{ 64, 64 }, _2));
 	test("Resize", std::bind(&resizeTest0, _1, Size{ 64, 64 }));
 	test("Multi Channels", std::bind(&multiChannelsTest0, _1, Size{ 64, 64 }));
