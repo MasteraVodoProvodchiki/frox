@@ -202,6 +202,52 @@ bool checkSum(frox::ComputeFramePtr frame, SumT expected)
 	return equalValue(sum, expected);
 }
 
+template<typename T>
+bool countOfValue(frox::ComputeFramePtr frame, T expectedValue, uint32_t expectedCount)
+{
+	uint32_t sum = 0;
+	frox::utils::Foreach<T>(frame, [&sum, expectedValue](T value) {
+		sum += value == expectedValue ? 1 : 0;
+	});
+
+	std::cout
+		<< sum
+		<< " expected [" << expectedCount << "]";
+
+	return sum == expectedCount;
+}
+
 bool checkSumOne(frox::ComputeFramePtr frame, uint32_t nbElements);
 
 frox::ComputeFramePtr makeFrame(frox::Size size, frox::EComputeFrameType type, frox::Variant);
+frox::ComputeFramePtr makeCircle(frox::Size size = frox::Size{ 64, 64 }, uint32_t radius = 24);
+
+template<typename T>
+frox::ComputeFramePtr makeBox(frox::Size size, frox::Point offset, frox::Size extent, frox::EComputeFrameType type, T in, T out)
+{
+	auto gFrox = frox::FroxInstance();
+	assert(gFrox != nullptr);
+
+	// TODO. std::vector<bool> doesn't contain method data
+	T* values = new T[size.Width * size.Height];
+
+	int32_t minX = offset.X - extent.Width;
+	int32_t minY = offset.Y - extent.Height;
+
+	int32_t maxX = offset.X + extent.Width;
+	int32_t maxY = offset.Y + extent.Height;
+
+	for (uint32_t x = 0; x < size.Width; ++x)
+	{
+		for (uint32_t y = 0; y < size.Height; ++y)
+		{
+			values[y * size.Width + x] = (x >= minX && y >= minY && x < maxX && y < maxY) ? in : out;
+		}
+	}
+
+	auto frame = gFrox->CreateComputeFrame(size, type, values);
+
+	delete[] values;
+
+	return frame;
+}

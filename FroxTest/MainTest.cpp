@@ -327,14 +327,16 @@ bool inRangeTest0(FlowContext context, Size size)
 	FlowData& ouputData = context.OuputData;
 
 	// Create nodes
-	auto make = flow.CreateNode<MakeNoiseFrameComputeNode>("Make");
-	make->SetWidth(size.Width);
-	make->SetHeight(size.Height);
-	make->SetType(EComputeFrameType::ECFT_UInt16);
+	Size boxSize = Size{ 8, 8 };
+	auto inputFrame = makeBox<uint16_t>(Size{ 64, 64 }, Point{ 32, 32 }, Size{8, 8}, EComputeFrameType::ECFT_UInt16, 500, 5);
+	
+
+	auto make = flow.CreateNode<ConstFrameComputeNode>("Make");
+	make->SetFrame(inputFrame);
 
 	auto inRange = flow.CreateNode<InRangeComputeNode>("InRange");
 	inRange->SetLow(10);
-	inRange->SetHigh(20);
+	inRange->SetHigh(600);
 
 	// Connect
 	flow.ConnectNodes(make, inRange);
@@ -346,7 +348,7 @@ bool inRangeTest0(FlowContext context, Size size)
 		performer,
 		inputData,
 		ouputData,
-		std::bind(&checkRange<uint8_t>, std::placeholders::_1, 0, 255)
+		std::bind(&countOfValue<uint8_t>, std::placeholders::_1, 255, boxSize.Width * 2 * boxSize.Height * 2)
 	);
 }
 

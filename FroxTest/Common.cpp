@@ -86,3 +86,31 @@ ComputeFramePtr makeFrame(Size size, EComputeFrameType type, Variant value)
 
 	return nullptr;
 }
+
+ComputeFramePtr makeCircle(Size size, uint32_t radius)
+{
+	auto gFrox = FroxInstance();
+	assert(gFrox != nullptr);
+
+	// TODO. std::vector<bool> doesn't contain method data
+	uint8_t* values = new uint8_t[size.Width * size.Height];
+	float radiusf = float(radius);
+	for (uint32_t x = 0; x < size.Width; ++x)
+	{
+		for (uint32_t y = 0; y < size.Height; ++y)
+		{
+			float d = std::sqrtf(
+				std::powf(int(x) - int(size.Width / 2), 2.f) +
+				std::powf(int(y) - int(size.Height / 2), 2.f)
+			);
+			values[y * size.Width + x] = d < radiusf ? 255 : 0;
+		}
+	}
+
+
+	auto frame = gFrox->CreateComputeFrame(size, EComputeFrameType::ECFT_UInt8, values);
+
+	delete[] values;
+
+	return frame;
+}
