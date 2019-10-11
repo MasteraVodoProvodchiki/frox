@@ -179,6 +179,7 @@
     <ClInclude Include="FlowPerformerImpl.h" />
     <ClInclude Include="FrameInfoComputeNode.h" />
     <ClInclude Include="FrameSizeExpression.h" />
+    <ClInclude Include="GaussianBlurComputeNode.h" />
     <ClInclude Include="Guid.h" />
     <ClInclude Include="InRangeComputeNode.h" />
     <ClInclude Include="OpenCV.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="FrameSizeExpression.cpp" />
     <ClCompile Include="Frox.cpp" />
     <ClCompile Include="FroxImpl.cpp" />
+    <ClCompile Include="GaussianBlurComputeNode.cpp" />
     <ClCompile Include="Guid.cpp" />
     <ClCompile Include="InRangeComputeNode.cpp" />
     <ClCompile Include="Log.cpp" />
