@@ -76,6 +76,10 @@ struct EachFrameSize
 		Sizes.push_back(frox::Size{ 58, 14 });
 	}
 
+	EachFrameSize(const std::vector<frox::Size>& sizes)
+		: Sizes(sizes)
+	{}
+
 	template<typename FuncT, typename ContextT>
 	bool operator () (const char* name, FuncT f, ContextT context)
 	{

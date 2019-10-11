@@ -251,3 +251,5 @@ frox::ComputeFramePtr makeBox(frox::Size size, frox::Point offset, frox::Size ex
 
 	return frame;
 }
+
+frox::ComputeFramePtr makeBoxByType(frox::Size size, frox::Point offset, frox::Size extent, frox::EComputeFrameType type, frox::Variant in, frox::Variant out);

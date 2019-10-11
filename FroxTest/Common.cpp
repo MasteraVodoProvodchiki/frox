@@ -114,3 +114,24 @@ ComputeFramePtr makeCircle(Size size, uint32_t radius)
 
 	return frame;
 }
+
+frox::ComputeFramePtr makeBoxByType(frox::Size size, frox::Point offset, frox::Size extent, frox::EComputeFrameType type, Variant in, Variant out)
+{
+	switch (type)
+	{
+	case ECFT_Bool:
+		return makeBox<bool>(size, offset, extent, type, in.To<bool>(), out.To<bool>());
+	case ECFT_UInt8:
+		return makeBox<uint8_t>(size, offset, extent, type, in.To<uint8_t>(), out.To<uint8_t>());
+	case ECFT_UInt16:
+		return makeBox<uint16_t>(size, offset, extent, type, in.To<uint16_t>(), out.To<uint16_t>());
+	case ECFT_UInt32:
+		return makeBox<uint32_t>(size, offset, extent, type, in.To<uint32_t>(), out.To<uint32_t>());
+	case ECFT_Float:
+		return makeBox<float>(size, offset, extent, type, in.To<float>(), out.To<float>());
+	default:
+		return nullptr;
+	}
+
+	return nullptr;
+}
