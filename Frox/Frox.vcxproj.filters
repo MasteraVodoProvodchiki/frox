@@ -204,6 +204,9 @@
     <ClInclude Include="InRangeComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="FlipComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -339,6 +342,9 @@
       <Filter>Public\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="InRangeComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="FlipComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>

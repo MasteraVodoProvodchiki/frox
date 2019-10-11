@@ -207,7 +207,7 @@ bool countOfValue(frox::ComputeFramePtr frame, T expectedValue, uint32_t expecte
 {
 	uint32_t sum = 0;
 	frox::utils::Foreach<T>(frame, [&sum, expectedValue](T value) {
-		sum += value == expectedValue ? 1 : 0;
+		sum += equalValue(value, expectedValue) ? 1 : 0;
 	});
 
 	std::cout
@@ -216,6 +216,8 @@ bool countOfValue(frox::ComputeFramePtr frame, T expectedValue, uint32_t expecte
 
 	return sum == expectedCount;
 }
+
+bool countOfValue(frox::ComputeFramePtr frame, frox::Variant expectedValue, uint32_t expectedCount);
 
 bool checkSumOne(frox::ComputeFramePtr frame, uint32_t nbElements);
 
