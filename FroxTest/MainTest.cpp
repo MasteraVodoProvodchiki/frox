@@ -452,7 +452,7 @@ struct EachFrameFlip
 	{
 		static std::map<EFrameFlip, std::string> names = {
 			std::make_pair(None, "No"),
-			std::make_pair(Horizontal, "Horizontal"),
+			std::make_pair(Vertical, "Vertical"),
 			std::make_pair(Horizontal, "Horizontal"),
 			std::make_pair(Both, "Both")
 		};
