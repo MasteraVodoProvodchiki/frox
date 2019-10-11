@@ -9,6 +9,7 @@
 #include <InRangeComputeNode.h>
 #include <CropComputeNode.h>
 #include <ResizeComputeNode.h>
+#include <FlipComputeNode.h>
 #include <FrameInfoComputeNode.h>
 
 using namespace frox;
@@ -426,6 +427,98 @@ bool resizeTest0(FlowContext context, Size size)
 	);
 }
 
+//
+
+struct EachFrameFlip
+{
+	enum EFrameFlip
+	{
+		None,
+		Vertical,
+		Horizontal,
+		Both
+	};
+
+	std::vector<EFrameFlip> Types;
+	EachFrameFlip()
+	{
+		Types.push_back(None);
+		Types.push_back(Vertical);
+		Types.push_back(Horizontal);
+		Types.push_back(Both);
+	}
+
+	static std::string TypeToName(EFrameFlip type, const std::string& defaultName = "none")
+	{
+		static std::map<EFrameFlip, std::string> names = {
+			std::make_pair(None, "No"),
+			std::make_pair(Horizontal, "Horizontal"),
+			std::make_pair(Horizontal, "Horizontal"),
+			std::make_pair(Both, "Both")
+		};
+
+		auto it = names.find(type);
+		return it != names.end() ? it->second : defaultName;
+	}
+
+	template<typename FuncT, typename ContextT>
+	bool operator () (const char* name, FuncT f, ContextT context)
+	{
+		bool result = true;
+		for (EFrameFlip type : Types)
+		{
+			std::string newName = std::string(name) + " - Flip " + TypeToName(type);
+			result &= context(newName.c_str(), f(type));
+		}
+
+		return result;
+	}
+};
+
+bool flipTest0(FlowContext context, Size size, EComputeFrameType type, EachFrameFlip::EFrameFlip flipType)
+{
+	ComputeFlow& flow = context.Flow;
+	FlowPerformer& performer = context.Performer;
+	FlowData& inputData = context.InputData;
+	FlowData& ouputData = context.OuputData;
+
+	// Create nodes
+	ComputeFramePtr inputFrame;
+	uint32_t sum;
+	if (size != Size{1, 1})
+	{
+		Point offset = Point{ int32_t(size.Width / 2), int32_t(size.Height / 2) };
+		Size boxSize = Size{ 8, 8 };
+		inputFrame = makeBoxByType(size, offset, boxSize, type, 1, 0);
+		sum = boxSize.Width * 2 * boxSize.Height * 2;
+	}
+	else
+	{
+		inputFrame = makeFrame(size, type, 1);
+		sum = 1;
+	}
+	
+	auto make = flow.CreateNode<ConstFrameComputeNode>("Make");
+	make->SetFrame(inputFrame);
+
+	auto inRange = flow.CreateNode<FlipComputeNode>("Flip");
+	inRange->SetVertical(flipType == EachFrameFlip::Both || flipType == EachFrameFlip::Vertical);
+	inRange->SetHorizontal(flipType == EachFrameFlip::Both || flipType == EachFrameFlip::Horizontal);
+
+	// Connect
+	flow.ConnectNodes(make, inRange);
+	flow.ConnectOutput(flow.CreateOutput("out"), inRange);
+
+	// Run
+	return runFlow(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		std::bind(&countOfValue, std::placeholders::_1, 1, sum)
+	);
+}
+
 bool multiChannelsTest0(FlowContext context, Size size)
 {
 	ComputeFlow& flow = context.Flow;
@@ -605,6 +698,16 @@ void Tests::MainTest()
 		inRangeTestTester,
 		EachFrameType().Ignored({ EComputeFrameType::ECFT_Bool, EComputeFrameType::ECFT_UInt8 }),
 		EachFrameSize({ Size{ 64, 64 }, Size{ 58, 44 } }),
+		BasicFlowContext()
+	);
+
+	std::function<bool(EachFrameFlip::EFrameFlip, EComputeFrameType, Size, FlowContext)> flipTestTester = std::bind(&flipTest0, _4, _3, _2, _1);
+	generationTest(
+		"Flip",
+		flipTestTester,
+		EachFrameFlip(),
+		EachFrameType(),
+		EachFrameSize({ Size{ 1, 1 }, Size{ 64, 64 }, Size{ 58, 44 } }),
 		BasicFlowContext()
 	);
 
