@@ -171,6 +171,7 @@
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionInput.h" />
     <ClInclude Include="FindContoursComputeNode.h" />
+    <ClInclude Include="FlipComputeNode.h" />
     <ClInclude Include="FlowData.h" />
     <ClInclude Include="BasicFlowDataImpl.h" />
     <ClInclude Include="FlowDataImpl.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="ExpressionInput.cpp" />
     <ClCompile Include="FindContoursComputeNode.cpp" />
+    <ClCompile Include="FlipComputeNode.cpp" />
     <ClCompile Include="FlowData.cpp" />
     <ClCompile Include="BasicFlowDataImpl.cpp" />
     <ClCompile Include="FlowDataImpl.cpp" />
