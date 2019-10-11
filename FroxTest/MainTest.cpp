@@ -10,6 +10,7 @@
 #include <CropComputeNode.h>
 #include <ResizeComputeNode.h>
 #include <FlipComputeNode.h>
+#include <GaussianBlurComputeNode.h>
 #include <FrameInfoComputeNode.h>
 
 using namespace frox;
@@ -519,6 +520,35 @@ bool flipTest0(FlowContext context, Size size, EComputeFrameType type, EachFrame
 	);
 }
 
+bool gaussianBlurTest0(FlowContext context, Size size, EComputeFrameType type)
+{
+	ComputeFlow& flow = context.Flow;
+	FlowPerformer& performer = context.Performer;
+	FlowData& inputData = context.InputData;
+	FlowData& ouputData = context.OuputData;
+
+	// Create nodes
+	auto inputFrame = makeCircle(size, size.Width / 3);
+
+	auto make = flow.CreateNode<ConstFrameComputeNode>("Make");
+	make->SetFrame(inputFrame);
+
+	auto gaussianBlur = flow.CreateNode<GaussianBlurComputeNode>("GaussianBlur");
+
+	// Connect
+	flow.ConnectNodes(make, gaussianBlur);
+	flow.ConnectOutput(flow.CreateOutput("out"), gaussianBlur);
+
+	// Run
+	return runFlow(
+		flow,
+		performer,
+		inputData,
+		ouputData,
+		std::bind(&checkRangeAuto, std::placeholders::_1)
+	);
+}
+
 bool multiChannelsTest0(FlowContext context, Size size)
 {
 	ComputeFlow& flow = context.Flow;
@@ -701,6 +731,9 @@ void Tests::MainTest()
 		BasicFlowContext()
 	);
 
+	testEachType("Crop", std::bind(&cropTest0, _1, Size{ 64, 64 }, _2));
+	test("Resize", std::bind(&resizeTest0, _1, Size{ 64, 64 }));
+
 	std::function<bool(EachFrameFlip::EFrameFlip, EComputeFrameType, Size, FlowContext)> flipTestTester = std::bind(&flipTest0, _4, _3, _2, _1);
 	generationTest(
 		"Flip",
@@ -711,8 +744,16 @@ void Tests::MainTest()
 		BasicFlowContext()
 	);
 
-	testEachType("Crop", std::bind(&cropTest0, _1, Size{ 64, 64 }, _2));
-	test("Resize", std::bind(&resizeTest0, _1, Size{ 64, 64 }));
+
+	std::function<bool(EComputeFrameType, Size, FlowContext)> gaussianBlurTestTester = std::bind(&gaussianBlurTest0, _3, _2, _1);
+	generationTest(
+		"GaussianBlur",
+		gaussianBlurTestTester,
+		EachFrameType({ frox::ECFT_UInt16, frox::ECFT_Float }),
+		EachFrameSize({ Size{ 64, 64 }, Size{ 58, 44 } }),
+		BasicFlowContext()
+	);
+
 	test("Multi Channels", std::bind(&multiChannelsTest0, _1, Size{ 64, 64 }));
 
 	test("Dynamic Input Props", std::bind(&dynamicInputPropsTest0, _1, Size{ 64, 64 }));
