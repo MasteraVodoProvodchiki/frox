@@ -319,7 +319,7 @@ bool convertToTest0(FlowContext context, Size size)
 	);
 }
 
-bool inRangeTest0(FlowContext context, Size size)
+bool inRangeTest0(FlowContext context, Size size, EComputeFrameType type)
 {
 	ComputeFlow& flow = context.Flow;
 	FlowPerformer& performer = context.Performer;
@@ -327,8 +327,9 @@ bool inRangeTest0(FlowContext context, Size size)
 	FlowData& ouputData = context.OuputData;
 
 	// Create nodes
+	Point offset = Point{ int32_t(size.Width / 2), int32_t(size.Height / 2) };
 	Size boxSize = Size{ 8, 8 };
-	auto inputFrame = makeBox<uint16_t>(Size{ 64, 64 }, Point{ 32, 32 }, Size{8, 8}, EComputeFrameType::ECFT_UInt16, 500, 5);
+	auto inputFrame = makeBoxByType(size, offset, boxSize, type, 500, 5);
 	
 
 	auto make = flow.CreateNode<ConstFrameComputeNode>("Make");
@@ -597,7 +598,16 @@ void Tests::MainTest()
 	test("Multi", std::bind(&multiTest, _1, Size{ 64, 64 }));
 	testEachType("Noise", std::bind(&noiseTest0, _1, Size{ 64, 64 }, _2));
 	test("ConvertTo", std::bind(&convertToTest0, _1, Size{ 64, 64 }));
-	test("InRange", std::bind(&inRangeTest0, _1, Size{ 64, 64 }));
+
+	std::function<bool(EComputeFrameType, Size, FlowContext)> inRangeTestTester = std::bind(&inRangeTest0, _3, _2, _1);
+	generationTest(
+		"InRange",
+		inRangeTestTester,
+		EachFrameType().Ignored({ EComputeFrameType::ECFT_Bool, EComputeFrameType::ECFT_UInt8 }),
+		EachFrameSize({ Size{ 64, 64 }, Size{ 58, 44 } }),
+		BasicFlowContext()
+	);
+
 	testEachType("Crop", std::bind(&cropTest0, _1, Size{ 64, 64 }, _2));
 	test("Resize", std::bind(&resizeTest0, _1, Size{ 64, 64 }));
 	test("Multi Channels", std::bind(&multiChannelsTest0, _1, Size{ 64, 64 }));
