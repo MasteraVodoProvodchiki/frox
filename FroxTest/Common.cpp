@@ -24,6 +24,28 @@ bool checkRangeAuto(ComputeFramePtr frame)
 	return false;
 }
 
+bool countOfValue(frox::ComputeFramePtr frame, Variant expectedValue, uint32_t expectedCount)
+{
+	EComputeFrameType type = frame->GetType().Type;
+	switch (type)
+	{
+	case ECFT_Bool:
+		return countOfValue<bool>(frame, expectedValue.To<bool>(), expectedCount);
+	case ECFT_UInt8:
+		return countOfValue<uint8_t>(frame, expectedValue.To<uint8_t>(), expectedCount);
+	case ECFT_UInt16:
+		return countOfValue<uint16_t>(frame, expectedValue.To<uint16_t>(), expectedCount);
+	case ECFT_UInt32:
+		return countOfValue<uint32_t>(frame, expectedValue.To<uint32_t>(), expectedCount);
+	case ECFT_Float:
+		return countOfValue<float>(frame, expectedValue.To<float>(), expectedCount);
+	default:
+		return false;
+	}
+
+	return false;
+}
+
 bool checkSumOne(ComputeFramePtr frame, uint32_t nbElements)
 {
 	EComputeFrameType type = frame->GetType().Type;
