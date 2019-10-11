@@ -179,6 +179,7 @@
     <ClInclude Include="FrameInfoComputeNode.h" />
     <ClInclude Include="FrameSizeExpression.h" />
     <ClInclude Include="Guid.h" />
+    <ClInclude Include="InRangeComputeNode.h" />
     <ClInclude Include="OpenCV.h" />
     <ClInclude Include="OpenCVComputeFrameImpl.h" />
     <ClInclude Include="Output.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="Frox.cpp" />
     <ClCompile Include="FroxImpl.cpp" />
     <ClCompile Include="Guid.cpp" />
+    <ClCompile Include="InRangeComputeNode.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MakeFrameComputeNode.cpp" />
     <ClCompile Include="OpenCVComputeFrameImpl.cpp" />
