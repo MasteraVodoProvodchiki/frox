@@ -207,6 +207,9 @@
     <ClInclude Include="FlipComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="GaussianBlurComputeNode.h">
+      <Filter>Public\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -345,6 +348,9 @@
       <Filter>Public\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="FlipComputeNode.cpp">
+      <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussianBlurComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
