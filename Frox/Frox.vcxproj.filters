@@ -40,6 +40,9 @@
     <Filter Include="Private\Common">
       <UniqueIdentifier>{6cbe965e-4e91-4523-8b1d-13bf0395db92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Public\Nodes\Debug">
+      <UniqueIdentifier>{b331a7c0-b110-49d4-acbd-e25f14c916cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frox.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="GaussianBlurComputeNode.h">
       <Filter>Public\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="ShowFrameNode.h">
+      <Filter>Public\Nodes\Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frox.cpp">
@@ -352,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="GaussianBlurComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowFrameNode.cpp">
+      <Filter>Public\Nodes\Debug</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
