@@ -39,7 +39,24 @@ int FindContoursModeToCvMode(EFindContoursMode mode)
 	}
 }
 
-void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy, EFindContoursMode mode)
+int FindContoursMethodToCvMethod(EContourApproximationMode method)
+{
+	switch (method)
+	{
+	case EContourApproximationMode::ChainApproxNone:
+		return cv::CHAIN_APPROX_NONE;
+	case EContourApproximationMode::ChainApproxSimple:
+		return cv::CHAIN_APPROX_SIMPLE;
+	case EContourApproximationMode::ChainApproxTC89_L1:
+		return cv::CHAIN_APPROX_TC89_L1;
+	case EContourApproximationMode::ChainApproxTC89_KCOS:
+		return cv::CHAIN_APPROX_TC89_KCOS;
+	default:
+		assert(false);
+	}
+}
+
+void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy, EFindContoursMode mode, EContourApproximationMode method, frox::Point offset)
 {
 	assert(input->IsOpencv());
 
@@ -58,8 +75,8 @@ void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr
 		contoursComputeData->Contours,
 		hierarchyComputeData->Hierarchy,
 		FindContoursModeToCvMode(mode),
-		cv::CHAIN_APPROX_SIMPLE,
-		cv::Point(0, 0)
+		FindContoursMethodToCvMethod(method),
+		cv::Point(offset.X, offset.Y)
 	);
 }
 #else
@@ -77,6 +94,8 @@ FindContoursComputeNode::FindContoursComputeNode(const ComputeNodeInitializer& i
 	: Super(initializer)
 	, _input("input")
 	, _mode(EFindContoursMode::External)
+	, _method(EContourApproximationMode::ChainApproxSimple)
+	, _offset("offset", Point{ 0, 0 })
 	, _contours("contours")
 	, _hierarchy("hierarchy")
 {}
@@ -87,6 +106,7 @@ FindContoursComputeNode::~FindContoursComputeNode()
 void FindContoursComputeNode::AllocateDefaultPins()
 {
 	RegisterInput(&_input);
+	RegisterInput(&_offset);
 	RegisterOutput(&_contours);
 	RegisterOutput(&_hierarchy);
 }
@@ -101,26 +121,28 @@ ComputeTask* FindContoursComputeNode::CreateComputeTask(FlowDataImplPtr inputDat
 	// Prepare inputs/output
 	auto input = _input.GetValue(inputData);
 	auto mode = _mode;
+	auto method = _method;
+	auto offset = _offset.GetValue(inputData);
 	auto contours = _contours.GetValue(inputData);
 	auto hierarchy = _hierarchy.GetValue(outputData);
 
 	// Make task
 	return
-		ComputeTaskHelper::UnPackProps(input, mode)
+		ComputeTaskHelper::UnPackProps(input, mode, method, offset)
 		// .Validate
 		// .UnPackOutputs
 		// .Invoke
 		.MakeTask(
-			[](ComputeFramePtr input, EFindContoursMode mode) {
+			[](ComputeFramePtr input, EFindContoursMode mode, EContourApproximationMode method, Point offset) {
 				return input != nullptr && input->IsValid();
 			},
-			[contours, hierarchy](ComputeFramePtr input, EFindContoursMode mode) {
+			[contours, hierarchy](ComputeFramePtr input, EFindContoursMode mode, EContourApproximationMode method, Point offset) {
 				// TODO. Add `compose` and fix callback hell
 				contours.SetValue<ContoursComputeData>(
-					[input, mode, hierarchy](ComputeDataPtr contours) {
+					[input, mode, method, offset, hierarchy](ComputeDataPtr contours) {
 						hierarchy.SetValue<HierarchyComputeData>(
-							[input, mode, contours](ComputeDataPtr hierarchy) {
-								functions::FindContours(input, contours, hierarchy, mode);
+							[input, mode, method, offset, contours](ComputeDataPtr hierarchy) {
+								functions::FindContours(input, contours, hierarchy, mode, method, offset);
 							}
 						);
 					}
@@ -132,6 +154,16 @@ ComputeTask* FindContoursComputeNode::CreateComputeTask(FlowDataImplPtr inputDat
 void FindContoursComputeNode::SetMode(EFindContoursMode mode)
 {
 	_mode = mode;
+}
+
+void FindContoursComputeNode::SetMethod(EContourApproximationMode method)
+{
+	_method = method;
+}
+
+void FindContoursComputeNode::SetOffset(Point offset)
+{
+	_offset = offset;
 }
 
 } // End frox
