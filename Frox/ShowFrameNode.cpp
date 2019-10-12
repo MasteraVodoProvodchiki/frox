@@ -185,7 +185,10 @@ ComputeTask* ShowFrameWithContoursNode::CreateComputeTask(FlowDataImplPtr inputD
 		// .Invoke
 		.MakeTask(
 			[](ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy, bool show) {
-				return input != nullptr && input->IsValid();
+				return
+					input != nullptr && input->IsValid() &&
+					contours != nullptr && contours->IsValid() &&
+					hierarchy != nullptr && hierarchy->IsValid();
 			},
 			[self](ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy, bool show) {
 				if (show)
