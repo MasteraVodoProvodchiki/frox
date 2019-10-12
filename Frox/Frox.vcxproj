@@ -188,6 +188,7 @@
     <ClInclude Include="OutputFrameExpression.h" />
     <ClInclude Include="RadiusOfContourComputeNode.h" />
     <ClInclude Include="ResizeComputeNode.h" />
+    <ClInclude Include="ShowFrameNode.h" />
     <ClInclude Include="SubFlowComputeNode.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Variant.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="OutputFrameExpression.cpp" />
     <ClCompile Include="RadiusOfContourComputeNode.cpp" />
     <ClCompile Include="ResizeComputeNode.cpp" />
+    <ClCompile Include="ShowFrameNode.cpp" />
     <ClCompile Include="SubFlowComputeNode.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="Utils.cpp" />

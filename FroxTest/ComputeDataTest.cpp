@@ -7,6 +7,10 @@
 #include <CenterOfContourComputeNode.h>
 #include <RadiusOfContourComputeNode.h>
 
+#ifdef SHOW_DEBUGFRAME
+#include <ShowFrameNode.h>
+#endif
+
 using namespace frox;
 
 bool findContoursTest(FlowContext context)
@@ -21,14 +25,26 @@ bool findContoursTest(FlowContext context)
 
 	auto findContours = flow.CreateNode<FindContoursComputeNode>("FindContours");
 
+#ifdef SHOW_DEBUGFRAME
+	auto showFrameWithContoursNode = flow.CreateNode<ShowFrameWithContoursNode>("ShowFrameWithContoursNode");
+#endif
+
 	// Set inputs
 	inputData.SetFrame("testframe", inputFrame);
 
 	// Connect
-	flow.ConnectEntry(flow.CreateEntry("testframe"), findContours);
+	auto entryId = flow.CreateEntry("testframe");
+	flow.ConnectEntry(entryId, findContours);
+
+#ifdef SHOW_DEBUGFRAME
+	flow.ConnectEntry(entryId, showFrameWithContoursNode, 0);
+	flow.ConnectNodes(findContours, 0, showFrameWithContoursNode, 1);
+	flow.ConnectNodes(findContours, 1, showFrameWithContoursNode, 2);
+#endif
+
 	flow.ConnectOutput(flow.CreateOutput("contours", EPinValueType::Data), findContours, 0);
 	flow.ConnectOutput(flow.CreateOutput("hierarchy", EPinValueType::Data), findContours, 1);
-
+	
 	// Run
 	return runFlowBase(
 		flow,
