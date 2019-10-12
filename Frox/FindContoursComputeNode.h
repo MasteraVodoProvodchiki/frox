@@ -45,6 +45,14 @@ enum class EFindContoursMode
 	FloodFill = 4,
 };
 
+enum class EContourApproximationMode
+{
+	ChainApproxNone = 1,
+	ChainApproxSimple = 2,
+	ChainApproxTC89_L1 = 3,
+	ChainApproxTC89_KCOS = 4
+};
+
 class FindContoursComputeNode : public ComputeNodeImpl
 {
 	FROX_COMPUTENODE(FindContoursComputeNode, "findcontours")
@@ -60,12 +68,14 @@ public:
 	virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData) override;
 
 	FROX_API void SetMode(EFindContoursMode mode);
+	FROX_API void SetMethod(EContourApproximationMode method);
+	FROX_API void SetOffset(Point offset);
 
 private:
 	TExpressionInput<ComputeFramePtr> _input;
 	EFindContoursMode _mode;
-	// TODO. Add method and offset
-
+	EContourApproximationMode _method;
+	TExpressionInput<Point> _offset;
 	TOutputData<ComputeDataPtr> _contours;
 	TOutputData<ComputeDataPtr> _hierarchy;
 };
