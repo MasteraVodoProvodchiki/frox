@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ComputeDataTest.cpp" />
+    <ClCompile Include="ComputeFrameTest.cpp" />
     <ClCompile Include="ConsoleTextColor.cpp" />
     <ClCompile Include="DepthSensorTest.cpp" />
     <ClCompile Include="main.cpp" />
