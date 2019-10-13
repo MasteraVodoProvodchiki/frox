@@ -82,8 +82,8 @@ ComputeTask* InRangeComputeNode::CreateComputeTask(FlowDataImplPtr inputData, Fl
 		// .UnPackOutputs
 		// .Invoke
 		.MakeTask(
-			[](ComputeFramePtr input, double alpha, double high) {
-				return input != nullptr && input->IsValid();
+			[](ComputeFramePtr input, double low, double high) {
+				return input != nullptr && input->IsValid() && low < high;
 			},
 			[output](ComputeFramePtr input, double low, double high) {
 				output.SetValue(
