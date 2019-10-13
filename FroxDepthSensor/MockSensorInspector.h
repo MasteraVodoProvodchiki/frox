@@ -17,17 +17,20 @@ public:
 		return std::make_shared<MockSensorInspector>(device, type);
 	}
 
-	// FDepthSensor overrides
 	virtual bool Start();
 	virtual void Stop();
 
+	// SensorInspector overrides
 	virtual bool IsValid() const override;
 	virtual ComputeFramePtr ReadFrame() const override;
+
+private:
+	ComputeFramePtr GenerateFrame() const;
 
 protected:
 	MockSensorDevicePtr _device;
 	EInspectorType _type;
-	ComputeFramePtr _frame;
+	mutable ComputeFramePtr _frame;
 };
 
 } // End frox.
