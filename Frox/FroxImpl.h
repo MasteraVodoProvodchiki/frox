@@ -20,6 +20,7 @@ public:
 	virtual FlowPerformer* CreateFlowPerformer(IComputeFlowListerner* listerner = nullptr) override;
 	virtual void DestroyFlowPerformer(FlowPerformer* performer) override;
 	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr) override;
+	virtual ComputeFramePtr LoadComputeFrame(const char* path, EFrameLoaderType loader = EFrameLoaderType::Default) override;
 	virtual void DestroyComputeFrame(ComputeFramePtr computeFlow) override;
 	virtual ComputeDataPtr CreateComputeData(const char* type) override;
 

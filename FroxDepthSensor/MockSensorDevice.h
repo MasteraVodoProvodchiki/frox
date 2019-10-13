@@ -30,9 +30,19 @@ public:
 	virtual const char* GetSerial() const override;
 	virtual SensorInspectorPtr CreateInpector(EInspectorType type) override;
 
+	FROXDS_API void SetDepthFrame(ComputeFramePtr frame);
+	FROXDS_API void SetColorFrame(ComputeFramePtr frame);
+	FROXDS_API void SetInfraredFrame(ComputeFramePtr frame);
+
+	FROXDS_API ComputeFramePtr GetFrame(EInspectorType type) const;
+
 private:
 	std::string _name;
 	std::string _serial;
+
+	ComputeFramePtr _depthFrame;
+	ComputeFramePtr _colorFrame;
+	ComputeFramePtr _infraredFrame;
 };
 
 } // End frox

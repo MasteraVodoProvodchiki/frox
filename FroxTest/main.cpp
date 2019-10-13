@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 	// Init
 	gFrox = FroxInit();
 
+	Tests::ComputeFrameTests();
 	Tests::MainTest();
 	Tests::ComputeDataTest();
 	Tests::DepthSensorTest();
