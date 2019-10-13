@@ -24,6 +24,12 @@ struct FroxDesc
 	class ILogListerner* LogListerner = nullptr;
 };
 
+enum class EFrameLoaderType
+{
+	Default = 0,
+	Gamex = 1
+};
+
 class Frox
 {
 public:
@@ -39,6 +45,7 @@ public:
 	virtual void DestroyFlowPerformer(FlowPerformer* performer) = 0;
 
 	virtual ComputeFramePtr CreateComputeFrame(Size size = Size{ 0, 0 }, ComputeFrameType type = ComputeFrameType{ ECFT_None, 0 }, const void* data = nullptr) = 0;
+	virtual ComputeFramePtr LoadComputeFrame(const char* path, EFrameLoaderType loader = EFrameLoaderType::Default) = 0;
 	virtual void DestroyComputeFrame(ComputeFramePtr computeFlow) = 0;
 
 	ComputeFramePtr CreateComputeFrame(Size size, EComputeFrameType type, const void* data = nullptr)
