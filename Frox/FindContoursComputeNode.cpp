@@ -37,6 +37,8 @@ int FindContoursModeToCvMode(EFindContoursMode mode)
 	default:
 		assert(false);
 	}
+
+	return cv::RETR_EXTERNAL;
 }
 
 int FindContoursMethodToCvMethod(EContourApproximationMode method)
@@ -54,6 +56,8 @@ int FindContoursMethodToCvMethod(EContourApproximationMode method)
 	default:
 		assert(false);
 	}
+
+	return cv::CHAIN_APPROX_SIMPLE;
 }
 
 void FindContours(ComputeFramePtr input, ComputeDataPtr contours, ComputeDataPtr hierarchy, EFindContoursMode mode, EContourApproximationMode method, frox::Point offset)
