@@ -26,6 +26,7 @@ class Variant
 		ET_Float2,
 		ET_Float3,
 		ET_Float4,
+		ET_Double,
 		ET_Point,
 		ET_Size
 	};
@@ -70,6 +71,11 @@ public:
 		, _float4(value)
 	{}
 
+	inline Variant(double value)
+		: _type(ET_Double)
+		, _double(value)
+	{}
+
 	inline Variant(Point value)
 		: _type(ET_Point)
 		, _point(value)
@@ -88,18 +94,21 @@ public:
 	template<typename T>
 	inline bool Is() const
 	{
+		static_assert(false, "Varian.Is invalid type");
 		return false;
 	}
 
 	template<typename T>
 	inline T As() const
 	{
+		static_assert(false, "Varian.As invalid type");
 		return T();
 	}
 
 	template<typename T>
 	inline T To() const
 	{
+		static_assert(false, "Varian.To invalid type");
 		return T();
 	}
 
@@ -114,6 +123,7 @@ private:
 		float2 _float2;
 		float3 _float3;
 		float4 _float4;
+		double _double;
 		Point _point;
 		Size _size;
 	};
@@ -172,6 +182,12 @@ template<>
 inline bool Variant::Is<float4>() const
 {
 	return _type == ET_Float4;
+}
+
+template<>
+inline bool Variant::Is<double>() const
+{
+	return _type == ET_Double;
 }
 
 template<>
@@ -251,6 +267,13 @@ inline float4 Variant::As<float4>() const
 }
 
 template<>
+inline double Variant::As<double>() const
+{
+	assert(_type == ET_Double);
+	return _double;
+}
+
+template<>
 inline Point Variant::As<Point>() const
 {
 	assert(_type == ET_Point);
@@ -278,6 +301,8 @@ inline bool Variant::To<bool>() const
 		return _uint32 > 0;
 	case ET_Float:
 		return _float > 0;
+	case ET_Double:
+		return _double > 0;
 	default:
 		return false;
 	}
@@ -299,6 +324,8 @@ inline uint8_t Variant::To<uint8_t>() const
 	case ET_Float3:
 	case ET_Float4:
 		return uint8_t(_float);
+	case ET_Double:
+		return uint8_t(_double);
 	default:
 		return 0;
 	}
@@ -320,6 +347,8 @@ inline uint16_t Variant::To<uint16_t>() const
 	case ET_Float3:
 	case ET_Float4:
 		return uint16_t(_float);
+	case ET_Double:
+		return uint16_t(_double);
 	default:
 		return 0;
 	}
@@ -341,6 +370,8 @@ inline int Variant::To<int>() const
 	case ET_Float3:
 	case ET_Float4:
 		return int(_float);
+	case ET_Double:
+		return int(_double);
 	default:
 		return 0;
 	}
@@ -362,6 +393,8 @@ inline uint32_t Variant::To<uint32_t>() const
 	case ET_Float3:
 	case ET_Float4:
 		return uint32_t(_float);
+	case ET_Double:
+		return uint32_t(_double);
 	default:
 		return 0;
 	}
@@ -383,6 +416,8 @@ inline float Variant::To<float>() const
 	case ET_Float3:
 	case ET_Float4:
 		return _float;
+	case ET_Double:
+		return float(_double);
 	default:
 		return 0.f;
 	}
@@ -403,6 +438,8 @@ inline float2 Variant::To<float2>() const
 	case ET_Float3:
 	case ET_Float4:
 		return _float2;
+	case ET_Double:
+		return float2{ float(_double), 0.f };
 	default:
 		return float2{ 0.f, 0.f };
 	}
@@ -424,6 +461,8 @@ inline float3 Variant::To<float3>() const
 	case ET_Float3:
 	case ET_Float4:
 		return _float3;
+	case ET_Double:
+		return float3{ float(_double), 0.f, 0.f };
 	default:
 		return float3{ 0.f, 0.f, 0.f };
 	}
@@ -446,8 +485,33 @@ inline float4 Variant::To<float4>() const
 		return float4{ _float3.X, _float3.Y, _float3.Z, 0.f };
 	case ET_Float4:
 		return _float4;
+	case ET_Double:
+		return float4{ float(_double), 0.f, 0.f, 0.f };
 	default:
 		return float4{ 0.f, 0.f, 0.f, 0.f };
+	}
+}
+
+template<>
+inline double Variant::To<double>() const
+{
+	switch (_type)
+	{
+	case ET_Bool:
+		return _bool ? 1.f : 0.f;
+	case ET_Int:
+		return double(_int);
+	case ET_Uint:
+		return double(_uint32);
+	case ET_Float:
+	case ET_Float2:
+	case ET_Float3:
+	case ET_Float4:
+		return _float;
+	case ET_Double:
+		return _double;
+	default:
+		return 0.f;
 	}
 }
 
@@ -468,6 +532,8 @@ inline Point Variant::To<Point>() const
 	case ET_Float3:
 	case ET_Float4:
 		return Point{ int32_t(_float2.X), int32_t(_float2.Y) };
+	case ET_Double:
+		return Point({ int32_t(_double), int32_t(_double) });
 	case ET_Point:
 		return _point;
 	case ET_Size:
@@ -494,6 +560,8 @@ inline Size Variant::To<Size>() const
 	case ET_Float3:
 	case ET_Float4:
 		return Size{ uint32_t(_float2.X), uint32_t(_float2.Y) };
+	case ET_Double:
+		return Size({ uint32_t(_double), uint32_t(_double) });
 	case ET_Point:
 		return Size({ uint32_t(_point.X), uint32_t(_point.Y) });;
 	case ET_Size:
