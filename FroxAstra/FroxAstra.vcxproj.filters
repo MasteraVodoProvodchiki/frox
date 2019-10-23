@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Public">
+      <UniqueIdentifier>{847d04f5-3915-4806-adc5-e124d7d52a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private">
+      <UniqueIdentifier>{8f3c0536-2711-4104-9263-bebd47bca8b0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AstraDevice.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="AstraDeviceManager.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="AstraInspector.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="AstraModule.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="AstraModuleImpl.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="AstraSensor.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shared.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraDevice.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraInspector.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraModuleImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraNative.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraSensor.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraTypes.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraDeviceManager.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraModule.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
