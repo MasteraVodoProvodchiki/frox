@@ -31,11 +31,15 @@ private:
 	int32_t FindProfile(EAstraStreamType streamType, EAstraFormatType format, AstraStreamMode mode, AstraStreamProfile& out) const;
 	void EnsureProfileSupported(EAstraStreamType streamType, EAstraFormatType format, AstraStreamMode mode) const;
 
+	bool InitDepth();
+	bool InitColor();
+	bool InitInfrared();
+
 	bool WaitReadFrame() const;
-	void ProcessFrameset(void* frameset) const;
-	void ReadDepth(void* frameset) const;
-	void ReadColor(void* frameset) const;
-	void ReadInfrared(void* frameset) const;
+	void ProcessFrameset(ComputeFramePtr frame) const;
+	void ReadDepth(ComputeFramePtr frame) const;
+	void ReadColor(ComputeFramePtr frame) const;
+	void ReadInfrared(ComputeFramePtr frame) const;
 
 protected:
 	AstraDevicePtr _device; // use weak_ptr

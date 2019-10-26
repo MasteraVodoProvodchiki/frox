@@ -5,6 +5,13 @@
 
 namespace frox {
 
+enum class EAstraSensorType : uint8_t
+{
+	Depth = 0,
+	Color,
+	Infrared
+};
+
 using AstraSensorPtr = std::shared_ptr<class AstraSensor>;
 class AstraSensor : std::enable_shared_from_this<AstraSensor>
 {

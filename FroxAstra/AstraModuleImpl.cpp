@@ -28,12 +28,23 @@ void AstraModule::ShutdownModule()
 
 void AstraModule::InitContext()
 {
+	auto status = astra::initialize();
+	if (status != ASTRA_STATUS_SUCCESS)
+	{
+		Log::Error("unable to initialize ", "AstraModule");
+		return;
+	}
 
 }
 
 void AstraModule::ReleaseContext()
 {
-	
+	auto status = astra::terminate();
+	if (status != ASTRA_STATUS_SUCCESS)
+	{
+		Log::Error("unable to terminate ", "AstraModule");
+		return;
+	}
 }
 
 } // End frox.

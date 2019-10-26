@@ -32,9 +32,15 @@ SensorDevice* AstraDeviceManager::GetDefaultDevice() const
 	return nullptr;
 }
 
-AstraDevicePtr AstraDeviceManager::NewDevice(void* handle, const char* name)
+AstraDevicePtr AstraDeviceManager::NewDevice(const char* deviceURI, const char* name)
 {
-	auto device = AstraDevice::Create(handle);
+	auto device = AstraDevice::Create(deviceURI);
+	return device;
+}
+
+AstraDevicePtr AstraDeviceManager::NewDevice(astra::StreamSet streamSet, const char* name)
+{
+	auto device = AstraDevice::Create(streamSet);
 	return device;
 }
 
@@ -43,7 +49,12 @@ void AstraDeviceManager::QueryDevices()
 	_devices.clear();
 
 	// Read devices
-
+	astra::StreamSet streaSet(astra::ASTRA_DEFAULT_DEVICE_URI);
+	if (streaSet.is_available())
+	{
+		_devices.push_back(NewDevice(streaSet, "AstraDevice"));
+	}
+	
 	for (auto device : _devices)
 	{
 		device->QueryData();

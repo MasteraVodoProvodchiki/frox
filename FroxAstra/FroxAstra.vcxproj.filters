@@ -27,6 +27,9 @@
     <ClCompile Include="AstraSensor.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="AstraUtils.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shared.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="AstraModule.h">
       <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="AstraUtils.h">
+      <Filter>Private</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

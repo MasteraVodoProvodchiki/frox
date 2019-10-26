@@ -26,11 +26,12 @@ public:
 	virtual class SensorDevice* GetDefaultDevice() const override;
 
 public:
-	AstraDevicePtr NewDevice(void* handle, const char* name);
+	AstraDevicePtr NewDevice(const char* deviceURI, const char* name);
+	AstraDevicePtr NewDevice(astra::StreamSet streamSet, const char* name);
 	void QueryDevices();
 	AstraDevicePtr GetDeviceById(uint32_t id) const;
 	AstraDevicePtr FindDeviceBySerial(const char* serial) const;
-
+	
 private:
 	std::vector<AstraDevicePtr> _devices;
 };

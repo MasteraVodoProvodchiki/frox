@@ -1,11 +1,32 @@
 #include "AstraInspector.h"
 #include "AstraDevice.h"
 #include "AstraModule.h"
+#include "AstraUtils.h"
 
 #include <Log.h>
 #include <Frox.h>
 
 namespace frox {
+namespace utils {
+
+EAstraStreamType InspectorTypeToStreamType(EInspectorType type)
+{
+	switch (type)
+	{
+	case EInspectorType::Depth:
+		return EAstraStreamType::STREAM_DEPTH;
+	case EInspectorType::Color:
+		return EAstraStreamType::STREAM_COLOR;
+	case EInspectorType::Infrared:
+		return EAstraStreamType::STREAM_INFRARED;
+	default:
+		assert(false);
+	}
+
+	return EAstraStreamType::STREAM_ANY;
+}
+
+} // End utils
 
 AstraInspector::AstraInspector(AstraDevicePtr device, EInspectorType type)
 	: _device(device)
@@ -20,8 +41,24 @@ AstraInspector::~AstraInspector()
 
 bool AstraInspector::Start()
 {
-	// Start
+	// Init Frame
+	switch (_type)
+	{
+	case EInspectorType::Depth:
+		_bStartedFlag = InitDepth();
+		break;
+	case EInspectorType::Color:
+		_bStartedFlag = InitColor();
+		break;
+	case EInspectorType::Infrared:
+		_bStartedFlag = InitInfrared();
+		break;
+	default:
+		break;
+	}
 
+	// Start Reading
+	_device->StartStream(utils::InspectorTypeToStreamType(_type));
 	return _bStartedFlag;
 }
 
@@ -31,7 +68,8 @@ void AstraInspector::Stop()
 	{
 		_bStartedFlag = false;
 
-		// Stop
+		// Stop Reading
+		_device->StopStream(utils::InspectorTypeToStreamType(_type));
 
 		_frame = nullptr;
 	}
@@ -52,10 +90,60 @@ ComputeFramePtr AstraInspector::ReadFrame() const
 	return _frame;
 }
 
+bool AstraInspector::InitDepth()
+{
+	// Get stream
+	astra::StreamReader& reader = _device->GetReader();
+	auto depthStream = reader.stream<astra::DepthStream>();
+	if (!depthStream.is_available())
+	{
+		return false;
+	}
+
+	// Create frame
+	_frame = CreateFrame(depthStream);
+	return _frame != nullptr;
+}
+
+bool AstraInspector::InitColor()
+{
+	// Get stream
+	astra::StreamReader& reader = _device->GetReader();
+	auto colorStream = reader.stream<astra::ColorStream>();
+	if (!colorStream.is_available())
+	{
+		return false;
+	}
+
+	// Create frame
+	_frame = CreateFrame(colorStream);
+	return _frame != nullptr;
+}
+
+bool AstraInspector::InitInfrared()
+{
+	// Get stream
+	astra::StreamReader& reader = _device->GetReader();
+	auto infraredStream = reader.stream<astra::InfraredStream>();
+	if (!infraredStream.is_available())
+	{
+		return false;
+	}
+
+	// Create frame
+	_frame = CreateFrame(infraredStream);
+	return _frame != nullptr;
+}
+
 bool AstraInspector::WaitReadFrame() const
 {
-	// Read
+	auto frame = _device->WaitReadFrame(utils::InspectorTypeToStreamType(_type));
+	if (!frame)
+	{
+		return false;
+	}
 
+	ProcessFrameset(frame);
 	return true;
 }
 
@@ -86,37 +174,64 @@ void AstraInspector::EnsureProfileSupported(EAstraStreamType streamType, EAstraF
 	}
 }
 
-void AstraInspector::ProcessFrameset(void* frameset) const
+void AstraInspector::ProcessFrameset(ComputeFramePtr frame) const
 {
 	switch (_type)
 	{
 	case EInspectorType::Depth:
-		ReadDepth(frameset);
+		ReadDepth(frame);
 		break;
 	case EInspectorType::Color:
-		ReadColor(frameset);
+		ReadColor(frame);
 		break;
 	case EInspectorType::Infrared:
-		ReadInfrared(frameset);
+		ReadInfrared(frame);
 		break;
 	default:
 		break;
 	}
 }
 
-void AstraInspector::ReadDepth(void* frameset) const
+void AstraInspector::ReadDepth(ComputeFramePtr frame) const
 {
+	assert(_frame->GetSize() == frame->GetSize());
+	assert(_frame->GetType() == frame->GetType());
 
+	// TODO. Add copyTo
+	Size size = _frame->GetSize();
+	uint32_t elementSize = _frame->GetElementSize();
+	for (uint32_t row = 0; row < size.Height; ++row)
+	{
+		memcpy(_frame->GetRowData(row), frame->GetRowData(row), elementSize * size.Width);	
+	}
 }
 
-void AstraInspector::ReadColor(void* frameset) const
+void AstraInspector::ReadColor(ComputeFramePtr frame) const
 {
+	assert(_frame->GetSize() == frame->GetSize());
+	assert(_frame->GetType() == frame->GetType());
 
+	// TODO. Add copyTo
+	Size size = _frame->GetSize();
+	uint32_t elementSize = _frame->GetElementSize();
+	for (uint32_t row = 0; row < size.Height; ++row)
+	{
+		memcpy(_frame->GetRowData(row), frame->GetRowData(row), elementSize * size.Width);
+	}
 }
 
-void AstraInspector::ReadInfrared(void* frameset) const
+void AstraInspector::ReadInfrared(ComputeFramePtr frame) const
 {
+	assert(_frame->GetSize() == frame->GetSize());
+	assert(_frame->GetType() == frame->GetType());
 
+	// TODO. Add copyTo
+	Size size = _frame->GetSize();
+	uint32_t elementSize = _frame->GetElementSize();
+	for (uint32_t row = 0; row < size.Height; ++row)
+	{
+		memcpy(_frame->GetRowData(row), frame->GetRowData(row), elementSize * size.Width);
+	}
 }
 
 } // End frox.
