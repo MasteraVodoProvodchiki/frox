@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 	Tests::MainTest();
 	Tests::ComputeDataTest();
 	Tests::DepthSensorTest();
+	Tests::AstraTest();
 
 	// Shutdown
 	FroxShutdown(gFrox);

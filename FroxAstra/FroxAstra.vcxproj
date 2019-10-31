@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{B56BF486-2BFE-45CD-8F95-3124F4B9B0FD}</ProjectGuid>
+    <ProjectGuid>{2B74120D-E9F4-44A1-B2C1-2A3314A9284D}</ProjectGuid>
     <RootNamespace>FroxIntelRealSense</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -58,19 +58,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="realsense.props" />
+    <Import Project="astra.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="realsense.props" />
+    <Import Project="astra.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="realsense.props" />
+    <Import Project="astra.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="realsense.props" />
+    <Import Project="astra.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -83,16 +83,21 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FROXIRS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FROXASTRA_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;astra.lib;astra_core.lib;astra_core_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /Y "$(AstraDir)\bin\astra.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core_api.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\ORBBEC.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -102,14 +107,19 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FROXIRS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FROXASTRA_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;astra.lib;astra_core.lib;astra_core_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /Y "$(AstraDir)\bin\astra.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core_api.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\ORBBEC.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -119,14 +129,19 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FROXIRS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FROXASTRA_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;astra.lib;astra_core.lib;astra_core_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /Y "$(AstraDir)\bin\astra.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core_api.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\ORBBEC.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,35 +153,42 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FROXIRS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FROXASTRA_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;realsense2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;astra.lib;astra_core.lib;astra_core_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /Y "$(AstraDir)\bin\astra.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\astra_core_api.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\ORBBEC.dll" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"
+xcopy /Y "$(AstraDir)\bin\orbbec.ini" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="RealSenseDevice.cpp" />
-    <ClCompile Include="RealSenseDeviceManager.cpp" />
-    <ClCompile Include="RealSenseInspector.cpp" />
-    <ClCompile Include="RealSenseModule.cpp" />
-    <ClCompile Include="RealSenseModuleImpl.cpp" />
-    <ClCompile Include="RealSenseSensor.cpp" />
+    <ClCompile Include="AstraDevice.cpp" />
+    <ClCompile Include="AstraDeviceManager.cpp" />
+    <ClCompile Include="AstraInspector.cpp" />
+    <ClCompile Include="AstraModule.cpp" />
+    <ClCompile Include="AstraModuleImpl.cpp" />
+    <ClCompile Include="AstraSensor.cpp" />
+    <ClCompile Include="AstraUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RealSenseDevice.h" />
-    <ClInclude Include="RealSenseDeviceManager.h" />
-    <ClInclude Include="RealSenseInspector.h" />
-    <ClInclude Include="RealSenseModule.h" />
-    <ClInclude Include="RealSenseModuleImpl.h" />
-    <ClInclude Include="RealSenseNative.h" />
-    <ClInclude Include="RealSenseSensor.h" />
-    <ClInclude Include="RealSenseTypes.h" />
+    <ClInclude Include="AstraDevice.h" />
+    <ClInclude Include="AstraDeviceManager.h" />
+    <ClInclude Include="AstraInspector.h" />
+    <ClInclude Include="AstraModule.h" />
+    <ClInclude Include="AstraModuleImpl.h" />
+    <ClInclude Include="AstraNative.h" />
+    <ClInclude Include="AstraSensor.h" />
+    <ClInclude Include="AstraTypes.h" />
+    <ClInclude Include="AstraUtils.h" />
     <ClInclude Include="Shared.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

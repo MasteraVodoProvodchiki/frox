@@ -84,15 +84,16 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;FroxAstra.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -101,15 +102,16 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;FroxAstra.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,17 +122,18 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;FroxAstra.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,20 +144,22 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Frox.lib;FroxDepthSensor.lib;FroxIntelRealSense.lib;FroxAstra.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(IntelRealSenseDir)\bin\x64\realsense2.dll" "$(OutputPath)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AstraTest.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ComputeDataTest.cpp" />
     <ClCompile Include="ComputeFrameTest.cpp" />
