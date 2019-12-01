@@ -5,14 +5,13 @@
 
 namespace frox {
 
-// using MultiFrameListenerPtr = std::shared_ptr<class MultiFrameListener>;
 using Kinect2DevicePtr = std::shared_ptr<class Kinect2Device>;
 class Kinect2Device
 	: public SensorDevice
 	, public std::enable_shared_from_this<Kinect2Device>
 {
 public:
-	Kinect2Device(IKinectSensor* kinectSensor);
+	Kinect2Device(IKinectSensor* pKinectSensor);
 	virtual ~Kinect2Device();
 
 	Kinect2DevicePtr GetPtr()
@@ -20,9 +19,9 @@ public:
 		return shared_from_this();
 	}
 
-	static Kinect2DevicePtr Create(IKinectSensor* kinectSensor)
+	static Kinect2DevicePtr Create(IKinectSensor* pKinectSensor)
 	{
-		return std::make_shared<Kinect2Device>(kinectSensor);
+		return std::make_shared<Kinect2Device>(pKinectSensor);
 	}
 
 	// SensorDevice overrides
@@ -70,8 +69,6 @@ private:
 	IDepthFrameReader* _depthFrameReader;
 	IColorFrameReader* _colorFrameReader;
 	IInfraredFrameReader* _infraredFrameReader;
-
-	// MultiFrameListenerPtr _listerner;
 
 	uint32_t _depthStart = 0;
 	uint32_t _colorStart = 0;
