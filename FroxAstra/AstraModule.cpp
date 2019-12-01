@@ -5,8 +5,8 @@ namespace frox {
 
 IAstraModule& IAstraModule::Get()
 {
-	static AstraModule realSenseModule;
-	return realSenseModule;
+	static AstraModule astraModule;
+	return astraModule;
 }
 
 } // End frox.

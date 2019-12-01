@@ -2,8 +2,6 @@
 
 #include "Shared.h"
 
-struct rs2_context;
-
 namespace frox {
 
 class IAstraModule
