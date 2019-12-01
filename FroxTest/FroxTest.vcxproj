@@ -84,7 +84,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;../FroxKinect2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -102,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;../FroxKinect2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;../FroxKinect2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -144,7 +144,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Frox;../FroxDepthSensor;../FroxIntelRealSense;../FroxAstra;../FroxKinect2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -165,6 +165,7 @@
     <ClCompile Include="ComputeFrameTest.cpp" />
     <ClCompile Include="ConsoleTextColor.cpp" />
     <ClCompile Include="DepthSensorTest.cpp" />
+    <ClCompile Include="Kinect2Test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainTest.cpp" />
   </ItemGroup>

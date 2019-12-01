@@ -15,6 +15,9 @@ int main(int argc, char *argv[])
 	Tests::ComputeDataTest();
 	Tests::DepthSensorTest();
 	Tests::AstraTest();
+#ifdef WITH_KINECT2
+	Tests::Kinect2Test();
+#endif // WITH_KINECT2
 
 	// Shutdown
 	FroxShutdown(gFrox);
