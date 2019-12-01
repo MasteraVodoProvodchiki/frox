@@ -12,8 +12,8 @@ using Kinect2DeviceManagerPtr = std::shared_ptr<class Kinect2DeviceManager>;
 class Kinect2DeviceManager : public SensorDeviceManager
 {
 public:
-	FROXASTRA_API Kinect2DeviceManager();
-	FROXASTRA_API virtual ~Kinect2DeviceManager();
+	FROXKINECT2_API Kinect2DeviceManager();
+	FROXKINECT2_API virtual ~Kinect2DeviceManager();
 
 	static Kinect2DeviceManagerPtr Create()
 	{
