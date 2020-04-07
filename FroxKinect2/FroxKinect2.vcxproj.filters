@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Public">
+      <UniqueIdentifier>{847d04f5-3915-4806-adc5-e124d7d52a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private">
+      <UniqueIdentifier>{8f3c0536-2711-4104-9263-bebd47bca8b0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinect2ModuleImpl.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinect2Module.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinect2Inspector.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinect2Device.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinect2DeviceManager.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinect2Sensor.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shared.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect2Module.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect2DeviceManager.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect2Sensor.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect2ModuleImpl.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect2Inspector.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect2Device.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Native.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
