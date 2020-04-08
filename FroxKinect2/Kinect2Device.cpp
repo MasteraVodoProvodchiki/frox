@@ -433,8 +433,8 @@ void Kinect2Device::UpdateColor()
 	// Read data
 	if (SUCCEEDED(hr))
 	{
-		auto dst = _depthFrame->GetData<uint16_t>();
-		auto frameSize = _depthFrame->GetSize();
+		auto dst = _colorFrame->GetData<uint8_t>();
+		auto frameSize = _colorFrame->GetSize();
 
 		if (imageFormat == ColorImageFormat_Bgra)
 		{
@@ -443,8 +443,8 @@ void Kinect2Device::UpdateColor()
 		}
 		else
 		{
-			assert(_depthFrame->GetElementSize() == sizeof(uint16_t) * 4);
-			
+			assert(_colorFrame->GetElementSize() == sizeof(uint8_t) * 4);
+
 			nBufferSize = frameSize.Width * frameSize.Height * sizeof(uint8_t) * 4;
 			hr = pColorFrame->CopyConvertedFrameDataToArray(nBufferSize, reinterpret_cast<BYTE*>(dst), ColorImageFormat::ColorImageFormat_Bgra);
 		}
@@ -516,7 +516,7 @@ void Kinect2Device::UpdateInfrared()
 	// Read data
 	if (SUCCEEDED(hr))
 	{
-		auto dst = _depthFrame->GetData<uint16_t>();
+		auto dst = _infraredFrame->GetData<uint16_t>();
 		memcpy(dst, pBuffer, nBufferSize);
 	}
 
