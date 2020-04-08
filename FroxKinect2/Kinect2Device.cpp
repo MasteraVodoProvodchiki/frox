@@ -147,7 +147,7 @@ void Kinect2Device::InitFrames()
 		_colorFrameReader->put_IsPaused(TRUE);
 
 		IFrameDescription* pFrameDescription = nullptr;
-		pFrameSource->get_FrameDescription(&pFrameDescription);
+		pFrameSource->CreateFrameDescription(ColorImageFormat::ColorImageFormat_Bgra, &pFrameDescription);
 		if (pFrameDescription != nullptr)
 		{
 			_colorFrame = CreateColorFrame(pFrameDescription);
