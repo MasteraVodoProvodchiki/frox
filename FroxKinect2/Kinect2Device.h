@@ -28,6 +28,7 @@ public:
 	virtual const char* GetName() const override { return _name.data(); }
 	virtual const char* GetSerial() const override { return _serial.data(); }
 	virtual SensorInspectorPtr CreateInpector(EInspectorType type) override;
+	virtual ComputeFramePtr MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame) override;
 
 	void QueryData();
 	bool FindProfile(Kinect2StreamProfile profile, Kinect2StreamProfile& out) const;
@@ -42,6 +43,7 @@ public:
 private:
 	Kinect2SensorPtr NewSensor(void* handle, const char* name);
 	void InitFrames();
+	void InitCoordinateMapper();
 
 	void StartDepthStream();
 	void StartColorStream();
@@ -69,6 +71,8 @@ private:
 	IDepthFrameReader* _depthFrameReader;
 	IColorFrameReader* _colorFrameReader;
 	IInfraredFrameReader* _infraredFrameReader;
+	
+	ICoordinateMapper* _coordinateMapper;
 
 	uint32_t _depthStart = 0;
 	uint32_t _colorStart = 0;
