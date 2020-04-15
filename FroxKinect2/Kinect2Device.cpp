@@ -62,7 +62,6 @@ ComputeFramePtr Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFr
 	HRESULT hr = _coordinateMapper->MapDepthFrameToColorSpace(colorSpacePoints.size(), depthData, colorSpacePoints.size(), colorSpacePoints.data());
 	if (FAILED(hr))
 	{
-		//TODO: return empty frame
 		return depthFrame;
 	}
 
