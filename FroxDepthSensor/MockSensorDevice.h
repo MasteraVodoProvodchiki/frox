@@ -29,6 +29,7 @@ public:
 	virtual const char* GetName() const override;
 	virtual const char* GetSerial() const override;
 	virtual SensorInspectorPtr CreateInpector(EInspectorType type) override;
+	virtual bool MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output) override;
 
 	FROXDS_API void SetDepthFrame(ComputeFramePtr frame);
 	FROXDS_API void SetColorFrame(ComputeFramePtr frame);

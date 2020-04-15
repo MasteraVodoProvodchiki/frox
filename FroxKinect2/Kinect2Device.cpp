@@ -5,6 +5,9 @@
 
 #include <assert.h>
 
+#include <ppl.h>
+#include <Frox.h>
+
 namespace frox {
 
 Kinect2Device::Kinect2Device(IKinectSensor* pKinectSensor)
@@ -12,6 +15,7 @@ Kinect2Device::Kinect2Device(IKinectSensor* pKinectSensor)
 	, _depthFrameReader(nullptr)
 	, _colorFrameReader(nullptr)
 	, _infraredFrameReader(nullptr)
+	, _coordinateMapper(nullptr)
 {}
 
 Kinect2Device::~Kinect2Device()
@@ -33,6 +37,11 @@ Kinect2Device::~Kinect2Device()
 	{
 		_infraredFrameReader->Release();
 	}
+
+	if (_coordinateMapper != nullptr)
+	{
+		_coordinateMapper->Release();
+	}
 }
 
 SensorInspectorPtr Kinect2Device::CreateInpector(EInspectorType type)
@@ -40,6 +49,54 @@ SensorInspectorPtr Kinect2Device::CreateInpector(EInspectorType type)
 	auto inspector = Kinect2Inspector::Create(this->GetPtr(), type);
 	inspector->Start();
 	return inspector;
+}
+
+bool Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output)
+{
+	assert(_coordinateMapper != nullptr);
+
+	const auto depthFrameSize = depthFrame->GetSize();
+	auto depthData = depthFrame->GetData<uint16_t>();
+	const uint32_t colorSpacePointBufferSize = depthFrameSize.Width * depthFrameSize.Height;
+	
+	if (_colorSpacePointBuffer.size() != colorSpacePointBufferSize)
+	{
+		_colorSpacePointBuffer.resize(colorSpacePointBufferSize);
+	}
+
+	HRESULT hr = _coordinateMapper->MapDepthFrameToColorSpace(colorSpacePointBufferSize, depthData, colorSpacePointBufferSize, _colorSpacePointBuffer.data());
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	assert(output->GetSize() == depthFrameSize && output->GetType() == colorFrame->GetType());
+
+	auto buffer = output->GetData<uint8_t>();
+
+	Concurrency::parallel_for(0U, depthFrameSize.Height, [&](const uint32_t depthY) {
+		unsigned int depthOffset = depthY * depthFrameSize.Width;
+		for (uint32_t depthX = 0; depthX < depthFrameSize.Width; depthX++)
+		{
+			unsigned int depthIndex = depthOffset + depthX;
+			int colorX = static_cast<int>(_colorSpacePointBuffer[depthIndex].X + 0.5f); //round pixel
+			int colorY = static_cast<int>(_colorSpacePointBuffer[depthIndex].Y + 0.5f); //round pixel
+			if ((0 <= colorX) && (colorX < colorFrame->GetSize().Width) && (0 <= colorY) && (colorY < colorFrame->GetSize().Height))
+			{
+				unsigned int colorIndex = (colorY * colorFrame->GetSize().Width + colorX) * colorFrame->GetElementSize();
+				depthIndex = depthIndex * colorFrame->GetElementSize();
+
+				auto colorData = colorFrame->GetData<uint8_t>();
+
+				buffer[depthIndex + 0] = colorData[colorIndex + 0];
+				buffer[depthIndex + 1] = colorData[colorIndex + 1];
+				buffer[depthIndex + 2] = colorData[colorIndex + 2];
+				buffer[depthIndex + 3] = colorData[colorIndex + 3];
+			}
+		}
+	});
+
+	return true;
 }
 
 void Kinect2Device::QueryData()
@@ -65,6 +122,8 @@ void Kinect2Device::QueryData()
 	}
 
 	InitFrames();
+
+	InitCoordinateMapper();
 }
 
 bool Kinect2Device::FindProfile(Kinect2StreamProfile profile, Kinect2StreamProfile& out) const
@@ -192,6 +251,15 @@ void Kinect2Device::InitFrames()
 		}
 
 		pFrameSource->Release();
+	}
+}
+
+void Kinect2Device::InitCoordinateMapper()
+{
+	HRESULT hr = _kinectSensor->get_CoordinateMapper(&_coordinateMapper);
+	if (FAILED(hr))
+	{
+		Log::Error("Kinect2Device get coordinate mapper failed");
 	}
 }
 

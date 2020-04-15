@@ -25,6 +25,7 @@ public:
 	virtual const char* GetName() const = 0;
 	virtual const char* GetSerial() const = 0;
 	virtual SensorInspectorPtr CreateInpector(EInspectorType type) = 0;
+	virtual bool MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output) = 0;
 };
 
 } // End frox.

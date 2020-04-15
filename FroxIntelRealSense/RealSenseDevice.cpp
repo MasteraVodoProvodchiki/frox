@@ -26,6 +26,12 @@ SensorInspectorPtr RealSenseDevice::CreateInpector(EInspectorType type)
 	return inspector;
 }
 
+bool RealSenseDevice::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output)
+{
+	//TODO: implement mapping
+	return false;
+}
+
 void RealSenseDevice::QueryData()
 {
 	_sensors.clear();
