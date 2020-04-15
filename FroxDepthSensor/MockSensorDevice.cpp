@@ -31,6 +31,11 @@ SensorInspectorPtr MockSensorDevice::CreateInpector(EInspectorType type)
 	return inspector;
 }
 
+ComputeFramePtr MockSensorDevice::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame)
+{
+	return depthFrame;
+}
+
 void MockSensorDevice::SetDepthFrame(ComputeFramePtr frame)
 {
 	_depthFrame = frame;
