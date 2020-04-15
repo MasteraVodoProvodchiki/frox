@@ -93,7 +93,7 @@ ComputeFramePtr Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFr
 				buffer[depthIndex + 3] = colorData[colorIndex + 3];
 			}
 		}
-		});
+	});
 
 	return result;
 }
