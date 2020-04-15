@@ -55,7 +55,13 @@ ComputeTask* MapDepthToColorNode::CreateComputeTask(FlowDataImplPtr inputData, F
 					device != nullptr;
 			},
 			[output, device](ComputeFramePtr depthFrame, ComputeFramePtr colorFrame) {
-				output.SetValue(device->MapDepthFrameToColorFrame(depthFrame, colorFrame));
+				output.SetValue(
+					depthFrame->GetSize(),
+					colorFrame->GetType(),
+					[device, depthFrame, colorFrame](ComputeFramePtr output) {
+						device->MapDepthFrameToColorFrame(depthFrame, colorFrame, output);
+					}
+				);
 			}
 		);
 }

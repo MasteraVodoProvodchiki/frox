@@ -36,7 +36,7 @@ public:
 	virtual const char* GetName() const override { return _name.data(); }
 	virtual const char* GetSerial() const override { return _serial.data(); }
 	virtual SensorInspectorPtr CreateInpector(EInspectorType type) override;
-	virtual ComputeFramePtr MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame) override;
+	virtual void MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output) override;
 
 	void QueryData();
 	bool FindProfile(AstraStreamProfile profile, AstraStreamProfile& out) const;

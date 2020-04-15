@@ -51,7 +51,7 @@ SensorInspectorPtr Kinect2Device::CreateInpector(EInspectorType type)
 	return inspector;
 }
 
-ComputeFramePtr Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame)
+void Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output)
 {
 	assert(_coordinateMapper != nullptr);
 
@@ -67,11 +67,12 @@ ComputeFramePtr Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFr
 	HRESULT hr = _coordinateMapper->MapDepthFrameToColorSpace(colorSpacePointBufferSize, depthData, colorSpacePointBufferSize, _colorSpacePointBuffer.data());
 	if (FAILED(hr))
 	{
-		return depthFrame;
+		return;
 	}
 
-	auto result = FroxInstance()->CreateComputeFrame(depthFrameSize, colorFrame->GetType());
-	auto buffer = result->GetData<uint8_t>();
+	assert(output->GetSize() == depthFrameSize && output->GetType() == colorFrame->GetType());
+
+	auto buffer = output->GetData<uint8_t>();
 
 	Concurrency::parallel_for(0U, depthFrameSize.Height, [&](const uint32_t depthY) {
 		unsigned int depthOffset = depthY * depthFrameSize.Width;
@@ -94,8 +95,6 @@ ComputeFramePtr Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFr
 			}
 		}
 	});
-
-	return result;
 }
 
 void Kinect2Device::QueryData()
