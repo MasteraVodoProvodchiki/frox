@@ -73,6 +73,7 @@ private:
 	IInfraredFrameReader* _infraredFrameReader;
 	
 	ICoordinateMapper* _coordinateMapper;
+	std::vector<ColorSpacePoint> _colorSpacePointBuffer;
 
 	uint32_t _depthStart = 0;
 	uint32_t _colorStart = 0;

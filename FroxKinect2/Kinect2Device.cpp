@@ -55,25 +55,31 @@ ComputeFramePtr Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFr
 {
 	assert(_coordinateMapper != nullptr);
 
-	auto depthFrameSize = depthFrame->GetSize();
+	const auto depthFrameSize = depthFrame->GetSize();
 	auto depthData = depthFrame->GetData<uint16_t>();
-	std::vector<ColorSpacePoint> colorSpacePoints(depthFrameSize.Width * depthFrameSize.Height);
+	const uint32_t colorSpacePointBufferSize = depthFrameSize.Width * depthFrameSize.Height;
+	
+	if (_colorSpacePointBuffer.size() != colorSpacePointBufferSize)
+	{
+		_colorSpacePointBuffer.resize(colorSpacePointBufferSize);
+	}
 
-	HRESULT hr = _coordinateMapper->MapDepthFrameToColorSpace(colorSpacePoints.size(), depthData, colorSpacePoints.size(), colorSpacePoints.data());
+	HRESULT hr = _coordinateMapper->MapDepthFrameToColorSpace(colorSpacePointBufferSize, depthData, colorSpacePointBufferSize, _colorSpacePointBuffer.data());
 	if (FAILED(hr))
 	{
 		return depthFrame;
 	}
 
-	std::vector<BYTE> buffer(colorSpacePoints.size() * colorFrame->GetElementSize());
+	auto result = FroxInstance()->CreateComputeFrame(depthFrameSize, colorFrame->GetType());
+	auto buffer = result->GetData<uint8_t>();
 
 	Concurrency::parallel_for(0U, depthFrameSize.Height, [&](const uint32_t depthY) {
 		unsigned int depthOffset = depthY * depthFrameSize.Width;
 		for (uint32_t depthX = 0; depthX < depthFrameSize.Width; depthX++)
 		{
 			unsigned int depthIndex = depthOffset + depthX;
-			int colorX = static_cast<int>(colorSpacePoints[depthIndex].X + 0.5f); //round pixel
-			int colorY = static_cast<int>(colorSpacePoints[depthIndex].Y + 0.5f); //round pixel
+			int colorX = static_cast<int>(_colorSpacePointBuffer[depthIndex].X + 0.5f); //round pixel
+			int colorY = static_cast<int>(_colorSpacePointBuffer[depthIndex].Y + 0.5f); //round pixel
 			if ((0 <= colorX) && (colorX < colorFrame->GetSize().Width) && (0 <= colorY) && (colorY < colorFrame->GetSize().Height))
 			{
 				unsigned int colorIndex = (colorY * colorFrame->GetSize().Width + colorX) * colorFrame->GetElementSize();
@@ -88,11 +94,6 @@ ComputeFramePtr Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFr
 			}
 		}
 		});
-
-	auto result = FroxInstance()->CreateComputeFrame(depthFrameSize, colorFrame->GetType());
-
-	auto dst = result->GetData<uint8_t>();
-	memcpy(dst, buffer.data(), buffer.size());
 
 	return result;
 }

@@ -4,7 +4,6 @@
 
 #include <ComputeTask.h>
 #include <ComputeTaskHelper.h>
-#include <Utils.h>
 
 #include <assert.h>
 
@@ -56,16 +55,7 @@ ComputeTask* MapDepthToColorNode::CreateComputeTask(FlowDataImplPtr inputData, F
 					device != nullptr;
 			},
 			[output, device](ComputeFramePtr depthFrame, ComputeFramePtr colorFrame) {
-
-				ComputeFramePtr frame = device->MapDepthFrameToColorFrame(depthFrame, colorFrame);
-				
-				output.SetValue(
-					frame->GetSize(),
-					frame->GetType(),
-					[frame](ComputeFramePtr output) {
-						utils::Copy(frame, output);
-					}
-				);
+				output.SetValue(device->MapDepthFrameToColorFrame(depthFrame, colorFrame));
 			}
 			);
 }
