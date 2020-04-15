@@ -111,9 +111,10 @@ SensorInspectorPtr AstraDevice::CreateInpector(EInspectorType type)
 	return inspector;
 }
 
-void AstraDevice::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output)
+bool AstraDevice::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output)
 {
 	//TODO: implement mapping
+	return false;
 }
 
 void AstraDevice::QueryData()

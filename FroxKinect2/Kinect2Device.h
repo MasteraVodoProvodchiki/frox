@@ -28,7 +28,7 @@ public:
 	virtual const char* GetName() const override { return _name.data(); }
 	virtual const char* GetSerial() const override { return _serial.data(); }
 	virtual SensorInspectorPtr CreateInpector(EInspectorType type) override;
-	virtual void MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output) override;
+	virtual bool MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output) override;
 
 	void QueryData();
 	bool FindProfile(Kinect2StreamProfile profile, Kinect2StreamProfile& out) const;

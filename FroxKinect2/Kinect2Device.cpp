@@ -51,7 +51,7 @@ SensorInspectorPtr Kinect2Device::CreateInpector(EInspectorType type)
 	return inspector;
 }
 
-void Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output)
+bool Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, ComputeFramePtr colorFrame, ComputeFramePtr output)
 {
 	assert(_coordinateMapper != nullptr);
 
@@ -67,7 +67,7 @@ void Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, Comput
 	HRESULT hr = _coordinateMapper->MapDepthFrameToColorSpace(colorSpacePointBufferSize, depthData, colorSpacePointBufferSize, _colorSpacePointBuffer.data());
 	if (FAILED(hr))
 	{
-		return;
+		return false;
 	}
 
 	assert(output->GetSize() == depthFrameSize && output->GetType() == colorFrame->GetType());
@@ -95,6 +95,8 @@ void Kinect2Device::MapDepthFrameToColorFrame(ComputeFramePtr depthFrame, Comput
 			}
 		}
 	});
+
+	return true;
 }
 
 void Kinect2Device::QueryData()
