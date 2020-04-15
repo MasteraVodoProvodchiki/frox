@@ -68,7 +68,7 @@ ComputeFramePtr CreateFrame(IDepthFrameSource* pFrameSource)
 ComputeFramePtr CreateFrame(IColorFrameSource* pFrameSource)
 {
 	IFrameDescription* pFrameDescription = nullptr;
-	pFrameSource->get_FrameDescription(&pFrameDescription);
+	pFrameSource->CreateFrameDescription(ColorImageFormat::ColorImageFormat_Bgra, &pFrameDescription);
 	if (pFrameDescription != nullptr)
 	{
 		auto frame = CreateColorFrame(pFrameDescription);
