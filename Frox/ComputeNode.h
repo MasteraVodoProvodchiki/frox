@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ComputeFrame.h"
+#include "Guid.h"
 
 namespace frox {
 
@@ -26,6 +27,8 @@ public:
 
 	virtual int32_t FindInputByName(const char* pinName) const = 0;
 	virtual int32_t FindOutputByName(const char* pinName) const = 0;
+	virtual Guid FindInputGuidByName(const char* pinName) const = 0;
+	virtual Guid FindOutputGuidByName(const char* pinName) const = 0;
 };
 
 } // End frox

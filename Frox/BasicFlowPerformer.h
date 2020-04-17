@@ -22,6 +22,8 @@ public:
 	virtual void Fetch(ComputeFlow* flow, FlowData* outputData) override;
 	virtual uint32_t GetNumActiveTasks() const override;
 
+	virtual DebugFlowDataPtr GetLatestPerformedDataForDebug() const override;
+
 public:
 	FlowPerformerImplPtr GetPerformer() const { return _impl; }
 

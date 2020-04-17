@@ -3,6 +3,7 @@
 #include "BasicComputeFlow.h"
 #include "BasicFlowData.h"
 #include "BasicFlowDataImpl.h"
+#include "DebugFlowDataImpl.h"
 
 #include <assert.h>
 
@@ -57,6 +58,17 @@ void BasicFlowPerformer::OnPerformed()
 	{
 		_listerner->OnPerformed();
 	}
+}
+
+DebugFlowDataPtr BasicFlowPerformer::GetLatestPerformedDataForDebug() const
+{
+#ifdef FROX_DEBUG
+	assert(_impl);
+	return std::make_unique<DebugFlowDataImpl>(_impl->GetImmidiatePerformerData());
+#else
+	assert(false);
+	return std::make_unique<DebugFlowDataImpl>(nullptr);
+#endif
 }
 
 } // End frox

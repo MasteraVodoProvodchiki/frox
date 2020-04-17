@@ -34,6 +34,8 @@ public:
 	FROX_API virtual bool IsValid() const override;
 	FROX_API virtual int32_t FindInputByName(const char* pinName) const override;
 	FROX_API virtual int32_t FindOutputByName(const char* pinName) const override;
+	FROX_API virtual Guid FindInputGuidByName(const char* pinName) const override;
+	FROX_API virtual Guid FindOutputGuidByName(const char* pinName) const override;
 
 	FROX_API virtual ComputeTask* CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData);
 	

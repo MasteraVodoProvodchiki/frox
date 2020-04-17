@@ -217,4 +217,11 @@ void BasicFlowPerformerImpl::Performed()
 	}
 }
 
+#ifdef FROX_DEBUG
+FlowDataImplPtr BasicFlowPerformerImpl::GetImmidiatePerformerData() const
+{
+	return _privateData;
+}
+#endif
+
 } // End frox

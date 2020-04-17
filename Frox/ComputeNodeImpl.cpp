@@ -44,6 +44,23 @@ int32_t ComputeNodeImpl::FindOutputByName(const char* pinName) const
 	return it != _outputs.end() ? int32_t(it - _outputs.begin()) : -1;
 }
 
+Guid ComputeNodeImpl::FindInputGuidByName(const char* pinName) const
+{
+	auto it = std::find_if(_inputs.begin(), _inputs.end(), [pinName](InputPin* pin) {
+		return pin->Name == pinName;
+	});
+
+	return it != _inputs.end() ? (*it)->Id : Guid();
+}
+Guid ComputeNodeImpl::FindOutputGuidByName(const char* pinName) const
+{
+	auto it = std::find_if(_outputs.begin(), _outputs.end(), [pinName](OutputPin* pin) {
+		return pin->Name == pinName;
+	});
+
+	return it != _outputs.end() ? (*it)->Id : Guid();
+}
+
 ComputeTask* ComputeNodeImpl::CreateComputeTask(FlowDataImplPtr inputData, FlowDataImplPtr outputData)
 {
 	return nullptr;

@@ -24,6 +24,10 @@ public:
 	virtual void Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outputData) override;
 	virtual uint32_t GetNumActiveTasks() const override;
 
+#ifdef FROX_DEBUG
+	virtual FlowDataImplPtr GetImmidiatePerformerData() const override;
+#endif
+
 public:
 	void SetOnPerformedCallback(std::function<void()> onPerformed);
 	void ClearOnPerformedCallback();
