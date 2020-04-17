@@ -192,9 +192,6 @@
     <ClInclude Include="OpenCV.h">
       <Filter>Private\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Guid.h">
-      <Filter>Private\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Allocator.h">
       <Filter>Private\Common</Filter>
     </ClInclude>
@@ -215,6 +212,15 @@
     </ClInclude>
     <ClInclude Include="ShowFrameNode.h">
       <Filter>Public\Nodes\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugFlowData.h">
+      <Filter>Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugFlowDataImpl.h">
+      <Filter>Private\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Guid.h">
+      <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,9 +347,6 @@
     <ClCompile Include="Log.cpp">
       <Filter>Private\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Guid.cpp">
-      <Filter>Private\Common</Filter>
-    </ClCompile>
     <ClCompile Include="CenterOfContourComputeNode.cpp">
       <Filter>Public\Nodes</Filter>
     </ClCompile>
@@ -361,6 +364,15 @@
     </ClCompile>
     <ClCompile Include="ShowFrameNode.cpp">
       <Filter>Public\Nodes\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugFlowData.cpp">
+      <Filter>Public\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugFlowDataImpl.cpp">
+      <Filter>Private\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Guid.cpp">
+      <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

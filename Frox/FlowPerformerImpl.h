@@ -22,6 +22,10 @@ public:
 	virtual void Perform(ComputeFlowImplPtr flow, FlowDataImplPtr inputData) = 0;
 	virtual void Fetch(ComputeFlowImplPtr flow, FlowDataImplPtr outputData) = 0;
 	virtual uint32_t GetNumActiveTasks() const = 0;
+
+#ifdef FROX_DEBUG
+	virtual FlowDataImplPtr GetImmidiatePerformerData() const = 0;
+#endif
 };
 
 } // End frox

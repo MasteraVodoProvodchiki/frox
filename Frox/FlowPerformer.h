@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Common.h"
+#include "DebugFlowData.h"
+
 #include <memory>
 
 namespace frox {
@@ -20,6 +22,11 @@ public:
 	virtual uint32_t GetNumActiveTasks() const = 0;
 
 	void Release();
+
+	// Access to performer data for debug purposes only.
+	// Trying to use it without proper preparations can and will cause various errors.
+	// Works only if library was buit with FROX_DEBUG flag.
+	virtual DebugFlowDataPtr GetLatestPerformedDataForDebug() const = 0;
 };
 
 } // End frox
